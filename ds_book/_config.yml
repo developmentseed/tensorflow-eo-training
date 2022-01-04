@@ -1,0 +1,68 @@
+title: "Deep learning with TensorFlow"
+author: "Development Seed"
+email: "lilly@developmentseed.org"
+release: "1"
+logo: 'ds.png'
+
+# Short description about the book
+description: >-
+  Notebook tutorials demonstrating advanced techniques for use of deep learning with TensorFlow and earth observation data.
+
+execute:
+#  execute_notebooks           : auto
+  execute_notebooks           : off
+  timeout: -1
+
+# HTML-specific settings
+html:
+  favicon              : "ds.png"
+  home_page_in_navbar  : false
+  use_edit_page_button : true
+  use_repository_button: true
+  use_issues_button    : true
+
+# Interact link settings
+notebook_interface            : "notebook"
+
+repository:
+  url           : "https://github.com/developmentseed/tensorflow-eo-training/"
+  branch        : main
+  path_to_book  : ds_book
+
+# Launch button settings
+#launch_buttons:
+#  binder             : false
+#  binderhub          : false
+#  binderhub_url      : off
+#  jupyterhub         : false
+#  thebe              : false
+#  colab              : false
+
+# Launch button settings
+launch_buttons:
+#  notebook_interface: classic #jupyterlab
+  binderhub_url: https://mybinder.org
+  colab_url: https://colab.research.google.com
+
+
+# LaTeX settings
+bibtex_bibfiles:
+   - _bibliography/references.bib
+   
+latex:
+  latex_engine                : "pdflatex"
+  use_jupyterbook_latex       : true # use jupyterbook-latex for pdf builds as default
+  latex_documents:
+    targetname: ds_book.tex
+    
+sphinx:
+  config:
+    html_show_copyright: false
+    latex_toplevel_sectioning: 'section'
+#    latex_show_urls: 'footnote'
+    latex_elements.papersize: a4paper
+    latex_elements.pointsize: 12pt
+    
+
+#google_analytics:
+#  mytrackingcode: UA-205698170-1

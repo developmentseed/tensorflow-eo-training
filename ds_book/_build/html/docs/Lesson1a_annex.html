@@ -1,0 +1,589 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Annex to introduction content &#8212; Deep learning with TensorFlow</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="../_static/ds.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/ds.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Deep learning with TensorFlow</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1a_Intro_ML_NN_DL.html">
+   Introduction to machine learning, neural networks and deep learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1b_Intro_TensorFlow_Keras.html">
+   Introduction to TensorFlow and Keras
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson2a_get_planet_NICFI.html">
+   Access and mosaic Planet NICFI monthly basemaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson2b_prep_data_ML_segmentation.html">
+   Process dataset for use with deep learning segmentation network
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson3_deeplearning_crop_segmentation.html">
+   Semantic segmentation with deep learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson4_evaluation.html">
+   Evaluating Semantic Segmentation Models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson5_dealing_with_limited_data.html">
+   Dealing with limited data for semantic segmentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="appendix.html">
+   Appendix
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/docs/Lesson1a_annex.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training/"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training//issues/new?title=Issue%20on%20page%20%2Fdocs/Lesson1a_annex.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/developmentseed/tensorflow-eo-training/edit/main/ds_book/docs/Lesson1a_annex.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/developmentseed/tensorflow-eo-training/main?urlpath=tree/ds_book/docs/Lesson1a_annex.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/Lesson1a_annex.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#objectives">
+   Objectives
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-is-machine-learning">
+     What is Machine Learning?
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-are-neural-networks">
+     What are Neural Networks?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#what-are-convolutional-neural-networks">
+       What are Convolutional Neural Networks?
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#what-is-a-kernel-filter">
+       What is a kernel/filter?
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#what-is-stride">
+       What is stride?
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#what-is-a-convolution-operation">
+       What is a convolution operation?
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#convolution-operation-using-3d-filter">
+       Convolution operation using 3D filter
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#what-is-padding">
+       What is padding?
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#what-is-deep-learning">
+     What is Deep Learning?
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#training-and-testing-data">
+       Training and Testing Data
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#activation-function-weights-and-biases">
+       Activation Function, Weights and Biases
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#hyper-parameters">
+       Hyper-parameters
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#common-deep-learning-algorithms-for-computer-vision">
+       Common Deep Learning Algorithms for Computer Vision
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#semantic-segmentation">
+       Semantic Segmentation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#u-net-segmentation-architecture">
+       U-Net Segmentation Architecture
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#auxiliary-notes">
+       Auxiliary Notes
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="annex-to-introduction-content">
+<h1>Annex to introduction content<a class="headerlink" href="#annex-to-introduction-content" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="objectives">
+<h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this headline">¶</a></h2>
+<p>The goal of this notebook is to teach some basics of machine learning, deep learning and the TensorFlow framework. Here you will find both the explanations of key concepts and the illustrative programs.</p>
+<div class="section" id="what-is-machine-learning">
+<h3>What is Machine Learning?<a class="headerlink" href="#what-is-machine-learning" title="Permalink to this headline">¶</a></h3>
+<p>Machine learning (ML) is a subset of artificial intelligence (AI), which in broad terms, is defined as the ability of a machine to simulate intelligent human behavior.</p>
+<p>The intention of AI and by relation, ML, is to enable machines to learn patterns and subsequently automate certain tasks using sequestered knowledge. These tasks, which are otherwise nominally performed by humans, typically emote complex characteristics that a human similarly learns through pattern recognition.</p>
+<p>Machine learning was coined in the 1950s by AI pioneer Arthur Samuel as the “field of study that gives computers the ability to learn without explicitly being programmed.”</p>
+<p>To illustrate the importance of ML, we may compare traditional programming and ML. Whereas the former requires humans to create the program with detailed instructions for the computer to follow, ML allows the computer to program itself and learn the instructions through self-guided interaction and analysis. This difference confers benefits in many ways, namely:</p>
+<ol class="simple">
+<li><p>time savings on behalf of the human programmer,</p></li>
+<li><p>time savings on behalf of a human manual interpreter,</p></li>
+<li><p>overhead involved in describing step-wise instructions for a complex task such as, for example, how to recognize natural oil seeps versus anthropogenically-derived oil splills in satellite imagery</p></li>
+</ol>
+<p>At its core, machine learning is founded on the consumption of data, and ideally lots of it. ML learns from data provided to it, and generally speaking, the more data the smarter the model. The model trains itself to recognize patterns and features in the data, which then enables it to make predictions about related subject matter.</p>
+<p>Humans still have a role in this process. The appropriate ML algorithm has to be selected and supplied with useful information. Furthermore, human programmers can bootstrap an ML model and help reduce its learning curve by tuning certain parameters.</p>
+<p>There are several subcategories of machine learning:</p>
+<ol class="simple">
+<li><p><strong>Supervised machine learning</strong> involves training a model with labeled data sets that explicitly give examples of predictive features and their target attribute(s). Most geospatial ML applications are of this type, such as the task of supplying ground truth labels of deforestation events with corresponding satellite imagery to a model during training so that it can predict deforestation events in satellite imagery absent of labels.</p></li>
+<li><p><strong>Unsupervised machine learning</strong> involves tasking a model to search for patterns in data without the guidance of labels. This is often used to explore data and find patterns that human programmers aren’t explicitly looking for, or when ground truth labels don’t exist. As another geospatial example, unsupervised ML might be used to classify land cover without expert knowledge of a specific terrain and its land use categories. For classification, one would manually assign labels to clusters after an unsupervised algorithm is run to find clusters in a dataset.</p></li>
+<li><p><strong>Self-supervised machine learning</strong> is very new and growing in its application. It sits at the intersection of the former two ML types, and is revolutionary in its ability to perform like a supervised approach albeit with far less labeled data. It does this by learning common sense, which many consider the “dark matter of artificial intelligence” (<a class="reference external" href="https://ai.facebook.com/blog/self-supervised-learning-the-dark-matter-of-intelligence/">Facebook AI</a>). Common sense enables people to learn new concepts or skills without requiring massive amounts of guidance or teaching for every single objective. Rather, common sense is founded by a wealth of background knowledge gathered through observations and experience over time. Self-supervised ML leverages an understanding of the structure of the data by learning supervisory signals from the data itself, such that it can infer any withheld portion of the data from the remaining data. A geospatial example of this might be predicting urban structures that are diverse across different geographies, yet descriptive enough for a human interpreter to infer their identity using common sense.</p></li>
+<li><p><strong>Reinforcement machine learning</strong>, at last, is a form of ML in which machines learn by way of trial and error to perform optimized actions by being rewarded or penalized. Reinforcement learning can produce models capable of autonomous decision-making and action by iteratively giving feedback on the relative correctness of its decisions and actions.</p></li>
+</ol>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>There are also some problems where machine learning is uniquely equipped to learn insights and make decisions when a human might not, such as drawing relationships from combined spectral indices in a complex terrain.</p>
+</div>
+</div>
+<div class="section" id="what-are-neural-networks">
+<h3>What are Neural Networks?<a class="headerlink" href="#what-are-neural-networks" title="Permalink to this headline">¶</a></h3>
+<p>Artificial neural networks (ANNs) are a specific, biologically-inspired class of machine learning algorithms. They are modeled after the structure and function of the human brain, in which tens of billions of nodes called neurons are connected through synapses. One can think of the neuron as an elementary processing unit, which processes incoming data and passes along a derived message if the data is weighed to be useful. The many synapses, or message pathways, in a neural network are not uniform in strength, and can become weaker or stronger as more data is consumed and more feedback is received over time. That characteristic is in part why neurons are programmable and responsive to granular and/or system level changes so impressively.</p>
+<div class="figure align-default" id="neuron-fig">
+<a class="reference internal image-reference" href="../_images/neuron-structure.jpg"><img alt="../_images/neuron-structure.jpg" src="../_images/neuron-structure.jpg" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text">Biological neuron (from <a class="reference external" href="https://training.seer.cancer.gov/anatomy/nervous/tissue.html">https://training.seer.cancer.gov/anatomy/nervous/tissue.html</a>).</span><a class="headerlink" href="#neuron-fig" title="Permalink to this image">¶</a></p>
+</div>
+<p>ANNs are essentially program that makes decisions by weighing the evidence and responding to feedback. By varying the input data, types of parameters and their values, we can get different models of decision-making.</p>
+<div class="figure align-default" id="neuralnet-basic-fig">
+<a class="reference internal image-reference" href="https://miro.medium.com/max/1100/1*x6KWjKTOBhUYL0MRX4M3oQ.png"><img alt="https://miro.medium.com/max/1100/1*x6KWjKTOBhUYL0MRX4M3oQ.png" src="https://miro.medium.com/max/1100/1*x6KWjKTOBhUYL0MRX4M3oQ.png" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text">Basic neural network from <a class="reference external" href="https://towardsdatascience.com/machine-learning-for-beginners-an-introduction-to-neural-networks-d49f22d238f9">https://towardsdatascience.com/machine-learning-for-beginners-an-introduction-to-neural-networks-d49f22d238f9</a>.</span><a class="headerlink" href="#neuralnet-basic-fig" title="Permalink to this image">¶</a></p>
+</div>
+<p>In network architectures, neurons are grouped in layers, with synapses traversing the interstitial space between neurons in one layer and the next. As data passes through successive layers of the network, features are derived, combined and interpreted in a low-level to high-level trajectory. For example, in the intial layers of a network, you might see a model begin to detect crude lines and edges, and then in the intermediate layers you see the lines combined to form a building, and then the surrounding context or building color or texture might be involved in the latter layers to predict the the type of building.</p>
+<div class="section" id="what-are-convolutional-neural-networks">
+<h4>What are Convolutional Neural Networks?<a class="headerlink" href="#what-are-convolutional-neural-networks" title="Permalink to this headline">¶</a></h4>
+<p>A Convolutional Neural Network (ConvNet/CNN) is a form of deep learning inspired by the organization of the human visual cortex, in which individual neurons respond to stimuli within a constrained region of the visual field known as the receptive field. Several receptive fields overlap to account for the entire visual area.</p>
+<p>In artificial CNNs, an input matrix such as an image is given importance per various aspects and objects in the image through a moving, convoling receptive field. Very little pre-processing is required for CNNs relative to other classification methods as the need for upfront feature-engineering is removed. Rather, CNNs learn the correct filters and consequent features on their own, provided enough training time and examples.</p>
+<div class="figure align-default" id="convolution-fig">
+<a class="reference internal image-reference" href="https://miro.medium.com/max/1400/1*Fw-ehcNBR9byHtho-Rxbtw.gif"><img alt="https://miro.medium.com/max/1400/1*Fw-ehcNBR9byHtho-Rxbtw.gif" src="https://miro.medium.com/max/1400/1*Fw-ehcNBR9byHtho-Rxbtw.gif" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text">Convolution of a kernal over an input matrix from <a class="reference external" href="https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1">https://towardsdatascience.com/intuitively-understanding-convolutions-for-deep-learning-1f6f42faee1</a>.</span><a class="headerlink" href="#convolution-fig" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="what-is-a-kernel-filter">
+<h4>What is a kernel/filter?<a class="headerlink" href="#what-is-a-kernel-filter" title="Permalink to this headline">¶</a></h4>
+<p>A kernel is matrix smaller than the input. It acts as a receptive field that moves over the input matrix from left to right and top to bottom and filters for features in the image.</p>
+</div>
+<div class="section" id="what-is-stride">
+<h4>What is stride?<a class="headerlink" href="#what-is-stride" title="Permalink to this headline">¶</a></h4>
+<p>Stride refers to the number of pixels that the kernel shifts at each step in its navigation of the input matrix.</p>
+</div>
+<div class="section" id="what-is-a-convolution-operation">
+<h4>What is a convolution operation?<a class="headerlink" href="#what-is-a-convolution-operation" title="Permalink to this headline">¶</a></h4>
+<p>The convolution operation is the combination of two functions to produce a third function as a result. In effect, it is a merging of two sets of information, the the kernel and the input matrix. The dot products produced by the kernel and the input matrix at each stride are the new values in the resulting matrix, also known as a feature map.</p>
+<div class="figure align-default" id="convolution-arithmetic-fig">
+<a class="reference internal image-reference" href="https://theano-pymc.readthedocs.io/en/latest/_images/numerical_no_padding_no_strides.gif"><img alt="https://theano-pymc.readthedocs.io/en/latest/_images/numerical_no_padding_no_strides.gif" src="https://theano-pymc.readthedocs.io/en/latest/_images/numerical_no_padding_no_strides.gif" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text">Convolution of a kernal over an input matrix from <a class="reference external" href="https://theano-pymc.readthedocs.io/en/latest/tutorial/conv_arithmetic.html">https://theano-pymc.readthedocs.io/en/latest/tutorial/conv_arithmetic.html</a>.</span><a class="headerlink" href="#convolution-arithmetic-fig" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="convolution-operation-using-3d-filter">
+<h4>Convolution operation using 3D filter<a class="headerlink" href="#convolution-operation-using-3d-filter" title="Permalink to this headline">¶</a></h4>
+<p>An input image is often represented as a 3D matrix with a dimension for width (pixels), height (pixels), and depth (channels). In the case of an optical image with red, green and blue channels, the kernel/filter matrix is shaped with the same channel depth as the input and the weighted sum of dot products is computed across all 3 dimensions.</p>
+</div>
+<div class="section" id="what-is-padding">
+<h4>What is padding?<a class="headerlink" href="#what-is-padding" title="Permalink to this headline">¶</a></h4>
+<p>After a convolution operation, the feature map is by defualt smaller than the original input matrix. To maintain the same spatial dimensions between input matrix and output feature map, we may pad the input matrix with a border of zeroes or ones. There are two types of padding:</p>
+<ol class="simple">
+<li><p>Same padding: a border of zeroes or ones is added to match the input/output dimensions</p></li>
+<li><p>Valid padding: no border is added and the output dimensions are not matched to the input</p></li>
+</ol>
+<p>We use same padding often because it allows us to construct deeper networks. Without it, the progressive downsizing of the feature maps would constrain how many convolutional layers could be used before the feature map becomes too small.</p>
+<div class="figure align-default" id="padding-fig">
+<a class="reference internal image-reference" href="https://miro.medium.com/max/666/1*noYcUAa_P8nRilg3Lt_nuA.png"><img alt="https://miro.medium.com/max/666/1*noYcUAa_P8nRilg3Lt_nuA.png" src="https://miro.medium.com/max/666/1*noYcUAa_P8nRilg3Lt_nuA.png" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text"><a class="reference external" href="https://ayeshmanthaperera.medium.com/what-is-padding-in-cnns-71b21fb0dd7">Padding an input matrix with zeroes</a>.</span><a class="headerlink" href="#padding-fig" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+</div>
+<div class="section" id="what-is-deep-learning">
+<h3>What is Deep Learning?<a class="headerlink" href="#what-is-deep-learning" title="Permalink to this headline">¶</a></h3>
+<p>Deep learning is defined by neural networks with depth, i.e. many layers and connections. The reason for why deep learning is so highly performant lies in the degree of abstraction made possible by feature extraction across so many layers in which each neuron, or processing unit, is interacting with input from neurons in previous layers and making decisions accordingly. The deepest layers of a network once trained can be capabale inferring highly abstract concepts, such as what differentiates a school from a house in satellite imagery.</p>
+<div class="admonition-cost-of-deep-learning admonition">
+<p class="admonition-title"><strong>Cost of deep learning</strong></p>
+<p>Deep learning requires a lot of data to learn from and usually a significant amount of computing power, so it can be expensive depending on the scope of the problem.</p>
+</div>
+<div class="section" id="training-and-testing-data">
+<h4>Training and Testing Data<a class="headerlink" href="#training-and-testing-data" title="Permalink to this headline">¶</a></h4>
+<p>The dataset (e.g. all images and their labels) are split into training, validation and testing sets. A common ratio is 70:20:10 percent, train:validation:test.  If randomly split, it is important to check that all class labels exist in all sets and are well represented.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Why do we need validation and test data? Are they redundant?
+We need separate test data to evaluate the performance of the model because the validation data is used during training to measure error and therefore inform updates to the model parameters. Therefore, validation data is not unbiased ot the model. A need for new, wholly unseen data to test with is required.</p>
+</div>
+</div>
+<div class="section" id="activation-function-weights-and-biases">
+<h4>Activation Function, Weights and Biases<a class="headerlink" href="#activation-function-weights-and-biases" title="Permalink to this headline">¶</a></h4>
+<p>In a neural network, neurons in one layer are connected to neurons in the next layer.  As information passes from one neuron to the next, the information is conditioned by the weight of the synapse and is subjected to a bias. As it turns out, these variables, the weights and biases, play a significant role in determining if the information passes further beyond the current neuron.</p>
+<p>The activation function decides whether or not the output from one neuron is useful or not based on a threshold value, and therefore, whether it will be carried from one layer to the next.</p>
+<p>Weights, as a reminder, control the signal (or the strength of the connection) between two neurons in two consecutive layers.  In other words, a weight decides how much influence the information coming from one neuron will have on the decision made by the next neuron. Smaller weights correlate with less influence from one neuron to the next.</p>
+<p>Biases are values which help determine whether or not the activation output from a neuron is going to be passed forward through the network. Each Neuron has a bias, and it is the combination of the weighted sum from the input layer (where weighted sum = weights * input matrix) + the bias that decides the activation of a neuron. In the absence of a bias value, the neuron may not be activated by considering only the weighted sum from input layer. For example, if the weighted sum from the input layer is negative, and the activation function only fires when the weighted sum is greater than zero, the neuron won’t fire. If the neuron doesn’t fire / is not activated, the information from this neuron is not passed through rest of neural network. Adding a bias term of 1, for example, to the weighted sum would make the output of the neuron positive, in doing so allowing the neuron to fire and creating more range with respect to weights which will activate and hence be used throughout the network. Stated simply, bias increases the flexibility of the model by giving credence to a larger range of weights.</p>
+<div class="figure align-default" id="activation-fig">
+<a class="reference internal image-reference" href="https://cdn-images-1.medium.com/max/651/1*UA30b0mJUPYoPvN8yJr2iQ.jpeg"><img alt="https://cdn-images-1.medium.com/max/651/1*UA30b0mJUPYoPvN8yJr2iQ.jpeg" src="https://cdn-images-1.medium.com/max/651/1*UA30b0mJUPYoPvN8yJr2iQ.jpeg" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text"><a class="reference external" href="https://laptrinhx.com/statistics-is-freaking-hard-wtf-is-activation-function-207913705/">Weights, bias, activation</a>.</span><a class="headerlink" href="#activation-fig" title="Permalink to this image">¶</a></p>
+</div>
+<p>During training, the weights and biases are learned and updated using the training and validation dataset to fit the data and reduce error of prediction values relative to target values.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<ul class="simple">
+<li><p><strong>Activation function</strong>: decides whether or not the output from one neuron is useful or not</p></li>
+<li><p><strong>Weights</strong>: control the signal between neurons in consecutive layers</p></li>
+<li><p><strong>Biases</strong>: a threshold value that determines the activation of each neuron</p></li>
+<li><p>Weights and biases are the learnable parameters of a deep learning model</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="hyper-parameters">
+<h4>Hyper-parameters<a class="headerlink" href="#hyper-parameters" title="Permalink to this headline">¶</a></h4>
+<p>Importantly, neural networks train in cycles, where the input data passes through the network, a relationship between input data and target values is learned, a prediction is made, the prediction value is measured for error relative to its true value, and the errors are used to inform updates to parameters in the network, feeding into the next cycle of learning and prediction using the updated information. Bear in mind, unless your dataset is very small, it has to be fed to the model in smaller parts (known as <strong>batches</strong>) in order to avoid memory overload or resource exhaustion.</p>
+<p>The <strong>learning rate</strong> controls how much we want the model to change in response to the estimated error after each training cycle
+The <strong>batch size</strong> determines the portion of our training dataset that can be fed to the model during each cycle. Stated otherwise, batch size controls the number of training samples to work through before the model’s internal parameters are updated.</p>
+<p>The learning rate is a hyperparameter that controls how much the model may change in response to the estimated error each time the model weights are updated. Choosing the learning rate is challenging as a value too small may result in a long training process that could take a long time to converge on an optimal set of parameters, whereas a value too large may result in learning a sub-optimal set of weights too fast, getting stuck at a local optimum and consequently missing the global optimum.</p>
+<p>Think of a batch as a for-loop iterating over one or more samples and making predictions. At the end of the batch’s forward pass through the network, the predictions are compared to the expected output variables and an error is calculated. The error is back propogated through the network to adjust the parameters with respect to the error. A training dataset can be divided into one or more batches.</p>
+<p>An <strong>epoch</strong> is defined as the point when all training samples, aka the entire dataset, has passed through the neural network once. The number of epochs controls how many times the entire dataset is cycled through and analyzed by the neural network. We should expect to see the error progressively reduce throughout the course of successive epochs.</p>
+<p>The <strong>optimization function</strong> is really important. It’s what we use to change the attributes of your neural network such as weights and biases in order to reduce the losses. The goal of an optimization function is to minimize the error produced by the model.</p>
+<p>The <strong>loss function</strong>, also known as the cost function, measures how much the model needs to improve based on the prediction errors relative to the true values during training.</p>
+<p>The <strong>accuracy metric</strong> measures the performance of a model. For example, a pixel to pixel comparison for agreement on class.</p>
+<p>Note: the <strong>activation function</strong> is also a hyper-parameter.</p>
+</div>
+<div class="section" id="common-deep-learning-algorithms-for-computer-vision">
+<h4>Common Deep Learning Algorithms for Computer Vision<a class="headerlink" href="#common-deep-learning-algorithms-for-computer-vision" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Image classification: classifying whole images, e.g. image with clouds, image without clouds</p></li>
+<li><p>Object detection: identifying locations of objects in an image and classifying them, e.g. identify bounding boxes of cars and planes in satellite imagery</p></li>
+<li><p>Semantic segmentation: classifying individual pixels in an image, e.g. land cover classification</p></li>
+<li><p>Instance segmentation: classifying individual pixels in an image in terms of both class and individual membership, e.g. detecting unique agricultural field polygons and classifying them</p></li>
+<li><p>Generative Adversarial:  a type of image generation where synthetic images are created from real ones, e.g. creating synthetic landscapes from real landscape images</p></li>
+</ul>
+</div>
+<div class="section" id="semantic-segmentation">
+<h4>Semantic Segmentation<a class="headerlink" href="#semantic-segmentation" title="Permalink to this headline">¶</a></h4>
+<p>To pair with the content of these tutorials, we will demonstrate semantic segmentation (supervised) to map land use categories and illegal gold mining activity.</p>
+<ul class="simple">
+<li><p>Semantic = of or relating to meaning (class)</p></li>
+<li><p>Segmentation = division (of image) into separate parts</p></li>
+</ul>
+</div>
+<div class="section" id="u-net-segmentation-architecture">
+<h4>U-Net Segmentation Architecture<a class="headerlink" href="#u-net-segmentation-architecture" title="Permalink to this headline">¶</a></h4>
+<p>Semantic segmentation is often distilled into the combination of an encoder and a decoder. An encoder generates logic or feedback from input data, and a decoder takes that feedback and translates it to output data in the same form as the input.</p>
+<p>The U-Net model, which is one of many deep learning segmentation algorithms, has a great illustration of this structure. In Fig. 8, the encoder is on the left side of the model. It consists of consecutive convolutional layers, each followed by ReLU and a max pooling operation to encode feature representations at multiple scales. The encoder can be represented by most feature extraction networks designed for classification. In the initial convolutional layers, the filters learn low level features in an image such as lines or edges. Progressing through further layers, the filters learn more abstract features such as combinations of lines and colors. The encoder downsamples as it moves from extracting low-level, granular features to high level abstract features.</p>
+<p>The decoder, on the right side of the Fig. 8 diagram, is tasked to semantically project the discriminative features learned by the encoder onto the original pixel space to render a dense classification. The decoder consists of deconvolution and concatenation with corresponding features from the encoder followed by regular convolution operations.</p>
+<p>Deconvolution in a CNN is used to restore the dimensions of feature maps to the original size of the input image. This operation is also referred to as transposed convolution, upconvolution or upsampling. With deonvolution, the goal is to progressively upsample feature maps to pair with the size of the corresponding concatenation blocks from the encoder. You may see the gray and green arrows, where we concatenate two feature maps together. The main contribution of U-Net in this sense is that while upsampling in the network we are also concatenating the higher resolution feature maps from the encoder network with the upsampled features in order to better learn representations with following convolutions. Since upsampling is a sparse operation we need a good prior from earlier stages to better represent the localization.</p>
+<p>Following the decoder is the final classification layer, which computes the pixel-wise classification for each cell in the final feature map.</p>
+<p>These models are often applied to computer vision problems where regions of pixel space are representative of a unique class. A semantic segmentation model enables direct localization and quantification of predicted classes.</p>
+<p>Also to note, batch normalization is used as a way of accelerating training and many studies have found it to be important to use to obtain state-of-the-art results on benchmark problems. With batch normalization, each element of a layer in a neural network is normalized to zero mean and unit variance, based on its statistics within a mini-batch.</p>
+<p>ReLU is an operation, an activation function to be specific, that induces non-linearity. This function intakes the feature map from a convolution operation and remaps it such that any positive value stays exactly the same, and any negative value becomes zero.</p>
+<div class="figure align-default" id="relu-graph-fig">
+<a class="reference internal image-reference" href="https://miro.medium.com/max/3200/1*w48zY6o9_5W9iesSsNabmQ.gif"><img alt="https://miro.medium.com/max/3200/1*w48zY6o9_5W9iesSsNabmQ.gif" src="https://miro.medium.com/max/3200/1*w48zY6o9_5W9iesSsNabmQ.gif" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text"><a class="reference external" href="https://medium.com/ai%C2%B3-theory-practice-business/magic-behind-activation-function-c6fbc5e36a92">ReLU activation function</a>.</span><a class="headerlink" href="#relu-graph-fig" title="Permalink to this image">¶</a></p>
+</div>
+<p>Max pooling is used to summarize a feature map and only retain the important structural elements, foregoing the more granular detail that may not be significant to the modeling task. This helps to denoise the signal and helps with computational efficiency. It works similar to convolution in that a kernel with a stride is applied to the feature map and only the maximum value within each patch is reserved.</p>
+<div class="figure align-default" id="maxpooling-fig">
+<a class="reference internal image-reference" href="https://thumbs.gfycat.com/FirstMediumDalmatian-size_restricted.gif"><img alt="https://thumbs.gfycat.com/FirstMediumDalmatian-size_restricted.gif" src="https://thumbs.gfycat.com/FirstMediumDalmatian-size_restricted.gif" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text"><a class="reference external" href="https://gfycat.com/firstmediumdalmatian">Max pooling with a kernal over an input matrix</a>.</span><a class="headerlink" href="#maxpooling-fig" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="relu-maxpooling-fig">
+<a class="reference internal image-reference" href="https://miro.medium.com/max/1000/1*cmGESKfSZLH2ksqF_kBgfQ.gif"><img alt="https://miro.medium.com/max/1000/1*cmGESKfSZLH2ksqF_kBgfQ.gif" src="https://miro.medium.com/max/1000/1*cmGESKfSZLH2ksqF_kBgfQ.gif" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text"><a class="reference external" href="https://towardsdatascience.com/a-laymans-guide-to-building-your-first-image-classification-model-in-r-using-keras-b285deac6572">ReLU applied to an input matrix</a>.</span><a class="headerlink" href="#relu-maxpooling-fig" title="Permalink to this image">¶</a></p>
+</div>
+<div class="figure align-default" id="id1">
+<a class="reference internal image-reference" href="https://miro.medium.com/max/1000/1*cmGESKfSZLH2ksqF_kBgfQ.gif"><img alt="https://miro.medium.com/max/1000/1*cmGESKfSZLH2ksqF_kBgfQ.gif" src="https://miro.medium.com/max/1000/1*cmGESKfSZLH2ksqF_kBgfQ.gif" style="width: 450px;" /></a>
+<p class="caption"><span class="caption-text"><a class="reference external" href="https://towardsdatascience.com/a-laymans-guide-to-building-your-first-image-classification-model-in-r-using-keras-b285deac6572">ReLU applied to an input matrix</a>.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div>
+<div class="section" id="auxiliary-notes">
+<h4>Auxiliary Notes<a class="headerlink" href="#auxiliary-notes" title="Permalink to this headline">¶</a></h4>
+<p>Generally speaking, after training the model is complete, we can use the same evaluation metrics for deep learning as we do for classical ML. So, as an example, for segmentation, confusion matrix and f1-score are applicable in both classical ML (i.e. random forest) and in deep learning (i.e. semantic segmentation).</p>
+<p>Yet, still there is the question of when we should use deep learning instead of classical ML.  One of the great strengths of deep learning is its built in feature extraction, which can handle very complex and /or abstract data. A good rule of thumb: when either 1) the data is very complex and we do not want to do a lot of processing to define the features manually, or 2) when the task suits well to automation and scaling beyond human processing speed, deep learning is a good choice. In contrast, when the data is relatively uniform and/or the feature space is not too noisy, or, when our input data is not exceedingly vast, then classical ML is probably all that is necessary.</p>
+<p>Typically, when selecting a model architecture, you start with what are you trying to model (is it to classify an image, detect an object, so on so forth) and then, within that associated family of algorithms, you check for the state of the art model at the present time. Developers all over build and test their models against standard benchmark datasets so as to compare performances fairly. You can reference the performance scores of the different architectures to decide which is the best, but you’ll want to keep in mind the notion of architecture complexity. Some might perform extremely well, but the architectures under the hood are enormous and computationally expensive to use. A simple model architecture will comparatively cost less than a complex one, so identifying the right balance of complexity and performance in relation to training time and executional cost is important to factor in.</p>
+<p>Your choice of a loss function is a function of the problem itself. If it’s a binary classification problem, you might choose binary cross-entropy. If it’s a multi-class classification problem, you might choose multi-class cross entropy. In both, cross entropy entails comparing the predicted class probabilities for, let’s say a given pixel, and choosing the highest probability class. We will use an adaption on this loss function for a class-imbalanced dataset. It’s called focal loss and uses class weighting based on frequency in the dataset to tonify the losses associated with each class.</p>
+<p>Lastly, when we instantiate the model, we can initialize the weights to random values or all zeroes and let the model learn the correct values. Or, we can adopt the trained weights from another model to expedite the learning progress. Remember, in the initial convolutional layers, it’s just simple features that are learned - like combinations of lines and colors - and since that is generally extensible to many image-related applications, we can adopt the weights trained to learn those low-level features and start with that foundational knowledge. This makes it such that the network only really needs to learn the high level features unique to your training data. More on this later on.</p>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Development Seed<br/>
+        
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

@@ -1,0 +1,13 @@
+name: ds_book
+channels:
+  - default
+dependencies:
+  - python=3.8
+  - sphinx
+  - pip
+  - numpy
+  - matplotlib
+  - tqdm
+  - pip:
+    - jupyter-book
+
