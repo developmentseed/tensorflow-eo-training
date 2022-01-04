@@ -1,0 +1,1094 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Process dataset for use with deep learning segmentation network &#8212; Deep learning with TensorFlow</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="../_static/ds.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Semantic segmentation with deep learning" href="Lesson3_deeplearning_crop_segmentation.html" />
+    <link rel="prev" title="Access and mosaic Planet NICFI monthly basemaps" href="Lesson2a_get_planet_NICFI.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/ds.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Deep learning with TensorFlow</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1a_Intro_ML_NN_DL.html">
+   Introduction to machine learning, neural networks and deep learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1b_Intro_TensorFlow_Keras.html">
+   Introduction to TensorFlow and Keras
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson2a_get_planet_NICFI.html">
+   Access and mosaic Planet NICFI monthly basemaps
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Process dataset for use with deep learning segmentation network
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson3_deeplearning_crop_segmentation.html">
+   Semantic segmentation with deep learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson4_evaluation.html">
+   Evaluating Semantic Segmentation Models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson5_dealing_with_limited_data.html">
+   Dealing with limited data for semantic segmentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="appendix.html">
+   Appendix
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/docs/Lesson2b_prep_data_ML_segmentation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training/"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training//issues/new?title=Issue%20on%20page%20%2Fdocs/Lesson2b_prep_data_ML_segmentation.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/developmentseed/tensorflow-eo-training/edit/main/ds_book/docs/Lesson2b_prep_data_ML_segmentation.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/developmentseed/tensorflow-eo-training/main?urlpath=tree/ds_book/docs/Lesson2b_prep_data_ML_segmentation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/Lesson2b_prep_data_ML_segmentation.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup-notebook">
+   Setup Notebook
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-gpu">
+     Enabling GPU
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#raster-processing">
+   Raster processing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#read-the-data-into-memory">
+   Read the data into memory
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#getting-set-up-with-the-data">
+     Getting set up with the data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualize-the-data">
+     Visualize the data
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="process-dataset-for-use-with-deep-learning-segmentation-network">
+<h1>Process dataset for use with deep learning segmentation network<a class="headerlink" href="#process-dataset-for-use-with-deep-learning-segmentation-network" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>A guide for processing raster data and labels into ML-ready format for use with a deep-learning based semantic segmentation.</p>
+</div></blockquote>
+<div class="section" id="setup-notebook">
+<h2>Setup Notebook<a class="headerlink" href="#setup-notebook" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-version-control admonition">
+<p class="admonition-title"><strong>Version control</strong></p>
+<p>Colab updates without warning to users, which can cause notebooks to break. Therefore, we are pinning library versions.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># install required libraries</span>
+<span class="o">!</span>pip install -q <span class="nv">rasterio</span><span class="o">==</span><span class="m">1</span>.2.10
+<span class="o">!</span>pip install -q <span class="nv">geopandas</span><span class="o">==</span><span class="m">0</span>.10.2
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     |████████████████████████████████| 19.3 MB 385 kB/s 
+     |████████████████████████████████| 1.0 MB 8.1 MB/s 
+     |████████████████████████████████| 15.4 MB 82.3 MB/s 
+     |████████████████████████████████| 6.3 MB 28.0 MB/s 
+?25h
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import required libraries</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">functools</span><span class="o">,</span> <span class="nn">fnmatch</span><span class="o">,</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">mpimg</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="kn">import</span> <span class="nn">rasterio</span>
+<span class="kn">from</span> <span class="nn">rasterio.merge</span> <span class="kn">import</span> <span class="n">merge</span>
+<span class="kn">from</span> <span class="nn">rasterio.plot</span> <span class="kn">import</span> <span class="n">show</span>
+<span class="kn">from</span> <span class="nn">rasterio</span> <span class="kn">import</span> <span class="n">features</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">windows</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="kn">from</span> <span class="nn">timeit</span> <span class="kn">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mount google drive.</span>
+<span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/gdrive&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mounted at /content/gdrive
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set your root directory and tiled data folders</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed/&#39;</span>  
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running on Colab&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/servir-tf-devseed&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not running on Colab, data needs to be downloaded locally at </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;indices/&#39;</span><span class="p">)</span> <span class="c1"># or os.path.join(root_dir,&#39;images_bright/&#39;) if using the optical tiles</span>
+<span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;labels/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Running on Colab
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">cd</span> $root_dir 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/content/gdrive/MyDrive/servir-tf/data/servir-tf-devseed
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="enabling-gpu">
+<h3>Enabling GPU<a class="headerlink" href="#enabling-gpu" title="Permalink to this headline">¶</a></h3>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>This notebook can utilize a GPU and works better if you use one. Hopefully this notebook is using a GPU, and we can check with the following code.</p>
+<p>If it’s not using a GPU you can change your session/notebook to use a GPU. See <a class="reference external" href="https://colab.research.google.com/notebooks/gpu.ipynb#scrollTo=sXnDmXR7RDr2">Instructions</a>.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">tensorflow_version</span> 2.x
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="n">device_name</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">gpu_device_name</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">device_name</span> <span class="o">!=</span> <span class="s1">&#39;/device:GPU:0&#39;</span><span class="p">:</span>
+  <span class="k">raise</span> <span class="ne">SystemError</span><span class="p">(</span><span class="s1">&#39;GPU device not found&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Found GPU at: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">device_name</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="raster-processing">
+<h2>Raster processing<a class="headerlink" href="#raster-processing" title="Permalink to this headline">¶</a></h2>
+<div class="alert alert-block alert-danger">
+&#9888 <b>WARNING</b> &#9888 This section contains helper functions for processing the raw raster composites and is <b>optional yet not recommended</b>, as the ML-ready tiled dataset is written to a shared drive folder, as you’ll see in the section titled <b>Read the data into memory</b>. Any cells with markdown containing an &#8681 just above them are to be skipped during the workshop.
+</div><p>Get the optical, spectral index and label mask images.</p>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">raster_read</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">):</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">)</span>
+   <span class="n">rasters</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/**/*.tif&#39;</span><span class="p">),</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">rasters</span><span class="p">)</span>
+
+   <span class="c1"># Read band metadata and arrays</span>
+   <span class="c1"># metadata</span>
+   <span class="n">rgb</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/*rgb.tif*&#39;</span><span class="p">))</span> <span class="c1">#rgb</span>
+   <span class="n">rgbn</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/*rgbn.tif*&#39;</span><span class="p">))</span> <span class="c1">#rgbn</span>
+   <span class="n">indices</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/*indices.tif*&#39;</span><span class="p">))</span> <span class="c1">#spectral</span>
+   <span class="n">labels</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/*label.tif*&#39;</span><span class="p">))</span> <span class="c1">#labels</span>
+   <span class="n">rgb_src</span> <span class="o">=</span> <span class="n">rgb</span>
+   <span class="n">labels_src</span> <span class="o">=</span> <span class="n">labels</span>
+   <span class="n">target_crs</span> <span class="o">=</span> <span class="n">rgb_src</span><span class="o">.</span><span class="n">crs</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rgb: &quot;</span><span class="p">,</span> <span class="n">rgb</span><span class="p">)</span>
+
+   <span class="c1"># arrays</span>
+   <span class="c1"># Read and re-scale the original 16 bit image to 8 bit.</span>
+   <span class="n">rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">rgb</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>
+   <span class="n">rgbn</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>
+   <span class="n">indices</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">indices</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>
+   <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+   <span class="c1"># Check the label mask values.</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;values in labels array: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+   <span class="k">return</span> <span class="n">raster_dir</span><span class="p">,</span> <span class="n">rgb</span><span class="p">,</span> <span class="n">rgbn</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rgb_src</span><span class="p">,</span> <span class="n">labels_src</span><span class="p">,</span> <span class="n">target_crs</span>
+</pre></div>
+</div>
+<p>Color correction for the optical composite.</p>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># function to increase the brightness in an image</span>
+<span class="k">def</span> <span class="nf">change_brightness</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+    <span class="n">hsv</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2HSV</span><span class="p">)</span>
+    <span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">hsv</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">v</span> <span class="o">&gt;</span> <span class="mi">255</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">final_hsv</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">merge</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">final_hsv</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_HSV2BGR</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">img</span>
+</pre></div>
+</div>
+<p>Calculate relevant spectral indices</p>
+<div>&#8681</div> <p><strong>WDRVI</strong>: Wide Dynamic Range Vegetation Index <br />
+<strong>NPCRI</strong>: Normalized Pigment Chlorophyll Ratio Index <br />
+<strong>SI</strong>: Shadow Index</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate spectral indices and concatenate them into one 3 channel image</span>
+<span class="k">def</span> <span class="nf">indexnormstack</span><span class="p">(</span><span class="n">red</span><span class="p">,</span> <span class="n">green</span><span class="p">,</span> <span class="n">blue</span><span class="p">,</span> <span class="n">nir</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">WDRVIcalc</span><span class="p">(</span><span class="n">nir</span><span class="p">,</span> <span class="n">red</span><span class="p">):</span> 
+        <span class="n">a</span> <span class="o">=</span> <span class="mf">0.15</span>
+        <span class="n">wdrvi</span> <span class="o">=</span>  <span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">nir</span><span class="o">-</span><span class="n">red</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">a</span> <span class="o">*</span> <span class="n">nir</span><span class="o">+</span><span class="n">red</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">wdrvi</span>
+    
+    <span class="k">def</span> <span class="nf">NPCRIcalc</span><span class="p">(</span><span class="n">red</span><span class="p">,</span><span class="n">blue</span><span class="p">):</span>
+        <span class="n">npcri</span> <span class="o">=</span>  <span class="p">(</span><span class="n">red</span><span class="o">-</span><span class="n">blue</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">red</span><span class="o">+</span><span class="n">blue</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">npcri</span>
+    
+    <span class="k">def</span> <span class="nf">SIcalc</span><span class="p">(</span><span class="n">red</span><span class="p">,</span> <span class="n">green</span><span class="p">,</span> <span class="n">blue</span><span class="p">):</span>
+        <span class="n">si</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">red</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">green</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">blue</span><span class="p">))</span><span class="o">^</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">si</span>
+    
+    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+        <span class="n">arr_norm</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="o">*</span><span class="p">(</span><span class="n">arr</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">ptp</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span> 
+        <span class="k">return</span> <span class="n">arr_norm</span>
+    
+    <span class="n">wdrvi</span> <span class="o">=</span> <span class="n">WDRVIcalc</span><span class="p">(</span><span class="n">nir</span><span class="p">,</span><span class="n">red</span><span class="p">)</span> 
+
+    <span class="n">npcri</span> <span class="o">=</span> <span class="n">WRDVIcalc</span><span class="p">(</span><span class="n">red</span><span class="p">,</span><span class="n">blue</span><span class="p">)</span>
+    
+    <span class="n">si</span> <span class="o">=</span> <span class="n">SIcalc</span><span class="p">(</span><span class="n">red</span><span class="p">,</span><span class="n">green</span><span class="p">,</span><span class="n">blue</span><span class="p">)</span> 
+    
+    <span class="n">wdrvi</span> <span class="o">=</span> <span class="n">wdrvi</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">npcri</span> <span class="o">=</span> <span class="n">npcri</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">si</span> <span class="o">=</span> <span class="n">si</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">index_stack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">wdrvi</span><span class="p">,</span> <span class="n">npcri</span><span class="p">,</span> <span class="n">si</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">index_stack</span>
+</pre></div>
+</div>
+<p>If you are rasterizing the labels from a vector file (e.g. GeoJSON or Shapefile).</p>
+<div>&#8681</div> <p>Read label shapefile into geopandas dataframe, check for invalid geometries and set to local CRS. Then, rasterize the labeled polygons using the metadata from one of the grayscale band images. In this fucntion, <code class="docutils literal notranslate"><span class="pre">geo_1</span></code> is used when there are two vector files used for labeling, e.g. Imaflora and Para. The latter is given preference over the former because it overwrites when intersections occur.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="n">geos</span><span class="p">,</span> <span class="n">labels_src</span><span class="p">):</span>
+    <span class="n">geo_0</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">geos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># check for and remove invalid geometries</span>
+    <span class="n">geo_0</span> <span class="o">=</span> <span class="n">geo_0</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">geo_0</span><span class="o">.</span><span class="n">is_valid</span><span class="p">]</span>
+    <span class="c1"># reproject training data into local coordinate reference system</span>
+    <span class="n">geo_0</span> <span class="o">=</span> <span class="n">geo_0</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;init&#39;</span><span class="p">:</span> <span class="n">target_crs</span><span class="p">})</span>
+    <span class="c1">#convert the class identifier column to type integer</span>
+    <span class="n">geo_0</span><span class="p">[</span><span class="s1">&#39;landcover_int&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">geo_0</span><span class="o">.</span><span class="n">landcover</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="c1"># pair the geometries and their integer class values</span>
+    <span class="n">shapes_0</span> <span class="o">=</span> <span class="p">((</span><span class="n">geom</span><span class="p">,</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">geom</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">geo_0</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">geo_0</span><span class="o">.</span><span class="n">landcover_int</span><span class="p">))</span> 
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">geos</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+      <span class="n">geo_1</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">geos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+      <span class="n">geo_1</span> <span class="o">=</span> <span class="n">geo_1</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">geo_1</span><span class="o">.</span><span class="n">is_valid</span><span class="p">]</span>
+      <span class="n">geo_1</span> <span class="o">=</span> <span class="n">geo_1</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;init&#39;</span><span class="p">:</span> <span class="n">target_crs</span><span class="p">})</span>
+      <span class="n">geo_1</span><span class="p">[</span><span class="s1">&#39;landcover_int&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="n">geo_1</span><span class="o">.</span><span class="n">landcover</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+      <span class="n">shapes_1</span> <span class="o">=</span> <span class="p">((</span><span class="n">geom</span><span class="p">,</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">geom</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">geo_1</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">geo_1</span><span class="o">.</span><span class="n">landcover_int</span><span class="p">))</span> 
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">continue</span>
+
+    <span class="c1"># get the metadata (height, width, channels, transform, CRS) to use in constructing the labeled image array</span>
+    <span class="n">labels_src_prf</span> <span class="o">=</span> <span class="n">labels_src</span><span class="o">.</span><span class="n">profile</span>
+    <span class="c1"># construct a blank array from the metadata and burn the labels in</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">rasterize</span><span class="p">(</span><span class="n">shapes</span><span class="o">=</span><span class="n">shapes</span><span class="p">,</span> <span class="n">out_shape</span><span class="o">=</span><span class="p">(</span><span class="n">labels_src_prf</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">labels_src_prf</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]),</span> <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">all_touched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">labels_src_prf</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">labels_src_prf</span><span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">geo_1</span><span class="p">:</span>
+      <span class="n">labels</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">rasterize</span><span class="p">(</span><span class="n">shapes</span><span class="o">=</span><span class="n">shapes_0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">all_touched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">labels_src_prf</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">continue</span>
+      
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in labeled image: &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">))</span>
+
+
+    <span class="k">return</span> <span class="n">labels</span>
+</pre></div>
+</div>
+<p>Write the processed rasters to file.</p>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">save_images</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span> <span class="n">rgb_norm</span><span class="p">,</span> <span class="n">index_stack</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rgb_src</span><span class="p">,</span> <span class="n">labels_src</span><span class="p">):</span>
+
+    <span class="n">rgb_norm_out</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/rgb_byte_scaled.tif&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;Gtiff&#39;</span><span class="p">,</span>
+                              <span class="n">width</span><span class="o">=</span><span class="n">rgb_src</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">rgb_src</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+                              <span class="n">count</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                              <span class="n">crs</span><span class="o">=</span><span class="n">rgb_src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
+                              <span class="n">transform</span><span class="o">=</span><span class="n">rgb_src</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
+                              <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
+
+    <span class="n">rgb_norm_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">rgb_norm</span><span class="p">)</span>
+    <span class="n">rgb_norm_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">indices_computed</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># change to True if using the index helper function above</span>
+    <span class="k">if</span> <span class="n">indices_computed</span><span class="p">:</span>
+      <span class="n">index_stack</span> <span class="o">=</span> <span class="p">(</span><span class="n">index_stack</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+      <span class="n">index_stack_t</span> <span class="o">=</span> <span class="n">index_stack</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">index_stack_t</span> <span class="o">=</span> <span class="n">index_stack</span>
+
+    <span class="n">index_stack_out</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/index_stack.tif&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;Gtiff&#39;</span><span class="p">,</span>
+                              <span class="n">width</span><span class="o">=</span><span class="n">rgb_src</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">rgb_src</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+                              <span class="n">count</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                              <span class="n">crs</span><span class="o">=</span><span class="n">rgb_src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
+                              <span class="n">transform</span><span class="o">=</span><span class="n">rgb_src</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
+                              <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
+
+    <span class="n">index_stack_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">index_stack_t</span><span class="p">)</span>
+    <span class="n">index_stack_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="n">labels_out</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/labels.tif&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;Gtiff&#39;</span><span class="p">,</span>
+                              <span class="n">width</span><span class="o">=</span><span class="n">labels_src</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">labels_src</span><span class="o">.</span><span class="n">height</span><span class="p">,</span>
+                              <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                              <span class="n">crs</span><span class="o">=</span><span class="n">labels_src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
+                              <span class="n">transform</span><span class="o">=</span><span class="n">labels_src</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
+                              <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span>
+
+    <span class="n">labels_out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">labels_out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/index_stack.tif&#39;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/labels.tif&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now let’s divide the optical/index stack and labeled image into 224x224 pixel tiles.</p>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">tile</span><span class="p">(</span><span class="n">index_stack</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">brighten</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">tiles_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span><span class="s1">&#39;tiled/&#39;</span><span class="p">)</span>
+    <span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span><span class="s1">&#39;tiled/indices/&#39;</span><span class="p">)</span>
+    <span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span><span class="s1">&#39;tiled/labels/&#39;</span><span class="p">)</span>
+    <span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">tiles_dir</span><span class="p">,</span> <span class="n">img_dir</span><span class="p">,</span> <span class="n">label_dir</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">get_tiles</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
+        <span class="c1"># get number of rows and columns (pixels) in the entire input image</span>
+        <span class="n">nols</span><span class="p">,</span> <span class="n">nrows</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">],</span> <span class="n">ds</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
+        <span class="c1"># get the grid from which tiles will be made </span>
+        <span class="n">offsets</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nols</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nrows</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+        <span class="c1"># get the window of the entire input image</span>
+        <span class="n">big_window</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">Window</span><span class="p">(</span><span class="n">col_off</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_off</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">nols</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">nrows</span><span class="p">)</span>
+        <span class="c1"># tile the big window by mini-windows per grid cell</span>
+        <span class="k">for</span> <span class="n">col_off</span><span class="p">,</span> <span class="n">row_off</span> <span class="ow">in</span> <span class="n">offsets</span><span class="p">:</span>
+            <span class="n">window</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">Window</span><span class="p">(</span><span class="n">col_off</span><span class="o">=</span><span class="n">col_off</span><span class="p">,</span> <span class="n">row_off</span><span class="o">=</span><span class="n">row_off</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">big_window</span><span class="p">)</span>
+            <span class="n">transform</span> <span class="o">=</span> <span class="n">windows</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">window</span><span class="p">,</span> <span class="n">transform</span>
+      
+    <span class="n">tile_width</span><span class="p">,</span> <span class="n">tile_height</span> <span class="o">=</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span>
+    
+    <span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="n">inpath</span><span class="p">,</span> <span class="n">outpath</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+        <span class="c1"># read input image</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">inpath</span><span class="p">)</span>
+        <span class="c1"># get the metadata </span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;meta: &quot;</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+        <span class="c1"># set the number of channels to 3 or 1, depending on if its the index image or labels image</span>
+        <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="c1"># set the tile output file format to PNG (saves spatial metadata unlike JPG)</span>
+        <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;driver&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;PNG&#39;</span>
+        <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span>
+        <span class="c1"># tile the input image by the mini-windows</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">window</span><span class="p">,</span> <span class="n">transform</span> <span class="ow">in</span> <span class="n">get_tiles</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">transform</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">],</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">window</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">window</span><span class="o">.</span><span class="n">height</span>
+            <span class="n">outfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span><span class="s2">&quot;tile_</span><span class="si">%s</span><span class="s2">_</span><span class="si">%s</span><span class="s2">.png&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
+            <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">meta</span><span class="p">)</span> <span class="k">as</span> <span class="n">outds</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">brighten</span><span class="p">:</span>
+                  <span class="n">imw</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">)</span>
+                  <span class="n">imw</span> <span class="o">=</span> <span class="n">imw</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+                  <span class="n">imwb</span> <span class="o">=</span> <span class="n">change_brightness</span><span class="p">(</span><span class="n">imw</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+                  <span class="n">imwb</span> <span class="o">=</span> <span class="n">imwb</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                  <span class="n">outds</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">imwb</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                  <span class="n">outds</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">))</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+            
+    <span class="k">def</span> <span class="nf">process_tiles</span><span class="p">(</span><span class="n">index_flag</span><span class="p">):</span>
+        <span class="c1"># tile the input images, when index_flag == True, we are tiling the spectral index image, </span>
+        <span class="c1"># when False we are tiling the labels image</span>
+        <span class="k">if</span> <span class="n">index_flag</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="n">inpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/*indices_byte_scaled.tif&#39;</span><span class="p">)</span>
+            <span class="n">outpath</span><span class="o">=</span><span class="n">img_dir</span>
+            <span class="n">crop</span><span class="p">(</span><span class="n">inpath</span><span class="p">,</span> <span class="n">outpath</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">inpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;/*label.tif&#39;</span><span class="p">)</span>
+            <span class="n">outpath</span><span class="o">=</span><span class="n">label_dir</span>
+            <span class="n">crop</span><span class="p">(</span><span class="n">inpath</span><span class="p">,</span> <span class="n">outpath</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                
+    <span class="n">process_tiles</span><span class="p">(</span><span class="n">index_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># tile index stack</span>
+    <span class="n">process_tiles</span><span class="p">(</span><span class="n">index_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># tile labels</span>
+    <span class="k">return</span> <span class="n">tiles_dir</span><span class="p">,</span> <span class="n">img_dir</span><span class="p">,</span> <span class="n">label_dir</span>
+</pre></div>
+</div>
+<p>Run the image processing workflow.</p>
+<div class="alert alert-block alert-warning">
+&#9888 <b>Pain point</b> &#9888 The reason for not running this raster processing code in this workshop is due to a limitation of a Google Drive based workflow. Having a VM with a mounted SSD would be a good start to solving these associated latency problems incurred from I/O of data hosted in Google Drive.
+</div>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">process</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">if</span> <span class="n">process</span><span class="p">:</span>
+  <span class="n">raster_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;/rasters/&#39;</span><span class="p">)</span>
+
+  <span class="c1"># If you want to write the files out to your personal drive, set write_out = True, but I recommend trying </span>
+  <span class="c1"># that in your free time because it takes about 1 hour for all composites.</span>
+
+  <span class="n">write_out</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1">#False</span>
+  <span class="k">if</span> <span class="n">write_out</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+      <span class="c1"># read the rasters and scale to 8bit</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;reading and scaling rasters...&quot;</span><span class="p">)</span>
+      <span class="n">raster_dir</span><span class="p">,</span> <span class="n">rgb</span><span class="p">,</span> <span class="n">rgbn</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rgb_src</span><span class="p">,</span> <span class="n">labels_src</span><span class="p">,</span> <span class="n">target_crs</span> <span class="o">=</span> <span class="n">raster_read</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">)</span>
+
+      <span class="c1"># Calculate indices and combine the indices into one single 3 channel image</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;calculating spectral indices...&quot;</span><span class="p">)</span>
+      <span class="n">index_stack</span> <span class="o">=</span> <span class="n">indexnormstack</span><span class="p">(</span><span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+
+      <span class="c1"># Rasterize labels</span>
+      <span class="n">labels</span> <span class="o">=</span> <span class="n">label</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;TerraBio_Imaflora.geojson&#39;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;TerraBio_Para.geojson&#39;</span><span class="p">)],</span> <span class="n">labels_src</span><span class="p">)</span>
+
+      <span class="c1"># Save index stack and labels to geotiff</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;writing scaled rasters and labels to file...&quot;</span><span class="p">)</span>
+      <span class="n">index_stack_file</span><span class="p">,</span> <span class="n">labels_file</span> <span class="o">=</span> <span class="n">save_images</span><span class="p">(</span><span class="n">personal_dir</span><span class="p">,</span> <span class="n">rgb</span><span class="p">,</span> <span class="n">index_stack</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">rgb_src</span><span class="p">,</span> <span class="n">labels_src</span><span class="p">)</span>
+
+      <span class="c1"># Tile images into 224x224</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tiling the indices and labels...&quot;</span><span class="p">)</span>
+      <span class="n">tiles_dir</span><span class="p">,</span> <span class="n">img_dir</span><span class="p">,</span> <span class="n">label_dir</span> <span class="o">=</span> <span class="n">tile</span><span class="p">(</span><span class="n">index_stack</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="s1">&#39;terrabio&#39;</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="n">raster_dir</span><span class="p">,</span> <span class="n">brighten</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not writing to file; using data in shared drive.&quot;</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using pre-processed dataset.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="read-the-data-into-memory">
+<h2>Read the data into memory<a class="headerlink" href="#read-the-data-into-memory" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getting-set-up-with-the-data">
+<h3>Getting set up with the data<a class="headerlink" href="#getting-set-up-with-the-data" title="Permalink to this headline">¶</a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code>. Then, this folder will be available at the following path that is accessible with the google.colab <code class="docutils literal notranslate"><span class="pre">drive</span></code> module: <code class="docutils literal notranslate"><span class="pre">'/content/gdrive/My</span> <span class="pre">Drive/servir-tf-devseed/'</span></code></p>
+</div>
+<p>We’ll be working witht he following folders in the <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code> folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>servir-tf-devseed/
+├── images/
+├── images_bright/
+├── indices/
+├── indices_800/
+├── labels/
+├── labels_800/
+├── background_list_train.txt
+├── train_list_clean.txt
+└── terrabio_classes.csv
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the classes</span>
+<span class="n">class_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;terrabio_classes.csv&#39;</span><span class="p">))</span>
+<span class="n">class_names</span> <span class="o">=</span> <span class="n">class_index</span><span class="o">.</span><span class="n">class_name</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">class_index</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   class_id   class_name
+0         0   Background
+1         1     Bushland
+2         2      Pasture
+3         3        Roads
+4         4        Cocoa
+5         5   Tree cover
+6         6    Developed
+7         7        Water
+8         8  Agriculture
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Normally we would read the image files from the directories and then process forward from there with background removal with the next <strong>three</strong> illustrated functions, however, due to slow I/O in Google Colab we will read the images list with 90% background removal already performed from a pre-saved list in the shared drive.</p>
+</div>
+<p>Get lists of image and label tile pairs for training and testing.</p>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_train_test_lists</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="n">lbldir</span><span class="p">):</span>
+  <span class="n">imgs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span><span class="s2">&quot;/*.png&quot;</span><span class="p">))</span>
+  <span class="c1">#print(imgs[0:1])</span>
+  <span class="n">dset_list</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">imgs</span><span class="p">:</span>
+    <span class="n">filename_split</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> 
+    <span class="n">filename_zero</span><span class="p">,</span> <span class="n">fileext</span> <span class="o">=</span> <span class="n">filename_split</span> 
+    <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename_zero</span><span class="p">)</span> 
+    <span class="n">dset_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basename</span><span class="p">)</span>
+    
+  <span class="n">x_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">y_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">img_id</span> <span class="ow">in</span> <span class="n">dset_list</span><span class="p">:</span>
+    <span class="n">x_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+    <span class="n">y_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lbldir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+    
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dset_list</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">dset_list</span><span class="p">,</span> <span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span>
+
+<span class="n">train_list</span><span class="p">,</span> <span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span> <span class="o">=</span> <span class="n">get_train_test_lists</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="n">label_dir</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p>number of images:  37350</p>
+<p>Check for the proportion of background tiles. This takes a while. So we can skip by loading from saved results.</p>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">skip</span><span class="p">:</span>
+  <span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">train_list</span><span class="p">:</span> 
+      <span class="c1"># read in each labeled images</span>
+      <span class="c1"># print(os.path.join(label_dir,&quot;{}.png&quot;.format(i))) </span>
+      <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">label_dir</span><span class="p">,</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))))</span>  
+      <span class="c1"># check if no values in image are greater than zero (background value)</span>
+      <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+          <span class="n">background_list_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+          
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of background images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">))</span>
+
+  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;background_list_train.txt&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">background_list_train</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;background_list_train.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of background images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Number of background images:  36489</p>
+<p>We will keep only 10% of the total. Too many background tiles can cause a form of class imbalance.</p>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">background_removal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span>
+<span class="n">train_list_clean</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">train_list</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">background_list_train</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">background_removal</span><span class="p">)]]</span>
+
+<span class="n">x_train_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">y_train_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">img_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_list_clean</span><span class="p">))),</span> <span class="n">train_list_clean</span><span class="p">):</span>
+  <span class="k">pass</span> 
+  <span class="n">x_train_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+  <span class="n">y_train_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">label_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of background tiles: &quot;</span><span class="p">,</span> <span class="n">background_removal</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Remaining number of tiles after 90% background removal: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_list_clean</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Number of background tiles:  32840</p>
+<p>Remaining number of tiles after 90% background removal:  4510</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The cell below contains the shortcut read of prepped training image list.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>  <span class="k">def</span> <span class="nf">get_train_test_lists</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="n">lbldir</span><span class="p">):</span>
+    <span class="n">train_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;train_list_clean.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
+
+    <span class="n">x_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">img_id</span> <span class="ow">in</span> <span class="n">train_list</span><span class="p">:</span>
+      <span class="n">x_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+      <span class="n">y_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lbldir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_list</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">train_list</span><span class="p">,</span> <span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_list</span><span class="p">,</span> <span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span> <span class="o">=</span> <span class="n">get_train_test_lists</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="n">label_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of images:  4510
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now that we have our set of files we want to use for developing our model, we need to split them into three sets:</p>
+<ul class="simple">
+<li><p>the training set for the model to learn from</p></li>
+<li><p>the validation set that allows us to evaluate models and make decisions to change models</p></li>
+<li><p>and the test set that we will use to communicate the results of the best performing model (as determined by the validation set)</p></li>
+</ul>
+<p>We will split index tiles and label tiles into train, validation and test sets: 70%, 20% and 10%, respectively.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">x_test_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span><span class="p">,</span> <span class="n">y_test_filenames</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">num_train_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_train_filenames</span><span class="p">)</span>
+<span class="n">num_val_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_val_filenames</span><span class="p">)</span>
+<span class="n">num_test_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_test_filenames</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of training examples: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_train_examples</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of validation examples: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_val_examples</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of test examples: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_test_examples</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of training examples: 3157
+Number of validation examples: 906
+Number of test examples: 447
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Long running cell</strong> <br />
+The code below checks for values in train, val, and test partitions. We won’t run this since it takes over 10 minutes on colab due to slow IO.</p>
+</div>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vals_train</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vals_val</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vals_test</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">get_vals_in_partition</span><span class="p">(</span><span class="n">partition_list</span><span class="p">,</span> <span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span><span class="p">,</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_filenames</span><span class="p">)))):</span>
+      <span class="k">pass</span> 
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> 
+        <span class="n">vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">partition_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+      <span class="k">except</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+<span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">partition_list</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">partition_list</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+
+<span class="n">get_vals_in_partition</span><span class="p">(</span><span class="n">vals_train</span><span class="p">,</span> <span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">)</span>
+<span class="n">get_vals_in_partition</span><span class="p">(</span><span class="n">vals_val</span><span class="p">,</span> <span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span><span class="p">)</span>
+<span class="n">get_vals_in_partition</span><span class="p">(</span><span class="n">vals_test</span><span class="p">,</span> <span class="n">x_test_filenames</span><span class="p">,</span> <span class="n">y_test_filenames</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in training partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_train</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in validation partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_val</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in test partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_test</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Values in training partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}</p>
+<p>Values in validation partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}</p>
+<p>Values in test partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}</p>
+</div>
+<div class="section" id="visualize-the-data">
+<h3>Visualize the data<a class="headerlink" href="#visualize-the-data" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Long running cell</strong> <br />
+The code below loads foreground examples randomly. We won’t run this since it takes over a while on colab due to slow I/O.</p>
+</div>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display_num</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;background_list_train.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
+
+<span class="c1"># select only for tiles with foreground labels present</span>
+<span class="n">foreground_list_x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">foreground_list_y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">):</span> 
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">filename_split</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> 
+      <span class="n">filename_zero</span><span class="p">,</span> <span class="n">fileext</span> <span class="o">=</span> <span class="n">filename_split</span> 
+      <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename_zero</span><span class="p">)</span> 
+      <span class="k">if</span> <span class="n">basename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">background_list_train</span><span class="p">:</span>
+        <span class="n">foreground_list_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">foreground_list_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">except</span><span class="p">:</span>
+      <span class="k">continue</span>
+
+<span class="n">num_foreground_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">foreground_list_y</span><span class="p">)</span>
+
+<span class="c1"># randomlize the choice of image and label pairs</span>
+<span class="n">r_choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">num_foreground_examples</span><span class="p">,</span> <span class="n">display_num</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Instead, we will read and plot a few sample foreground training images and labels from their pathnames. Note: this may still take a few execution tries to work. Google colab in practice takes some time to connect to data in Google Drive, so sometimes this returns an error on the first (few) attempt(s).</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_num</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;background_list_train.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
+
+<span class="n">foreground_list_x</span> <span class="o">=</span> <span class="p">[</span>
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_15684.png&#39;</span><span class="p">,</span> 
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_23056.png&#39;</span><span class="p">,</span> 
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_21877.png&#39;</span>
+                     <span class="p">]</span>
+
+<span class="n">foreground_list_y</span> <span class="o">=</span> <span class="p">[</span>
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_15684.png&#39;</span><span class="p">,</span> 
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_23056.png&#39;</span><span class="p">,</span> 
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_21877.png&#39;</span>
+                     <span class="p">]</span>
+                     
+<span class="c1"># confirm files exist</span>
+<span class="k">for</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">foreground_list_x</span><span class="p">,</span> <span class="n">foreground_list_y</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fy</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="s2">&quot; and &quot;</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="s2">&quot; exist.&quot;</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="s2">&quot; and &quot;</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="s2">&quot; don&#39;t exist.&quot;</span><span class="p">)</span>
+
+
+<span class="n">num_foreground_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">foreground_list_y</span><span class="p">)</span>
+
+<span class="c1"># randomlize the choice of image and label pairs</span>
+<span class="c1">#r_choices = np.random.choice(num_foreground_examples, display_num)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">display_num</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+  <span class="c1">#img_num = r_choices[i // 2]</span>
+  <span class="n">img_num</span> <span class="o">=</span> <span class="n">i</span> <span class="o">//</span> <span class="mi">2</span>
+  <span class="n">x_pathname</span> <span class="o">=</span> <span class="n">foreground_list_x</span><span class="p">[</span><span class="n">img_num</span><span class="p">]</span>
+  <span class="n">y_pathname</span> <span class="o">=</span> <span class="n">foreground_list_y</span><span class="p">[</span><span class="n">img_num</span><span class="p">]</span>
+  
+  <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">display_num</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mpimg</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">x_pathname</span><span class="p">))</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Original Image&quot;</span><span class="p">)</span>
+  
+  <span class="n">example_labels</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">y_pathname</span><span class="p">)</span>
+  <span class="n">label_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">example_labels</span><span class="p">))</span>
+  
+  <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">display_num</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">example_labels</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Masked Image&quot;</span><span class="p">)</span>  
+  
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Examples of Images and their Masks&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/content/gdrive/My Drive/servir-tf-devseed/indices/tile_terrabio_15684.png  and  /content/gdrive/My Drive/servir-tf-devseed/labels/tile_terrabio_15684.png  don&#39;t exist.
+/content/gdrive/My Drive/servir-tf-devseed/indices/tile_terrabio_23056.png  and  /content/gdrive/My Drive/servir-tf-devseed/labels/tile_terrabio_23056.png  exist.
+/content/gdrive/My Drive/servir-tf-devseed/indices/tile_terrabio_21877.png  and  /content/gdrive/My Drive/servir-tf-devseed/labels/tile_terrabio_21877.png  exist.
+</pre></div>
+</div>
+<img alt="../_images/Lesson2b_prep_data_ML_segmentation_35_1.png" src="../_images/Lesson2b_prep_data_ML_segmentation_35_1.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="Lesson2a_get_planet_NICFI.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Access and mosaic Planet NICFI monthly basemaps</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="Lesson3_deeplearning_crop_segmentation.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Semantic segmentation with deep learning</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Development Seed<br/>
+        
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

@@ -1,0 +1,811 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Access and mosaic Planet NICFI monthly basemaps &#8212; Deep learning with TensorFlow</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="../_static/ds.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Process dataset for use with deep learning segmentation network" href="Lesson2b_prep_data_ML_segmentation.html" />
+    <link rel="prev" title="Introduction to TensorFlow and Keras" href="Lesson1b_Intro_TensorFlow_Keras.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/ds.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Deep learning with TensorFlow</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1a_Intro_ML_NN_DL.html">
+   Introduction to machine learning, neural networks and deep learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1b_Intro_TensorFlow_Keras.html">
+   Introduction to TensorFlow and Keras
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Access and mosaic Planet NICFI monthly basemaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson2b_prep_data_ML_segmentation.html">
+   Process dataset for use with deep learning segmentation network
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson3_deeplearning_crop_segmentation.html">
+   Semantic segmentation with deep learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson4_evaluation.html">
+   Evaluating Semantic Segmentation Models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson5_dealing_with_limited_data.html">
+   Dealing with limited data for semantic segmentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="appendix.html">
+   Appendix
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/docs/Lesson2a_get_planet_NICFI.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training/"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training//issues/new?title=Issue%20on%20page%20%2Fdocs/Lesson2a_get_planet_NICFI.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/developmentseed/tensorflow-eo-training/edit/main/ds_book/docs/Lesson2a_get_planet_NICFI.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/developmentseed/tensorflow-eo-training/main?urlpath=tree/ds_book/docs/Lesson2a_get_planet_NICFI.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/Lesson2a_get_planet_NICFI.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup-notebook">
+   Setup Notebook
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#get-search-parameters">
+     Get search parameters
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#plot-the-gridded-aoi">
+       Plot the gridded AOI.
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#request-the-quad-tiles-fitting-the-search-parameters">
+     Request the quad tiles fitting the search parameters
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#plot-the-requested-quad-tiles">
+       Plot the requested quad tiles.
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mosaic-the-quad-tiles">
+     Mosaic the quad tiles
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#plot-the-mosaic">
+       Plot the mosaic
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="access-and-mosaic-planet-nicfi-monthly-basemaps">
+<h1>Access and mosaic Planet NICFI monthly basemaps<a class="headerlink" href="#access-and-mosaic-planet-nicfi-monthly-basemaps" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>A guide for accessing monthly Planet NICFI basemaps, selecting data by a defined AOI and mosaicing to produce a single image.</p>
+</div></blockquote>
+<p>You will need a configuration file named <code class="docutils literal notranslate"><span class="pre">planet_api.cfg</span></code> (simple text file with <code class="docutils literal notranslate"><span class="pre">.cfg</span></code> extension will do) to run this notebook. It should be located in your <code class="docutils literal notranslate"><span class="pre">My</span> <span class="pre">Drive</span></code> folder.</p>
+<p>The contents of the file should reflect the template below, swapping in the API access key that you should have receieved once you signed up for and subscribed to the Planet NICFI program. Please visit <a class="reference external" href="https://www.planet.com/nicfi/">https://www.planet.com/nicfi/</a> to sign up if you have not already.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">credentials</span><span class="p">]</span>
+<span class="n">api_key</span> <span class="o">=</span> <span class="n">xxxxxxxxxxxxxxxxx</span>
+</pre></div>
+</div>
+<div class="section" id="setup-notebook">
+<h2>Setup Notebook<a class="headerlink" href="#setup-notebook" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-version-control admonition">
+<p class="admonition-title"><strong>Version control</strong></p>
+<p>Colab updates without warning to users, which can cause notebooks to break. Therefore, we are pinning library versions.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install -q <span class="nv">rasterio</span><span class="o">==</span><span class="m">1</span>.2.10
+<span class="o">!</span>pip install -q <span class="nv">geopandas</span><span class="o">==</span><span class="m">0</span>.10.2
+<span class="o">!</span>pip install -q <span class="nv">shapely</span><span class="o">==</span><span class="m">1</span>.8.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import required libraries</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">functools</span><span class="o">,</span> <span class="nn">fnmatch</span><span class="o">,</span> <span class="nn">requests</span><span class="o">,</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">configparser</span> <span class="kn">import</span> <span class="n">ConfigParser</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">rasterio</span>
+<span class="kn">from</span> <span class="nn">rasterio.merge</span> <span class="kn">import</span> <span class="n">merge</span>
+<span class="kn">from</span> <span class="nn">rasterio.plot</span> <span class="kn">import</span> <span class="n">show</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">from</span> <span class="nn">folium</span> <span class="kn">import</span> <span class="n">Map</span><span class="p">,</span> <span class="n">GeoJson</span><span class="p">,</span> <span class="n">Figure</span>
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">box</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rasterio version: &quot;</span><span class="p">,</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">__version__</span><span class="p">,</span> <span class="s2">&quot;| geopandas version: &quot;</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set your root directory and tiled data folders</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+    <span class="c1"># mount google drive</span>
+    <span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+    <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/gdrive&#39;</span><span class="p">)</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed/&#39;</span> 
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed-workshop&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running on Colab&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/servir-tf-devseed&quot;</span><span class="p">)</span>
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./servir-tf-devseed-workshop&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not running on Colab, data needs to be downloaded locally at </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">)):</span>
+  <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">)</span>
+<span class="n">terrabio_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;terrabio&#39;</span><span class="p">)</span>
+<span class="n">rami_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;rami&#39;</span><span class="p">)</span>
+<span class="c1"># Make subdirectories for each project</span>
+<span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">terrabio_dir</span><span class="p">,</span> <span class="n">rami_dir</span><span class="p">]</span>
+<span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">dir</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Go to root folder</span>
+<span class="o">%</span><span class="k">cd</span> $workshop_dir
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition-gcs-note admonition">
+<p class="admonition-title"><strong>GCS note!</strong></p>
+<p>We won’t be using Google Cloud Storage to download data, but here is a code snippet to show how to practically do so with the RAMI “Blocks” gridded AOI shapefile. This code works if you have access to the “servirtensorflow” project on GCP.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#authenticate Google Cloud Storage</span>
+<span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">auth</span>
+<span class="n">auth</span><span class="o">.</span><span class="n">authenticate_user</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Authenticated Google Gloud access.&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Imports the Google Cloud client library</span>
+<span class="kn">from</span> <span class="nn">google.cloud</span> <span class="kn">import</span> <span class="n">storage</span>
+
+<span class="c1"># Instantiates a client</span>
+<span class="n">project</span> <span class="o">=</span> <span class="s1">&#39;servirtensorflow&#39;</span>
+<span class="n">storage_client</span> <span class="o">=</span> <span class="n">storage</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="p">)</span>
+
+<span class="c1"># The name for the new bucket</span>
+<span class="n">bucket_name</span> <span class="o">=</span> <span class="s2">&quot;dev-seed-workshop&quot;</span>
+
+<span class="n">rami_data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rami_dir</span><span class="p">,</span><span class="s1">&#39;/data/&#39;</span><span class="p">)</span>
+<span class="n">rami_gcs_to_local_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rami_data_dir</span><span class="p">,</span><span class="s1">&#39;gcs/&#39;</span><span class="p">)</span>
+<span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;rami/data/Blocks/&#39;</span>
+<span class="n">local_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rami_gcs_to_local_dir</span><span class="p">,</span><span class="s1">&#39;Blocks/&#39;</span><span class="p">)</span>
+<span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">rami_data_dir</span><span class="p">,</span> <span class="n">rami_gcs_to_local_dir</span><span class="p">,</span> <span class="n">local_dir</span><span class="p">]</span>
+<span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">dir</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+
+
+<span class="n">bucket_name</span> <span class="o">=</span> <span class="s2">&quot;dev-seed-workshop&quot;</span>
+<span class="n">bucket</span> <span class="o">=</span> <span class="n">storage_client</span><span class="o">.</span><span class="n">get_bucket</span><span class="p">(</span><span class="n">bucket_name</span><span class="p">)</span>
+<span class="n">blobs</span> <span class="o">=</span> <span class="n">bucket</span><span class="o">.</span><span class="n">list_blobs</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>  <span class="c1"># Get list of files</span>
+<span class="k">for</span> <span class="n">blob</span> <span class="ow">in</span> <span class="n">blobs</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">blob</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">blob</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span> 
+    <span class="n">filename_split</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">filename_zero</span><span class="p">,</span> <span class="n">fileext</span> <span class="o">=</span> <span class="n">filename_split</span>
+    <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename_zero</span><span class="p">)</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;Blocks&#39;</span>
+    <span class="n">blob</span><span class="o">.</span><span class="n">download_to_filename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">local_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">fileext</span><span class="p">)))</span>   <span class="c1"># Download </span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">blob</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">basename</span><span class="p">,</span> <span class="n">fileext</span><span class="p">))</span>
+
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">cpg</span><span class="p">,</span> <span class="mi">1637264951785014</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">cpg</span><span class="p">,</span> <span class="mi">1637264951785014</span><span class="o">&gt;</span> <span class="n">Blocks</span><span class="o">.</span><span class="n">cpg</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">dbf</span><span class="p">,</span> <span class="mi">1637264951817858</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">dbf</span><span class="p">,</span> <span class="mi">1637264951817858</span><span class="o">&gt;</span> <span class="n">Blocks</span><span class="o">.</span><span class="n">dbf</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">fix</span><span class="p">,</span> <span class="mi">1637264951832266</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">fix</span><span class="p">,</span> <span class="mi">1637264951832266</span><span class="o">&gt;</span> <span class="n">Blocks</span><span class="o">.</span><span class="n">fix</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">prj</span><span class="p">,</span> <span class="mi">1637264951801837</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">prj</span><span class="p">,</span> <span class="mi">1637264951801837</span><span class="o">&gt;</span> <span class="n">Blocks</span><span class="o">.</span><span class="n">prj</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">shp</span><span class="p">,</span> <span class="mi">1637264951794288</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">shp</span><span class="p">,</span> <span class="mi">1637264951794288</span><span class="o">&gt;</span> <span class="n">Blocks</span><span class="o">.</span><span class="n">shp</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">shx</span><span class="p">,</span> <span class="mi">1637264951768348</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">Blob</span><span class="p">:</span> <span class="n">dev</span><span class="o">-</span><span class="n">seed</span><span class="o">-</span><span class="n">workshop</span><span class="p">,</span> <span class="n">rami</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">/</span><span class="n">Blocks</span><span class="o">.</span><span class="n">shx</span><span class="p">,</span> <span class="mi">1637264951768348</span><span class="o">&gt;</span> <span class="n">Blocks</span><span class="o">.</span><span class="n">shx</span>
+</pre></div>
+</div>
+<div class="section" id="get-search-parameters">
+<h3>Get search parameters<a class="headerlink" href="#get-search-parameters" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Read the AOI from the shared google drive folder into a Geopandas dataframe.</p></li>
+<li><p>Get AOI bounds and centroid.</p></li>
+<li><p>Authenticate with Planet NICFI API key.</p></li>
+<li><p>Choose mosaic based on month/year of interest.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the shapefile into a geopandas dataframe (for more info see: https://geopandas.org/en/stable/)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;Blocks&#39;</span><span class="p">,</span> <span class="s1">&#39;Blocks.shp&#39;</span><span class="p">))</span>
+<span class="c1"># Get AOI bounds</span>
+<span class="n">bbox_peru</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">total_bounds</span>
+<span class="c1"># Get AOI centroid for plotting with folium</span>
+<span class="n">centroid_peru</span> <span class="o">=</span> <span class="p">[</span><span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">bbox_peru</span><span class="p">)</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">bbox_peru</span><span class="p">)</span><span class="o">.</span><span class="n">centroid</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># authenticate with Planet NICFI API KEY</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="p">()</span>
+<span class="n">configFilePath</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/planet_api.cfg&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">configFilePath</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">API_KEY</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;credentials&#39;</span><span class="p">,</span> <span class="s1">&#39;api_key&#39;</span><span class="p">)</span>
+<span class="n">PLANET_API_KEY</span> <span class="o">=</span> <span class="n">API_KEY</span> <span class="c1"># &lt;= insert API key here </span>
+<span class="c1">#setup Planet base URL</span>
+<span class="n">API_URL</span> <span class="o">=</span> <span class="s2">&quot;https://api.planet.com/basemaps/v1/mosaics&quot;</span>
+<span class="c1">#setup session</span>
+<span class="n">session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+<span class="c1">#authenticate</span>
+<span class="n">session</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="p">(</span><span class="n">PLANET_API_KEY</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="c1">#&lt;= change to match variable for API Key if needed</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>In the following cell, the <strong>name__is</strong> parameter is the basemap name. It is only differentiable by the time range in the name.</p>
+<p>E.g. <code class="docutils literal notranslate"><span class="pre">planet_medres_normalized_analytic_2021-08_mosaic</span></code> is for August, 2021.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#set params for search using name of mosaic</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;name__is&quot;</span> <span class="p">:</span><span class="s2">&quot;planet_medres_normalized_analytic_2021-08_mosaic&quot;</span> <span class="c1"># &lt;= customized to month/year of interest</span>
+<span class="p">}</span>
+<span class="c1">#make get request to access mosaic from basemaps API</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">API_URL</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">)</span>
+<span class="c1">#response status code</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print metadata for mosaic</span>
+<span class="n">mosaic</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="c1">#print(&quot;mosaic metadata (this will expose your API key so be careful about if/where you uncomment this line): &quot;, json.dumps(mosaic, indent=2))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#get id</span>
+<span class="n">mosaic_id</span> <span class="o">=</span> <span class="n">mosaic</span><span class="p">[</span><span class="s1">&#39;mosaics&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+<span class="c1">#get bbox for entire mosaic</span>
+<span class="n">mosaic_bbox</span> <span class="o">=</span> <span class="n">mosaic</span><span class="p">[</span><span class="s1">&#39;mosaics&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mosaic_bbox: &quot;</span><span class="p">,</span> <span class="n">mosaic_bbox</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bbox_peru: &quot;</span><span class="p">,</span> <span class="n">bbox_peru</span><span class="p">)</span>
+<span class="c1">#converting bbox to string for search params</span>
+<span class="n">string_bbox</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">bbox_peru</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mosaic id: &#39;</span><span class="p">,</span> <span class="n">mosaic_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="plot-the-gridded-aoi">
+<h4>Plot the gridded AOI.<a class="headerlink" href="#plot-the-gridded-aoi" title="Permalink to this headline">¶</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">Map</span><span class="p">(</span><span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;Stamen Terrain&quot;</span><span class="p">,</span>
+        <span class="n">control_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="n">centroid_peru</span><span class="p">,</span>
+        <span class="n">min_lon</span><span class="o">=-</span><span class="mf">70.28418783</span><span class="p">,</span>
+        <span class="n">max_lon</span><span class="o">=-</span><span class="mf">69.78113127</span><span class="p">,</span>
+        <span class="n">min_lat</span><span class="o">=-</span><span class="mf">13.07947054</span><span class="p">,</span>
+        <span class="n">max_lat</span><span class="o">=-</span><span class="mf">12.75607703</span><span class="p">,</span>
+        <span class="n">max_bounds</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">zoom_start</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">max_zoom</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="n">min_zoom</span> <span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+        <span class="n">zoom_control</span><span class="o">=</span><span class="kc">False</span> <span class="p">)</span>
+<span class="n">GeoJson</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">Figure</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="request-the-quad-tiles-fitting-the-search-parameters">
+<h3>Request the quad tiles fitting the search parameters<a class="headerlink" href="#request-the-quad-tiles-fitting-the-search-parameters" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#search for mosaic quad using AOI</span>
+<span class="n">search_parameters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;bbox&#39;</span><span class="p">:</span> <span class="n">string_bbox</span><span class="p">,</span>
+    <span class="s1">&#39;minimal&#39;</span><span class="p">:</span> <span class="kc">True</span>
+<span class="p">}</span>
+<span class="c1">#accessing quads using metadata from mosaic</span>
+<span class="n">quads_url</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">/quads&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">API_URL</span><span class="p">,</span> <span class="n">mosaic_id</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">quads_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">search_parameters</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quads</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quads</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">quads</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]</span>
+<span class="c1">#printing an example of quad metadata</span>
+<span class="c1">#print(&quot;quad tiles metadata (this will expose your API key so be careful about if/where you uncomment this line): &quot;, json.dumps(items[0], indent=2))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="plot-the-requested-quad-tiles">
+<h4>Plot the requested quad tiles.<a class="headerlink" href="#plot-the-requested-quad-tiles" title="Permalink to this headline">¶</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">item</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">))):</span>
+  <span class="n">quad_box</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;bbox&quot;</span><span class="p">]</span>
+  <span class="n">GeoJson</span><span class="p">(</span><span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">quad_box</span><span class="p">))</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">Figure</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set directory for downloading the quad tiles to</span>
+<span class="n">nicfi_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rami_dir</span><span class="p">,</span><span class="s1">&#39;082021_basemap_nicfi_lapampa/&#39;</span><span class="p">)</span> 
+<span class="n">quads_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nicfi_dir</span><span class="p">,</span><span class="s1">&#39;quads/&#39;</span><span class="p">)</span>
+<span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">nicfi_dir</span><span class="p">,</span> <span class="n">quads_dir</span><span class="p">]</span>
+<span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="nb">dir</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#iterate over quad download links and saving to folder by id</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+    <span class="n">link</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="s1">&#39;_links&#39;</span><span class="p">][</span><span class="s1">&#39;download&#39;</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.tiff&#39;</span>
+    <span class="n">DIR</span> <span class="o">=</span> <span class="n">quads_dir</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DIR</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="c1">#print(filename)</span>
+
+    <span class="c1">#checks if file already exists before s</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="mosaic-the-quad-tiles">
+<h3>Mosaic the quad tiles<a class="headerlink" href="#mosaic-the-quad-tiles" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># File and folder paths</span>
+<span class="n">out_mosaic</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nicfi_dir</span><span class="p">,</span><span class="s1">&#39;082021_basemap_nicfi_lapampa_Mosaic.tif&#39;</span><span class="p">)</span>
+
+<span class="c1"># Make a search criteria to select the quad tile files</span>
+<span class="n">search_criteria</span> <span class="o">=</span> <span class="s2">&quot;*.tiff&quot;</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">nicfi_dir</span><span class="p">,</span><span class="s1">&#39;quads&#39;</span><span class="p">,</span> <span class="n">search_criteria</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get all of the quad tiles</span>
+<span class="n">quad_files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quad_files</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">src_files_to_mosaic</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">quad_files</span><span class="p">:</span>
+  <span class="n">src</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+  <span class="n">src_files_to_mosaic</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the mosaic</span>
+<span class="n">mosaic</span><span class="p">,</span> <span class="n">out_trans</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">src_files_to_mosaic</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_meta</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">out_meta</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;driver&quot;</span><span class="p">:</span> <span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">mosaic</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                 <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">mosaic</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                 <span class="s2">&quot;transform&quot;</span><span class="p">:</span> <span class="n">out_trans</span>
+                  <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write the mosaic to raster file</span>
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">out_mosaic</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">out_meta</span><span class="p">)</span> <span class="k">as</span> <span class="n">dest</span><span class="p">:</span>
+    <span class="n">dest</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">mosaic</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_mosaic</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="plot-the-mosaic">
+<h4>Plot the mosaic<a class="headerlink" href="#plot-the-mosaic" title="Permalink to this headline">¶</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">src</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">out_mosaic</span><span class="p">)</span>
+
+<span class="n">show</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./docs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="Lesson1b_Intro_TensorFlow_Keras.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Introduction to TensorFlow and Keras</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="Lesson2b_prep_data_ML_segmentation.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Process dataset for use with deep learning segmentation network</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Development Seed<br/>
+        
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

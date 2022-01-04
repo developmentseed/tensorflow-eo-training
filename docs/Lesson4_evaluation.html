@@ -1,0 +1,787 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluating Semantic Segmentation Models &#8212; Deep learning with TensorFlow</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="../_static/ds.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Dealing with limited data for semantic segmentation" href="Lesson5_dealing_with_limited_data.html" />
+    <link rel="prev" title="Semantic segmentation with deep learning" href="Lesson3_deeplearning_crop_segmentation.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/ds.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Deep learning with TensorFlow</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1a_Intro_ML_NN_DL.html">
+   Introduction to machine learning, neural networks and deep learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1b_Intro_TensorFlow_Keras.html">
+   Introduction to TensorFlow and Keras
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson2a_get_planet_NICFI.html">
+   Access and mosaic Planet NICFI monthly basemaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson2b_prep_data_ML_segmentation.html">
+   Process dataset for use with deep learning segmentation network
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson3_deeplearning_crop_segmentation.html">
+   Semantic segmentation with deep learning
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Evaluating Semantic Segmentation Models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson5_dealing_with_limited_data.html">
+   Dealing with limited data for semantic segmentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="appendix.html">
+   Appendix
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/docs/Lesson4_evaluation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training/"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training//issues/new?title=Issue%20on%20page%20%2Fdocs/Lesson4_evaluation.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/developmentseed/tensorflow-eo-training/edit/main/ds_book/docs/Lesson4_evaluation.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/developmentseed/tensorflow-eo-training/main?urlpath=tree/ds_book/docs/Lesson4_evaluation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/Lesson4_evaluation.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#specific-concepts-that-will-be-covered">
+   Specific concepts that will be covered
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup-notebook">
+   Setup Notebook
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#getting-set-up-with-the-data">
+     Getting set up with the data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#check-out-the-labels">
+     Check out the labels
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#getting-image-prediction-and-label-filenames">
+     Getting image, prediction, and label filenames
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluate-model">
+     Evaluate Model
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="evaluating-semantic-segmentation-models">
+<h1>Evaluating Semantic Segmentation Models<a class="headerlink" href="#evaluating-semantic-segmentation-models" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>A guide for understanding the performance of semantic segmentation for land use / land cover in satellite imagery.</p>
+</div></blockquote>
+<p>After we have trained a model for segmenting images according to a set of classes it’s time to evaluate how well it has performed. With any supervised machine learning model, we are typically interested in minimizing false positives or false negatives, with a preference for one or the other.</p>
+<p>Additionally, are also interested in making sure our model generalizes beyond the training dataset to new data it was not trained on. Finally, we’d like our model to make high confidence, correct predictions, and for higher confidence thresholds to not result in many more false negatives.</p>
+<p>For semantic segmentation, our evaluation unit is an individual pixel, which can be one of four categories:</p>
+<ul class="simple">
+<li><p>true positive: the pixel was classified correctly as a class of interest.</p></li>
+<li><p>true negative: the pixel was classified correctly as the background class.</p></li>
+<li><p>false positive: the pixel was incorrectly assigned a class of interest</p></li>
+<li><p>false negative: the pixel was incorrectly assigned the background class or a different class</p></li>
+</ul>
+<p>The most in depth and succinct summary we can produce is a confusion matrix. It summarrizes the counts of pixels that fall into each of these categories for each of our classes of interest and the background class.</p>
+<p><img alt="Confusion Matrix Example" src="../_images/cm.png" /></p>
+<p>In this tutorial we will using data from two reference datasets, Imaflora and Para, and our U-Net predictions from Planet NICFI monthly imagery to compute a confusion matrix to assess our model performance. As we go through this exercise, you’ll notice that our reference datasets do not always correspond to the imagery, so take this lesson as a demonstration of how to carry out an experiment, not as an evaluation of a model that will be used in production. The next episode will cover how to deal with innacurate or limited reference data.</p>
+<div class="section" id="specific-concepts-that-will-be-covered">
+<h2>Specific concepts that will be covered<a class="headerlink" href="#specific-concepts-that-will-be-covered" title="Permalink to this headline">¶</a></h2>
+<p>In the process, we will build practical experience and develop intuition around the following concepts:</p>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.confusion_matrix.html">sci-kit learn</a></strong> - we will use sci-kit learn to compute a confusion matrix and discuss how supplying different values to the <code class="docutils literal notranslate"><span class="pre">normalize</span> </code>argument can help us interpret our data.</p></li>
+<li><p><strong>Metrics</strong> - We will cover useful summary metrics that capture much of the information in the confusion matrix, including precision, recall, and F1 Score.</p></li>
+</ul>
+<p><strong>Audience:</strong> This post is geared towards intermediate users who are comfortable with basic machine learning concepts.</p>
+<p><strong>Time Estimated</strong>: 60-120 min</p>
+</div>
+<div class="section" id="setup-notebook">
+<h2>Setup Notebook<a class="headerlink" href="#setup-notebook" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># install required libraries</span>
+<span class="o">!</span>pip install -q <span class="nv">rasterio</span><span class="o">==</span><span class="m">1</span>.2.10
+<span class="o">!</span>pip install -q <span class="nv">geopandas</span><span class="o">==</span><span class="m">0</span>.10.2
+<span class="o">!</span>pip install -q git+https://github.com/tensorflow/examples.git
+<span class="o">!</span>pip install -q -U tfds-nightly
+<span class="o">!</span>pip install -q focal-loss
+<span class="o">!</span>pip install -q tensorflow-addons<span class="o">==</span><span class="m">0</span>.8.3
+<span class="c1">#!pip install -q matplotlib==3.5 # UNCOMMENT if running on LOCAL</span>
+<span class="o">!</span>pip install -q scikit-learn<span class="o">==</span><span class="m">1</span>.0.1
+<span class="o">!</span>pip install -q scikit-image<span class="o">==</span><span class="m">0</span>.18.3
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import required libraries</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">functools</span><span class="o">,</span> <span class="nn">fnmatch</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">mpimg</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="kn">import</span> <span class="nn">skimage.io</span> <span class="k">as</span> <span class="nn">skio</span> <span class="c1"># lighter dependency than tensorflow for working with our tensors/arrays</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">f1_score</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-set-up-with-the-data">
+<h3>Getting set up with the data<a class="headerlink" href="#getting-set-up-with-the-data" title="Permalink to this headline">¶</a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code>. Then, this folder will be available at the following path that is accessible with the google.colab <code class="docutils literal notranslate"><span class="pre">drive</span></code> module: <code class="docutils literal notranslate"><span class="pre">'/content/gdrive/My</span> <span class="pre">Drive/servir-tf-devseed/'</span></code></p>
+</div>
+<p>We’ll be working witht he following folders in the <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code> folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>servir-tf-devseed/
+├── images/
+├── images_bright/
+├── indices/
+├── indices_800/
+├── labels/
+├── labels_800/
+├── background_list_train.txt
+├── train_list_clean.txt
+└── terrabio_classes.csv
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set your root directory and tiled data folders</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+    <span class="c1"># mount google drive</span>
+    <span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+    <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/gdrive&#39;</span><span class="p">)</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed/&#39;</span> 
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed-workshop&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running on Colab&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/servir-tf-devseed&quot;</span><span class="p">)</span>
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./servir-tf-devseed-workshop&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not running on Colab, data needs to be downloaded locally at </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;indices/&#39;</span><span class="p">)</span> <span class="c1"># or os.path.join(root_dir,&#39;images_bright/&#39;) if using the optical tiles</span>
+<span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;labels/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Not running on Colab, data needs to be downloaded locally at /home/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># go to root directory</span>
+<span class="o">%</span><span class="k">cd</span> $root_dir 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="check-out-the-labels">
+<h3>Check out the labels<a class="headerlink" href="#check-out-the-labels" title="Permalink to this headline">¶</a></h3>
+<p>We’ll use these labels to label our confusion matrix and table with class specific metrics.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the classes</span>
+<span class="n">class_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;terrabio_classes.csv&#39;</span><span class="p">))</span>
+<span class="n">class_names</span> <span class="o">=</span> <span class="n">class_index</span><span class="o">.</span><span class="n">class_name</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">class_index</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   class_id   class_name
+0         0   Background
+1         1     Bushland
+2         2      Pasture
+3         3        Roads
+4         4        Cocoa
+5         5   Tree cover
+6         6    Developed
+7         7        Water
+8         8  Agriculture
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-image-prediction-and-label-filenames">
+<h3>Getting image, prediction, and label filenames<a class="headerlink" href="#getting-image-prediction-and-label-filenames" title="Permalink to this headline">¶</a></h3>
+<p>Before creating our confusion matrix, we need to associate labels, images, and prediction files together so that we know what to compare. We’ll use our standard python for this.</p>
+</div>
+<div class="section" id="evaluate-model">
+<h3>Evaluate Model<a class="headerlink" href="#evaluate-model" title="Permalink to this headline">¶</a></h3>
+<p>Compute confusion matrix from all predicted images and their ground truth label masks.</p>
+<p>First we need to read in our prediction masks that we saved out in the last notebook. To do this, we can use scikit image, and then we can use scikit learn to compute our confusion matrix. No tensorflow needed for this part!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="s2">&quot;test_file_paths.csv&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_colwidth&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">path_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>img_names</th>
+      <th>label_names</th>
+      <th>pred_names</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_392.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_392.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_392.png</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_1440.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_1440.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_1440.png</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_21138.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_21138.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_21138.png</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_21426.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_21426.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_21426.png</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_3724.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_3724.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_3724.png</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>442</th>
+      <td>442</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_52.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_52.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_52.png</td>
+    </tr>
+    <tr>
+      <th>443</th>
+      <td>443</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_95.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_95.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_95.png</td>
+    </tr>
+    <tr>
+      <th>444</th>
+      <td>444</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_2678.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_2678.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_2678.png</td>
+    </tr>
+    <tr>
+      <th>445</th>
+      <td>445</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_44.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_44.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_44.png</td>
+    </tr>
+    <tr>
+      <th>446</th>
+      <td>446</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_577.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_577.png</td>
+      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_577.png</td>
+    </tr>
+  </tbody>
+</table>
+<p>447 rows × 4 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reading in preds</span>
+<span class="n">label_arr_lst</span> <span class="o">=</span> <span class="n">path_df</span><span class="p">[</span><span class="s2">&quot;label_names&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">skio</span><span class="o">.</span><span class="n">imread</span><span class="p">)</span>
+<span class="n">pred_arr_lst</span> <span class="o">=</span> <span class="n">path_df</span><span class="p">[</span><span class="s2">&quot;pred_names&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">skio</span><span class="o">.</span><span class="n">imread</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>One of our labels has an image dimension that doesn’t match the prediction dimension! It’s possible this image was corrupted. We can skip it and the corresponding prediction when computing our metrics.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_arr_lst_valid</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">label_arr_lst_valid</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pred_arr_lst</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="n">pred_arr_lst</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">label_arr_lst</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">th label has an incorrect dimension, skipping.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">pred_arr_lst</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">label_arr_lst</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">pred_arr_lst</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">label_arr_lst</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pred_arr_lst_valid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_arr_lst</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">label_arr_lst_valid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label_arr_lst</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The 176th label has an incorrect dimension, skipping.
+[[5 0 5 ... 6 5 0]
+ [3 2 4 ... 7 4 7]
+ [5 1 4 ... 5 5 3]
+ ...
+ [4 7 4 ... 7 4 7]
+ [5 1 2 ... 5 5 1]
+ [4 2 4 ... 2 4 2]]
+[[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]]
+(224, 224)
+(218, 224)
+</pre></div>
+</div>
+</div>
+</div>
+<p>With our predictions and labels in lists of tiled arrays, we can then flatten these so that we instead have lists of pixels for predictions and labels. This is the format expected by scikit-learn’s <code class="docutils literal notranslate"><span class="pre">confusion_matrix</span></code> function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># flatten our tensors and use scikit-learn to create a confusion matrix</span>
+<span class="n">flat_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">pred_arr_lst_valid</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">flat_truth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">label_arr_lst_valid</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">OUTPUT_CHANNELS</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">flat_truth</span><span class="p">,</span> <span class="n">flat_preds</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">OUTPUT_CHANNELS</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we can plot the confusion matrix. We can either use the built-in method from scikit-learn…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">ConfusionMatrixDisplay</span>
+
+<span class="n">ConfusionMatrixDisplay</span><span class="o">.</span><span class="n">from_predictions</span><span class="p">(</span><span class="n">flat_truth</span><span class="p">,</span> <span class="n">flat_preds</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="s1">&#39;true&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x16b0b0d60&gt;
+</pre></div>
+</div>
+<img alt="../_images/Lesson4_evaluation_21_1.png" src="../_images/Lesson4_evaluation_21_1.png" />
+</div>
+</div>
+<p>… or matplotlib, which allows us to more easily customize all aspects of our plot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">cm</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">cm</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="c1"># We want to show all ticks...</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+       <span class="n">yticks</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+       <span class="c1"># ... and label them with the respective list entries</span>
+       <span class="n">xticklabels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">OUTPUT_CHANNELS</span><span class="p">)),</span> <span class="n">yticklabels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">OUTPUT_CHANNELS</span><span class="p">)),</span>
+       <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Normalized Confusion Matrix&#39;</span><span class="p">,</span>
+       <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;True label&#39;</span><span class="p">,</span>
+       <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Predicted label&#39;</span><span class="p">)</span>
+
+<span class="c1"># Rotate the tick labels and set their alignment.</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+         <span class="n">rotation_mode</span><span class="o">=</span><span class="s2">&quot;anchor&quot;</span><span class="p">)</span>
+
+<span class="c1"># Loop over data dimensions and create text annotations.</span>
+<span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;.2f&#39;</span> <span class="c1">#&#39;d&#39; # if normalize else &#39;d&#39;</span>
+<span class="n">thresh</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">/</span> <span class="mf">2.</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cm</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="nb">format</span><span class="p">(</span><span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">fmt</span><span class="p">),</span>
+                <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span> <span class="k">if</span> <span class="n">cm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span> <span class="k">else</span> <span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">h_pad</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">w_pad</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8.5, -0.5)
+</pre></div>
+</div>
+<img alt="../_images/Lesson4_evaluation_23_1.png" src="../_images/Lesson4_evaluation_23_1.png" />
+</div>
+</div>
+<p>Now let’s compute the f1 score</p>
+<p>F1 = 2 * (precision * recall) / (precision + recall)</p>
+<p>You can view the documentation for a python function in a jupyter notebook with “??”. scikit-learn docs usually come with detaile descriptions of each argument and examples of usage.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>f1_score<span class="o">??</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># compute f1 score</span>
+<span class="n">f1_score</span><span class="p">(</span><span class="n">flat_truth</span><span class="p">,</span> <span class="n">flat_preds</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;macro&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-geospatial-py"
+        },
+        kernelOptions: {
+            kernelName: "conda-env-geospatial-py",
+            path: "./docs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-geospatial-py'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="Lesson3_deeplearning_crop_segmentation.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Semantic segmentation with deep learning</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="Lesson5_dealing_with_limited_data.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Dealing with limited data for semantic segmentation</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Development Seed<br/>
+        
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>

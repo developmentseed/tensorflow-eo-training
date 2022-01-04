@@ -1,0 +1,1694 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semantic segmentation with deep learning &#8212; Deep learning with TensorFlow</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="shortcut icon" href="../_static/ds.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Evaluating Semantic Segmentation Models" href="Lesson4_evaluation.html" />
+    <link rel="prev" title="Process dataset for use with deep learning segmentation network" href="Lesson2b_prep_data_ML_segmentation.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/ds.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Deep learning with TensorFlow</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1a_Intro_ML_NN_DL.html">
+   Introduction to machine learning, neural networks and deep learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson1b_Intro_TensorFlow_Keras.html">
+   Introduction to TensorFlow and Keras
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson2a_get_planet_NICFI.html">
+   Access and mosaic Planet NICFI monthly basemaps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson2b_prep_data_ML_segmentation.html">
+   Process dataset for use with deep learning segmentation network
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Semantic segmentation with deep learning
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson4_evaluation.html">
+   Evaluating Semantic Segmentation Models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Lesson5_dealing_with_limited_data.html">
+   Dealing with limited data for semantic segmentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="appendix.html">
+   Appendix
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/docs/Lesson3_deeplearning_crop_segmentation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training/"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/developmentseed/tensorflow-eo-training//issues/new?title=Issue%20on%20page%20%2Fdocs/Lesson3_deeplearning_crop_segmentation.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/developmentseed/tensorflow-eo-training/edit/main/ds_book/docs/Lesson3_deeplearning_crop_segmentation.ipynb"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/developmentseed/tensorflow-eo-training/main?urlpath=tree/ds_book/docs/Lesson3_deeplearning_crop_segmentation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/Lesson3_deeplearning_crop_segmentation.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#specific-concepts-that-will-be-covered">
+   Specific concepts that will be covered
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#general-workflow">
+     General Workflow
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#objectives">
+     Objectives
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup-notebook">
+   Setup Notebook
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#getting-set-up-with-the-data">
+     Getting set up with the data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-gpu">
+     Enabling GPU
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#check-out-the-labels">
+     Check out the labels
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#read-into-tensorflow-datasets">
+     Read into tensorflow datasets
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualize-the-data">
+     Visualize the data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#read-the-tiles-into-tensors">
+     Read the tiles into tensors
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#define-the-model">
+     Define the model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#train-the-model">
+     Train the model
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#fit-and-view">
+       Fit and View
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#start-tensorboard">
+       Start TensorBoard
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#save-model-to-file">
+       Save model to file
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#make-predictions">
+     Make predictions
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#single-image-example">
+       Single image example
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#multi-image-example">
+       Multi image example
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="semantic-segmentation-with-deep-learning">
+<h1>Semantic segmentation with deep learning<a class="headerlink" href="#semantic-segmentation-with-deep-learning" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>A guide for using deep-learning based semantic segmentation to land use / land cover in satellite imagery.</p>
+</div></blockquote>
+<p>In this tutorial we will learn how to segment images according to a set of classes. <strong>Segmentation</strong>  refers to the process of partitioning an image into groups of pixels that identify with a target class within the foreground or the background class (a catch-all class that contains non-target features).</p>
+<p>Specifically, in this tutorial we will be using data from two reference datasets, Imaflora and Para, depicting land use classifications of relevant areas in the Amazon.</p>
+<p>We will pair the reference data with a Planet 5 meter composite made from data available as part of the NICFI program. Our task will be to predict the land use / land cover in an image on a pixel-wise basis.</p>
+<div class="section" id="specific-concepts-that-will-be-covered">
+<h2>Specific concepts that will be covered<a class="headerlink" href="#specific-concepts-that-will-be-covered" title="Permalink to this headline">¶</a></h2>
+<p>In the process, we will build practical experience and develop intuition around the following concepts:</p>
+<ul class="simple">
+<li><p><strong><a class="reference external" href="https://keras.io/getting-started/functional-api-guide/">Functional API</a></strong> - we will be implementing UNet, a convolutional network model classically used for biomedical image segmentation with the Functional API.</p>
+<ul>
+<li><p>This model has layers that require multiple input/outputs. This requires the use of the functional API</p></li>
+<li><p>Check out the original <a class="reference external" href="https://arxiv.org/abs/1505.04597">paper</a>,
+U-Net: Convolutional Networks for Biomedical Image Segmentation by Olaf Ronneberger!</p></li>
+</ul>
+</li>
+<li><p><strong>Loss Functions and Metrics</strong> - We’ll implement the <strong>Sparse Categorical <a class="reference external" href="https://focal-loss.readthedocs.io/en/latest/">focal loss</a> function</strong>
+and <strong>accuracy</strong>. We’ll also generate confusion matrices during evaluation to judge how well the model performs.</p></li>
+<li><p><strong>Saving and loading Keras models</strong> - We’ll save our best model to file. When we want to perform inference/evaluate our model in the future, we can load the model file.</p></li>
+</ul>
+<div class="section" id="general-workflow">
+<h3>General Workflow<a class="headerlink" href="#general-workflow" title="Permalink to this headline">¶</a></h3>
+<ol class="simple">
+<li><p>Load image and label datasets from Google Drive</p></li>
+<li><p>Visualize data/perform some exploratory data analysis</p></li>
+<li><p>Set up data pipeline and preprocessing</p></li>
+<li><p>Build model</p></li>
+<li><p>Train model</p></li>
+<li><p>Test model</p></li>
+</ol>
+</div>
+<div class="section" id="objectives">
+<h3>Objectives<a class="headerlink" href="#objectives" title="Permalink to this headline">¶</a></h3>
+<ol class="simple">
+<li><p>Practice with the Keras Functional API as a means to run TensorFlow models</p></li>
+<li><p>Experience training a segmentation model and monitoring progress</p></li>
+<li><p>Learn how to generate predictions with a trained segmentation model</p></li>
+</ol>
+<p><strong>Audience:</strong> This post is geared towards intermediate users who are comfortable with basic machine learning concepts.</p>
+<p><strong>Time Estimated</strong>: 60-120 min</p>
+</div>
+</div>
+<div class="section" id="setup-notebook">
+<h2>Setup Notebook<a class="headerlink" href="#setup-notebook" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-version-control admonition">
+<p class="admonition-title"><strong>Version control</strong></p>
+<p>Colab updates without warning to users, which can cause notebooks to break. Therefore, we are pinning library versions.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>python --version
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip --version
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip install <span class="nv">pip</span><span class="o">==</span><span class="m">21</span>.1.3
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># install required libraries
+!pip install -q rasterio==1.2.10
+!pip install -q geopandas==0.10.2
+!pip install -q git+https://github.com/tensorflow/examples.git
+!pip install -q -U tfds-nightly
+!pip install -q focal-loss
+!pip install -q tensorflow-addons==0.8.3
+#!pip install -q matplotlib==3.5 # UNCOMMENT if running on LOCAL
+!pip install -q scikit-learn==1.0.1
+!pip install -q scikit-image==0.18.3
+!pip install -q tf-explain==0.3.1
+!pip install -q segmentation_models # we&#39;ll use this for pretraining later and for the IOU segmentation performance metric
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import required libraries</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">glob</span><span class="o">,</span> <span class="nn">functools</span><span class="o">,</span> <span class="nn">fnmatch</span><span class="o">,</span> <span class="nn">io</span><span class="o">,</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">ZipFile</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">mpimg</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="kn">import</span> <span class="nn">rasterio</span>
+<span class="kn">from</span> <span class="nn">rasterio</span> <span class="kn">import</span> <span class="n">features</span><span class="p">,</span> <span class="n">mask</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow.python.keras</span> <span class="kn">import</span> <span class="n">layers</span><span class="p">,</span> <span class="n">losses</span><span class="p">,</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">tensorflow.python.keras</span> <span class="kn">import</span> <span class="n">backend</span> <span class="k">as</span> <span class="n">K</span>  
+<span class="kn">import</span> <span class="nn">tensorflow_addons</span> <span class="k">as</span> <span class="nn">tfa</span>
+<span class="kn">from</span> <span class="nn">keras.utils.vis_utils</span> <span class="kn">import</span> <span class="n">plot_model</span>
+
+<span class="kn">from</span> <span class="nn">tensorflow_examples.models.pix2pix</span> <span class="kn">import</span> <span class="n">pix2pix</span>
+<span class="kn">from</span> <span class="nn">segmentation_models.metrics</span> <span class="kn">import</span> <span class="n">iou_score</span>
+<span class="kn">from</span> <span class="nn">tf_explain.callbacks.activations_visualization</span> <span class="kn">import</span> <span class="n">ActivationsVisualizationCallback</span>
+
+<span class="kn">import</span> <span class="nn">tensorflow_datasets</span> <span class="k">as</span> <span class="nn">tfds</span>
+<span class="n">tfds</span><span class="o">.</span><span class="n">disable_progress_bar</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">clear_output</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="kn">from</span> <span class="nn">tqdm.notebook</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">focal_loss</span> <span class="kn">import</span> <span class="n">SparseCategoricalFocalLoss</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">f1_score</span>
+<span class="kn">import</span> <span class="nn">skimage.io</span> <span class="k">as</span> <span class="nn">skio</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="getting-set-up-with-the-data">
+<h3>Getting set up with the data<a class="headerlink" href="#getting-set-up-with-the-data" title="Permalink to this headline">¶</a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code>. Then, this folder will be available at the following path that is accessible with the google.colab <code class="docutils literal notranslate"><span class="pre">drive</span></code> module: <code class="docutils literal notranslate"><span class="pre">'/content/gdrive/My</span> <span class="pre">Drive/servir-tf-devseed/'</span></code></p>
+</div>
+<p>We’ll be working witht he following folders in the <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code> folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>servir-tf-devseed/
+├── images/
+├── images_bright/
+├── indices/
+├── indices_800/
+├── labels/
+├── labels_800/
+├── background_list_train.txt
+├── train_list_clean.txt
+└── terrabio_classes.csv
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set your root directory and tiled data folders</span>
+<span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
+    <span class="c1"># this is a google colab specific command to ensure TF version 2 is used. </span>
+    <span class="c1"># it won&#39;t work in a regular jupyter notebook, for a regular notebook make sure you install TF version 2</span>
+    <span class="o">%</span><span class="k">tensorflow_version</span> 2.x
+    <span class="c1"># mount google drive</span>
+    <span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+    <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/gdrive&#39;</span><span class="p">)</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed/&#39;</span> 
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed-workshop&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running on Colab&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/servir-tf-devseed&quot;</span><span class="p">)</span>
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./servir-tf-devseed-workshop&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not running on Colab, data needs to be downloaded locally at </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;indices/&#39;</span><span class="p">)</span> <span class="c1"># or os.path.join(root_dir,&#39;images_bright/&#39;) if using the optical tiles</span>
+<span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;labels/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># go to root directory</span>
+<span class="o">%</span><span class="k">cd</span> $root_dir 
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="enabling-gpu">
+<h3>Enabling GPU<a class="headerlink" href="#enabling-gpu" title="Permalink to this headline">¶</a></h3>
+<p>This notebook can utilize a GPU and works better if you use one. Hopefully this notebook is using a GPU, and we can check with the following code.</p>
+<p>If it’s not using a GPU you can change your session/notebook to use a GPU. See <a class="reference external" href="https://colab.research.google.com/notebooks/gpu.ipynb#scrollTo=sXnDmXR7RDr2">Instructions</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">device_name</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">gpu_device_name</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">device_name</span> <span class="o">!=</span> <span class="s1">&#39;/device:GPU:0&#39;</span><span class="p">:</span>
+  <span class="k">raise</span> <span class="ne">SystemError</span><span class="p">(</span><span class="s1">&#39;GPU device not found&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Found GPU at: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">device_name</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="check-out-the-labels">
+<h3>Check out the labels<a class="headerlink" href="#check-out-the-labels" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the classes</span>
+<span class="n">class_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;terrabio_classes.csv&#39;</span><span class="p">))</span>
+<span class="n">class_names</span> <span class="o">=</span> <span class="n">class_index</span><span class="o">.</span><span class="n">class_name</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">class_index</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="read-into-tensorflow-datasets">
+<h3>Read into tensorflow datasets<a class="headerlink" href="#read-into-tensorflow-datasets" title="Permalink to this headline">¶</a></h3>
+<p>Now we will compile the spectral index image and label tiles into training, validation, and test datasets for use with TensorFlow.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Long running cells</strong> <br />
+Normally we would read the image files from the directories and then process forward from there with background removal with the next <strong>three</strong> illustrated functions, however, due to slow I/O in Google Colab we will read the images list with 90% background removal already performed from a pre-saved list in the shared drive.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get lists of image and label tile pairs for training and testing</span>
+
+<span class="k">def</span> <span class="nf">get_train_test_lists</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="n">lbldir</span><span class="p">):</span>
+  <span class="n">imgs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span><span class="s2">&quot;/*.png&quot;</span><span class="p">))</span>
+  <span class="c1">#print(imgs[0:1])</span>
+  <span class="n">dset_list</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">imgs</span><span class="p">:</span>
+    <span class="n">filename_split</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">img</span><span class="p">)</span> 
+    <span class="n">filename_zero</span><span class="p">,</span> <span class="n">fileext</span> <span class="o">=</span> <span class="n">filename_split</span> 
+    <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename_zero</span><span class="p">)</span> 
+    <span class="n">dset_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basename</span><span class="p">)</span>
+    
+  <span class="n">x_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">y_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">img_id</span> <span class="ow">in</span> <span class="n">dset_list</span><span class="p">:</span>
+    <span class="n">x_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+    <span class="n">y_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lbldir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+    
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dset_list</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">dset_list</span><span class="p">,</span> <span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span>
+
+<span class="n">train_list</span><span class="p">,</span> <span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span> <span class="o">=</span> <span class="n">get_train_test_lists</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="n">label_dir</span><span class="p">)</span>
+
+</pre></div>
+</div>
+<p>number of images:  37350</p>
+<p>Check for the proportion of background tiles. This takes a while. So we can skip by loading from saved results.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">skip</span><span class="p">:</span>
+  <span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">train_list</span><span class="p">:</span> 
+      <span class="c1"># read in each labeled images</span>
+      <span class="c1"># print(os.path.join(label_dir,&quot;{}.png&quot;.format(i))) </span>
+      <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">label_dir</span><span class="p">,</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))))</span>  
+      <span class="c1"># check if no values in image are greater than zero (background value)</span>
+      <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+          <span class="n">background_list_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+          
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of background images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">))</span>
+
+  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;background_list_train.txt&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">background_list_train</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+  <span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;background_list_train.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of background images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Number of background images:  36489</p>
+<p>We will keep only 10% of the total. Too many background tiles can cause a form of class imbalance.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">background_removal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span>
+<span class="n">train_list_clean</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">train_list</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">background_list_train</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">background_removal</span><span class="p">)]]</span>
+
+<span class="n">x_train_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">y_train_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">img_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_list_clean</span><span class="p">))),</span> <span class="n">train_list_clean</span><span class="p">):</span>
+  <span class="k">pass</span> 
+  <span class="n">x_train_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+  <span class="n">y_train_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">label_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of background tiles: &quot;</span><span class="p">,</span> <span class="n">background_removal</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Remaining number of tiles after 90% background removal: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_list_clean</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Number of background tiles:  32840</p>
+<p>Remaining number of tiles after 90% background removal:  4510</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The cell below contains the shortcut read of prepped training image list.</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>  <span class="k">def</span> <span class="nf">get_train_test_lists</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="n">lbldir</span><span class="p">):</span>
+    <span class="n">train_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;train_list_clean.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
+
+    <span class="n">x_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">img_id</span> <span class="ow">in</span> <span class="n">train_list</span><span class="p">:</span>
+      <span class="n">x_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+      <span class="n">y_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lbldir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_list</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">train_list</span><span class="p">,</span> <span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_list</span><span class="p">,</span> <span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span> <span class="o">=</span> <span class="n">get_train_test_lists</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="n">label_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now that we have our set of files we want to use for developing our model, we need to split them into three sets:</p>
+<ul class="simple">
+<li><p>the training set for the model to learn from</p></li>
+<li><p>the validation set that allows us to evaluate models and make decisions to change models</p></li>
+<li><p>and the test set that we will use to communicate the results of the best performing model (as determined by the validation set)</p></li>
+</ul>
+<p>We will split index tiles and label tiles into train, validation and test sets: 70%, 20% and 10%, respectively.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">x_test_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span><span class="p">,</span> <span class="n">y_test_filenames</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.33</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">num_train_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_train_filenames</span><span class="p">)</span>
+<span class="n">num_val_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_val_filenames</span><span class="p">)</span>
+<span class="n">num_test_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_test_filenames</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of training examples: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_train_examples</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of validation examples: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_val_examples</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of test examples: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num_test_examples</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Long running cell</strong> <br />
+The code below checks for values in train, val, and test partitions. We won’t run this since it takes over 10 minutes on colab due to slow I/O.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vals_train</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vals_val</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vals_test</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">get_vals_in_partition</span><span class="p">(</span><span class="n">partition_list</span><span class="p">,</span> <span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span><span class="p">,</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_filenames</span><span class="p">)))):</span>
+      <span class="k">pass</span> 
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">y</span><span class="p">))</span> 
+        <span class="n">vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">partition_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+      <span class="k">except</span><span class="p">:</span>
+        <span class="k">continue</span>
+
+<span class="k">def</span> <span class="nf">flatten</span><span class="p">(</span><span class="n">partition_list</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">partition_list</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+
+<span class="n">get_vals_in_partition</span><span class="p">(</span><span class="n">vals_train</span><span class="p">,</span> <span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">)</span>
+<span class="n">get_vals_in_partition</span><span class="p">(</span><span class="n">vals_val</span><span class="p">,</span> <span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span><span class="p">)</span>
+<span class="n">get_vals_in_partition</span><span class="p">(</span><span class="n">vals_test</span><span class="p">,</span> <span class="n">x_test_filenames</span><span class="p">,</span> <span class="n">y_test_filenames</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in training partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_train</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in validation partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_val</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in test partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_test</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Values in training partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}</p>
+<p>Values in validation partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}</p>
+<p>Values in test partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}</p>
+</div>
+<div class="section" id="visualize-the-data">
+<h3>Visualize the data<a class="headerlink" href="#visualize-the-data" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Long running cell</strong> <br />
+The code below loads foreground examples randomly. We won’t run this since it takes over a while on colab due to slow I/O.</p>
+</div>
+<div>&#8681</div> 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display_num</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;background_list_train.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
+
+<span class="c1"># select only for tiles with foreground labels present</span>
+<span class="n">foreground_list_x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">foreground_list_y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">):</span> 
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">filename_split</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> 
+      <span class="n">filename_zero</span><span class="p">,</span> <span class="n">fileext</span> <span class="o">=</span> <span class="n">filename_split</span> 
+      <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename_zero</span><span class="p">)</span> 
+      <span class="k">if</span> <span class="n">basename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">background_list_train</span><span class="p">:</span>
+        <span class="n">foreground_list_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">foreground_list_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">except</span><span class="p">:</span>
+      <span class="k">continue</span>
+
+<span class="n">num_foreground_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">foreground_list_y</span><span class="p">)</span>
+
+<span class="c1"># randomlize the choice of image and label pairs</span>
+<span class="n">r_choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">num_foreground_examples</span><span class="p">,</span> <span class="n">display_num</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Instead, we will read and plot a few sample foreground training images and labels from their pathnames. Note: this may still take a few execution tries to work. Google colab in practice takes some time to connect to data in Google Drive, so sometimes this returns an error on the first (few) attempt(s).</p>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_num</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;background_list_train.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
+
+<span class="n">foreground_list_x</span> <span class="o">=</span> <span class="p">[</span>
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_15684.png&#39;</span><span class="p">,</span> 
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_23056.png&#39;</span><span class="p">,</span> 
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_21877.png&#39;</span>
+                     <span class="p">]</span>
+
+<span class="n">foreground_list_y</span> <span class="o">=</span> <span class="p">[</span>
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_15684.png&#39;</span><span class="p">,</span> 
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_23056.png&#39;</span><span class="p">,</span> 
+                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_21877.png&#39;</span>
+                     <span class="p">]</span>
+
+<span class="c1"># confirm files exist</span>
+<span class="k">for</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">foreground_list_x</span><span class="p">,</span> <span class="n">foreground_list_y</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fy</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="s2">&quot; and &quot;</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="s2">&quot; exist.&quot;</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="s2">&quot; and &quot;</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="s2">&quot; don&#39;t exist.&quot;</span><span class="p">)</span>
+
+<span class="n">num_foreground_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">foreground_list_y</span><span class="p">)</span>
+
+<span class="c1"># randomlize the choice of image and label pairs</span>
+<span class="c1">#r_choices = np.random.choice(num_foreground_examples, display_num)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">display_num</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+  <span class="c1">#img_num = r_choices[i // 2]</span>
+  <span class="n">img_num</span> <span class="o">=</span> <span class="n">i</span> <span class="o">//</span> <span class="mi">2</span>
+  <span class="n">x_pathname</span> <span class="o">=</span> <span class="n">foreground_list_x</span><span class="p">[</span><span class="n">img_num</span><span class="p">]</span>
+  <span class="n">y_pathname</span> <span class="o">=</span> <span class="n">foreground_list_y</span><span class="p">[</span><span class="n">img_num</span><span class="p">]</span>
+  
+  <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">display_num</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mpimg</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">x_pathname</span><span class="p">))</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Original Image&quot;</span><span class="p">)</span>
+  
+  <span class="n">example_labels</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">y_pathname</span><span class="p">)</span>
+  <span class="n">label_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">example_labels</span><span class="p">))</span>
+  
+  <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">display_num</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">example_labels</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Masked Image&quot;</span><span class="p">)</span>  
+  
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Examples of Images and their Masks&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="read-the-tiles-into-tensors">
+<h3>Read the tiles into tensors<a class="headerlink" href="#read-the-tiles-into-tensors" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set input image shape</span>
+<span class="n">img_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c1"># set batch size for model</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">8</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function for reading the tiles into TensorFlow tensors </span>
+<span class="c1"># See TensorFlow documentation for explanation of tensor: https://www.tensorflow.org/guide/tensor</span>
+<span class="k">def</span> <span class="nf">_process_pathnames</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">label_path</span><span class="p">):</span>
+  <span class="c1"># We map this function onto each pathname pair  </span>
+  <span class="n">img_str</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+  <span class="n">img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">decode_png</span><span class="p">(</span><span class="n">img_str</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+  <span class="n">label_img_str</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">label_path</span><span class="p">)</span>
+
+  <span class="c1"># These are png images so they return as (num_frames, h, w, c)</span>
+  <span class="n">label_img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">decode_png</span><span class="p">(</span><span class="n">label_img_str</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+  <span class="c1"># The label image should have any values between 0 and 8, indicating pixel wise</span>
+  <span class="c1"># foreground class or background (0). We take the first channel only. </span>
+  <span class="n">label_img</span> <span class="o">=</span> <span class="n">label_img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+  <span class="n">label_img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">label_img</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">img</span><span class="p">,</span> <span class="n">label_img</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function to augment the data with horizontal flip</span>
+<span class="k">def</span> <span class="nf">flip_img_h</span><span class="p">(</span><span class="n">horizontal_flip</span><span class="p">,</span> <span class="n">tr_img</span><span class="p">,</span> <span class="n">label_img</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">horizontal_flip</span><span class="p">:</span>
+    <span class="n">flip_prob</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([],</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">tr_img</span><span class="p">,</span> <span class="n">label_img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">less</span><span class="p">(</span><span class="n">flip_prob</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+                                <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">flip_left_right</span><span class="p">(</span><span class="n">tr_img</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">flip_left_right</span><span class="p">(</span><span class="n">label_img</span><span class="p">)),</span>
+                                <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">tr_img</span><span class="p">,</span> <span class="n">label_img</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">tr_img</span><span class="p">,</span> <span class="n">label_img</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function to augment the data with vertical flip</span>
+<span class="k">def</span> <span class="nf">flip_img_v</span><span class="p">(</span><span class="n">vertical_flip</span><span class="p">,</span> <span class="n">tr_img</span><span class="p">,</span> <span class="n">label_img</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">vertical_flip</span><span class="p">:</span>
+    <span class="n">flip_prob</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([],</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">tr_img</span><span class="p">,</span> <span class="n">label_img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">less</span><span class="p">(</span><span class="n">flip_prob</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
+                                <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">flip_up_down</span><span class="p">(</span><span class="n">tr_img</span><span class="p">),</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">flip_up_down</span><span class="p">(</span><span class="n">label_img</span><span class="p">)),</span>
+                                <span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">tr_img</span><span class="p">,</span> <span class="n">label_img</span><span class="p">))</span>
+  <span class="k">return</span> <span class="n">tr_img</span><span class="p">,</span> <span class="n">label_img</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function to augment the images and labels</span>
+<span class="k">def</span> <span class="nf">_augment</span><span class="p">(</span><span class="n">img</span><span class="p">,</span>
+             <span class="n">label_img</span><span class="p">,</span>
+             <span class="n">resize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Resize the image to some size e.g. [256, 256]</span>
+             <span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Scale image e.g. 1 / 255.</span>
+             <span class="n">horizontal_flip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">vertical_flip</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span> 
+  <span class="k">if</span> <span class="n">resize</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Resize both images</span>
+    <span class="n">label_img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">label_img</span><span class="p">,</span> <span class="n">resize</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">resize</span><span class="p">)</span>
+  
+  <span class="n">img</span><span class="p">,</span> <span class="n">label_img</span> <span class="o">=</span> <span class="n">flip_img_h</span><span class="p">(</span><span class="n">horizontal_flip</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">label_img</span><span class="p">)</span>
+  <span class="n">img</span><span class="p">,</span> <span class="n">label_img</span> <span class="o">=</span> <span class="n">flip_img_v</span><span class="p">(</span><span class="n">vertical_flip</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">label_img</span><span class="p">)</span>
+  <span class="n">img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> 
+  <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale</span>
+    <span class="c1">#img = tf.keras.layers.Rescaling(scale=scale, offset=-1)</span>
+  <span class="c1">#label_img = tf.cast(label_img, tf.float32) * scale</span>
+  <span class="c1">#print(&quot;tensor: &quot;, tf.unique(tf.keras.backend.print_tensor(label_img)))</span>
+  <span class="k">return</span> <span class="n">img</span><span class="p">,</span> <span class="n">label_img</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Main function to tie all of the above four dataset processing functions together </span>
+<span class="k">def</span> <span class="nf">get_baseline_dataset</span><span class="p">(</span><span class="n">filenames</span><span class="p">,</span> 
+                         <span class="n">labels</span><span class="p">,</span>
+                         <span class="n">preproc_fn</span><span class="o">=</span><span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">_augment</span><span class="p">),</span>
+                         <span class="n">threads</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> 
+                         <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+                         <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>           
+  <span class="n">num_x</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)</span>
+  <span class="c1"># Create a dataset from the filenames and labels</span>
+  <span class="n">dataset</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">filenames</span><span class="p">,</span> <span class="n">labels</span><span class="p">))</span>
+  <span class="c1"># Map our preprocessing function to every element in our dataset, taking</span>
+  <span class="c1"># advantage of multithreading</span>
+  <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">_process_pathnames</span><span class="p">,</span> <span class="n">num_parallel_calls</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">preproc_fn</span><span class="o">.</span><span class="n">keywords</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;resize&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">preproc_fn</span><span class="o">.</span><span class="n">keywords</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">batch_size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Batching images must be of the same size&quot;</span>
+
+  <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">preproc_fn</span><span class="p">,</span> <span class="n">num_parallel_calls</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span>
+  
+  <span class="k">if</span> <span class="n">shuffle</span><span class="p">:</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">num_x</span><span class="p">)</span>
+  
+  
+  <span class="c1"># It&#39;s necessary to repeat our data for all epochs </span>
+  <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">repeat</span><span class="p">()</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset configuration for training</span>
+<span class="n">tr_cfg</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;resize&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">img_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="s1">&#39;scale&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span>
+    <span class="s1">&#39;horizontal_flip&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s1">&#39;vertical_flip&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">tr_preprocessing_fn</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">_augment</span><span class="p">,</span> <span class="o">**</span><span class="n">tr_cfg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset configuration for validation</span>
+<span class="n">val_cfg</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;resize&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">img_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="s1">&#39;scale&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">val_preprocessing_fn</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">_augment</span><span class="p">,</span> <span class="o">**</span><span class="n">val_cfg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># dataset configuration for testing</span>
+<span class="n">test_cfg</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;resize&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">img_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">img_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+    <span class="s1">&#39;scale&#39;</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="mf">255.</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">test_preprocessing_fn</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">_augment</span><span class="p">,</span> <span class="o">**</span><span class="n">test_cfg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the TensorFlow datasets</span>
+<span class="n">train_ds</span> <span class="o">=</span> <span class="n">get_baseline_dataset</span><span class="p">(</span><span class="n">x_train_filenames</span><span class="p">,</span>
+                                <span class="n">y_train_filenames</span><span class="p">,</span>
+                                <span class="n">preproc_fn</span><span class="o">=</span><span class="n">tr_preprocessing_fn</span><span class="p">,</span>
+                                <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+<span class="n">val_ds</span> <span class="o">=</span> <span class="n">get_baseline_dataset</span><span class="p">(</span><span class="n">x_val_filenames</span><span class="p">,</span>
+                              <span class="n">y_val_filenames</span><span class="p">,</span> 
+                              <span class="n">preproc_fn</span><span class="o">=</span><span class="n">val_preprocessing_fn</span><span class="p">,</span>
+                              <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+<span class="n">test_ds</span> <span class="o">=</span> <span class="n">get_baseline_dataset</span><span class="p">(</span><span class="n">x_test_filenames</span><span class="p">,</span>
+                              <span class="n">y_test_filenames</span><span class="p">,</span> 
+                              <span class="n">preproc_fn</span><span class="o">=</span><span class="n">test_preprocessing_fn</span><span class="p">,</span>
+                              <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now we will display some samples from the datasets</span>
+<span class="n">display_num</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">r_choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">num_foreground_examples</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">display_num</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+  <span class="n">img_num</span> <span class="o">=</span> <span class="n">r_choices</span><span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="n">temp_ds</span> <span class="o">=</span> <span class="n">get_baseline_dataset</span><span class="p">(</span><span class="n">foreground_list_x</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> 
+                               <span class="n">foreground_list_y</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span>
+                               <span class="n">preproc_fn</span><span class="o">=</span><span class="n">tr_preprocessing_fn</span><span class="p">,</span>
+                               <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s examine some of these augmented images</span>
+
+<span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">temp_ds</span><span class="p">)</span>
+<span class="n">next_element</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="n">get_next</span><span class="p">()</span>
+
+<span class="n">batch_of_imgs</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">next_element</span>
+
+<span class="c1"># Running next element in our graph will produce a batch of images</span>
+
+<span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span> <span class="o">=</span> <span class="n">batch_of_imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">display_list</span><span class="p">):</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+
+  <span class="n">title</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Input Image&#39;</span><span class="p">,</span> <span class="s1">&#39;True Mask&#39;</span><span class="p">,</span> <span class="s1">&#39;Predicted Mask&#39;</span><span class="p">]</span>
+
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">display_list</span><span class="p">)):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">display_list</span><span class="p">),</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">array_to_img</span><span class="p">(</span><span class="n">display_list</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+  <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># display sample train image</span>
+<span class="n">display</span><span class="p">([</span><span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>…same check for the validation images:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reset the forground list to capture the validation images</span>
+<span class="n">foreground_list_x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">foreground_list_y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span><span class="p">):</span> 
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">filename_split</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> 
+      <span class="n">filename_zero</span><span class="p">,</span> <span class="n">fileext</span> <span class="o">=</span> <span class="n">filename_split</span> 
+      <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename_zero</span><span class="p">)</span> 
+      <span class="k">if</span> <span class="n">basename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">background_list_train</span><span class="p">:</span>
+        <span class="n">foreground_list_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">foreground_list_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">except</span><span class="p">:</span>
+      <span class="k">continue</span>
+
+<span class="n">num_foreground_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">foreground_list_y</span><span class="p">)</span>
+
+<span class="n">display_num</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">r_choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">num_foreground_examples</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">display_num</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+  <span class="n">img_num</span> <span class="o">=</span> <span class="n">r_choices</span><span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="n">temp_ds</span> <span class="o">=</span> <span class="n">get_baseline_dataset</span><span class="p">(</span><span class="n">foreground_list_x</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> 
+                               <span class="n">foreground_list_y</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span>
+                               <span class="n">preproc_fn</span><span class="o">=</span><span class="n">val_preprocessing_fn</span><span class="p">,</span>
+                               <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s examine some of these augmented images</span>
+
+<span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">temp_ds</span><span class="p">)</span>
+<span class="n">next_element</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="n">get_next</span><span class="p">()</span>
+
+<span class="n">batch_of_imgs</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">next_element</span>
+
+<span class="c1"># Running next element in our graph will produce a batch of images</span>
+
+<span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span> <span class="o">=</span> <span class="n">batch_of_imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:]</span>
+
+<span class="c1"># display sample validation image</span>
+<span class="n">display</span><span class="p">([</span><span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>…same check for the test images:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reset the forground list to capture the test images</span>
+<span class="n">foreground_list_x</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">foreground_list_y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_test_filenames</span><span class="p">,</span> <span class="n">y_test_filenames</span><span class="p">):</span> 
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">filename_split</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> 
+      <span class="n">filename_zero</span><span class="p">,</span> <span class="n">fileext</span> <span class="o">=</span> <span class="n">filename_split</span> 
+      <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename_zero</span><span class="p">)</span> 
+      <span class="k">if</span> <span class="n">basename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">background_list_train</span><span class="p">:</span>
+        <span class="n">foreground_list_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">foreground_list_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">except</span><span class="p">:</span>
+      <span class="k">continue</span>
+
+<span class="n">num_foreground_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">foreground_list_y</span><span class="p">)</span>
+
+<span class="n">display_num</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">r_choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">num_foreground_examples</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">display_num</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+  <span class="n">img_num</span> <span class="o">=</span> <span class="n">r_choices</span><span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="n">temp_ds</span> <span class="o">=</span> <span class="n">get_baseline_dataset</span><span class="p">(</span><span class="n">foreground_list_x</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> 
+                               <span class="n">foreground_list_y</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span>
+                               <span class="n">preproc_fn</span><span class="o">=</span><span class="n">test_preprocessing_fn</span><span class="p">,</span>
+                               <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s examine some of these augmented images</span>
+
+<span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">temp_ds</span><span class="p">)</span>
+<span class="n">next_element</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="n">get_next</span><span class="p">()</span>
+
+<span class="n">batch_of_imgs</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">next_element</span>
+
+<span class="c1"># Running next element in our graph will produce a batch of images</span>
+
+<span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span> <span class="o">=</span> <span class="n">batch_of_imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:]</span>
+
+<span class="c1"># display sample test image</span>
+<span class="n">display</span><span class="p">([</span><span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="define-the-model">
+<h3>Define the model<a class="headerlink" href="#define-the-model" title="Permalink to this headline">¶</a></h3>
+<p>The model being used here is a modified U-Net. A U-Net consists of an encoder (downsampler) and decoder (upsampler). In-order to learn robust features, and reduce the number of trainable parameters, an optionally pretrained model can be used as the encoder. Thus, the encoder for this task will be a pretrained MobileNetV2 model, whose intermediate outputs will be used, and the decoder will be the upsample block already implemented in TensorFlow Examples in the Pix2pix tutorial.</p>
+<div class="figure align-default" id="unet-mobilenetv2-arch-arch-fig">
+<a class="reference internal image-reference" href="../_images/Unet_mobilenetv2_arch_arch.png"><img alt="../_images/Unet_mobilenetv2_arch_arch.png" src="../_images/Unet_mobilenetv2_arch_arch.png" style="width: 650px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">U-shaped MobileNetV2 (adapted U-Net) architecture diagram (from <a class="reference external" href="https://www.researchgate.net/publication/339266308_Surface-Defect_Segmentation_using_U-shaped_Inverted_Residuals">Sarakon et al., 2019</a>).</span><a class="headerlink" href="#unet-mobilenetv2-arch-arch-fig" title="Permalink to this image">¶</a></p>
+</div>
+<p>The reason to output nine channels is because there are nine possible labels for each pixel. Think of this as multi-classification where each pixel is being classified into nine classes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set number of model output channels to the number of classes (including background)</span>
+<span class="n">OUTPUT_CHANNELS</span> <span class="o">=</span> <span class="mi">9</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<p>As mentioned, the encoder will be an optionally pretrained MobileNetV2 model which is prepared and ready to use in tf.keras.applications. The encoder consists of specific outputs from intermediate layers in the model. Note that the encoder will be trained during the training process, as it would necessitate optical imagery if transfer learning were to be used, and in this example we are using spectral indices.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">applications</span><span class="o">.</span><span class="n">MobileNetV2</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="p">[</span><span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">include_top</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Use the activations of these layers</span>
+<span class="n">layer_names</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;block_1_expand_relu&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;block_3_expand_relu&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;block_6_expand_relu&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;block_13_expand_relu&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;block_16_project&#39;</span><span class="p">,</span> 
+<span class="p">]</span>
+<span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">base_model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">output</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">layer_names</span><span class="p">]</span>
+
+<span class="c1"># Create the feature extraction model</span>
+<span class="n">down_stack</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">base_model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">layers</span><span class="p">)</span>
+
+<span class="n">down_stack</span><span class="o">.</span><span class="n">trainable</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># Set this to False if using pre-trained weights</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The decoder/upsampler is simply a series of upsample blocks implemented in TensorFlow examples. The arguments are (number of filters, kernel size). A kernel size of 3 is considered standard for current network implementations (<a class="reference external" href="https://arxiv.org/abs/1801.04381">Sandler et al., 2018</a>). You can increase or decrease the number of filters, however, more filters equates to more parameters and longer training time. A range between 32 to 512, increasing 2x for each successive convolutional layer and decreasing for each successive deconvolutional/upsampling layer, is very common across different convolutional network architectures.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">up_stack</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">pix2pix</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">pix2pix</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">pix2pix</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">pix2pix</span><span class="o">.</span><span class="n">upsample</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">unet_model</span><span class="p">(</span><span class="n">output_channels</span><span class="p">):</span>
+  <span class="n">inputs</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">224</span><span class="p">,</span><span class="mi">224</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;first_layer&#39;</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">inputs</span>
+
+  <span class="c1"># Downsampling through the model</span>
+  <span class="n">skips</span> <span class="o">=</span> <span class="n">down_stack</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">skips</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="n">skips</span> <span class="o">=</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">skips</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+  <span class="c1"># Upsampling and establishing the skip connections</span>
+  <span class="k">for</span> <span class="n">up</span><span class="p">,</span> <span class="n">skip</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">up_stack</span><span class="p">,</span> <span class="n">skips</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">up</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">concat</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">concat</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">skip</span><span class="p">])</span>
+
+  <span class="c1"># This is the last layer of the model</span>
+  <span class="n">last</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2DTranspose</span><span class="p">(</span>
+      <span class="n">output_channels</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+      <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;last_layer&#39;</span><span class="p">)</span>
+
+  <span class="n">x</span> <span class="o">=</span> <span class="n">last</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+  <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="train-the-model">
+<h3>Train the model<a class="headerlink" href="#train-the-model" title="Permalink to this headline">¶</a></h3>
+<p>Now, all that is left to do is to compile and train the model. The loss being used here is SparseCategoricalFocalLoss(from_logits=True). The reason to use this loss function is 1) because the network is trying to assign each pixel a label, just like multi-class prediction, and 2) because focal loss weights the relative contribution of each class by the distribution in the dataset to emphasize under-represented classes and dampen over-represented classes. In the true segmentation mask, each pixel has a value between 0-9. The network here is outputting ten channels. Essentially, each channel is trying to learn to predict a class, and SparseCategoricalFocalLoss(from_logits=True) is the recommended loss for such a scenario. Using the output of the network, the label assigned to the pixel is the channel with the highest value. This is what the create_mask function is doing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">unet_model</span><span class="p">(</span><span class="n">OUTPUT_CHANNELS</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Check the network layer output shapes</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">layer</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">layer</span><span class="o">.</span><span class="n">output_shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Find the class weights for the focal loss function to help address class imbalance.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_df_para</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;TerraBio_Para.geojson&#39;</span><span class="p">)</span>
+<span class="n">train_df_imaflora</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;TerraBio_Imaflora.geojson&#39;</span><span class="p">)</span>
+<span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_df_para</span><span class="p">,</span> <span class="n">train_df_imaflora</span><span class="p">])</span>
+<span class="n">inv_freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">landcover</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">train_df</span><span class="p">)))</span>
+<span class="n">inv_freq</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="o">*</span><span class="n">inv_freq</span><span class="p">]</span>
+<span class="n">class_weights</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span> <span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">3</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> 
+                <span class="mi">4</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mi">5</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="mi">6</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                <span class="mi">7</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="mi">8</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">8</span><span class="p">]}</span>
+
+<span class="k">def</span> <span class="nf">NormalizeData</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+
+<span class="n">class_weights_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">class_weights</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;class weights: &quot;</span><span class="p">,</span> <span class="n">class_weights_list</span><span class="p">)</span>
+<span class="n">scaled_class_weights</span> <span class="o">=</span> <span class="n">NormalizeData</span><span class="p">(</span><span class="n">class_weights_list</span><span class="p">)</span>
+<span class="n">scaled_class_weights_list</span> <span class="o">=</span> <span class="n">scaled_class_weights</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scaled class weights: &quot;</span><span class="p">,</span> <span class="n">scaled_class_weights_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the SparseCategoricalFocalLoss function, gamma is the focusing parameter. Higher values of gamma make dominant, or “easy to classify”, examples contribute less to the loss relative to rare, or “difficult to classify”, examples. The value for gamma must be non-negative, and the authors of this loss function found that empirically a gamma value of 2 works best (<a class="reference external" href="https://arxiv.org/abs/1708.02002">Lin et al., 2017</a>). You can experiment by adding the class weights as a parameter to SparseCategoricalFocalLoss, e.g. <code class="docutils literal notranslate"><span class="pre">SparseCategoricalFocalLoss(gamma=2,</span> <span class="pre">class_weight=scaled_class_weights_list,</span> <span class="pre">from_logits=True)</span></code>.</p>
+<p>We will measure our model’s performance during training by per-pixel accuracy.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.00001</span><span class="p">),</span>
+              <span class="n">loss</span><span class="o">=</span><span class="n">SparseCategoricalFocalLoss</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">from_logits</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="c1">#tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),</span>
+              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="n">iou_score</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s try out the un/pre-trained model to see what it predicts before training.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_mask</span><span class="p">(</span><span class="n">pred_mask</span><span class="p">):</span>
+  <span class="n">pred_mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">pred_mask</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">pred_mask</span> <span class="o">=</span> <span class="n">pred_mask</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+  <span class="k">return</span> <span class="n">pred_mask</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">show_predictions</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># this is just for showing keras callback output. in practice this should be broken out into a different function</span>
+    <span class="n">sample_image</span> <span class="o">=</span> <span class="n">skio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_17507.png&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mf">255.</span><span class="p">)</span>
+    <span class="n">sample_mask</span> <span class="o">=</span> <span class="n">skio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_17507.png&#39;</span><span class="p">)</span>
+    <span class="n">mp</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sample_image</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span>
+    <span class="n">mpe</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">mp</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">([</span><span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">mpe</span><span class="p">])</span>
+  <span class="k">elif</span> <span class="n">dataset</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+      <span class="n">pred_mask</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+      <span class="n">display</span><span class="p">([</span><span class="n">image</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">pred_mask</span><span class="p">)])</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">mp</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span>
+    <span class="n">mpe</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">mp</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">([</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">mpe</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">show_predictions</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">sample_image</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">sample_mask</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s observe how the model improves while it is training. To accomplish this task, a callback function is defined below to plot a test image and its predicted mask after each epoch.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">DisplayCallback</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">Callback</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">on_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">logs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">show_predictions</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Sample Prediction after epoch </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We may want to view the model graph and training progress in TensorBoard, so we’ll establish a callback to save logs to a dedicated directory which will serve the TensorBoard interface.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the TensorBoard notebook extension</span>
+<span class="o">%</span><span class="k">load_ext</span> tensorboard
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">log_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;logs/&#39;</span><span class="p">)</span>
+<span class="n">log_fit_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="s1">&#39;fit&#39;</span><span class="p">)</span>
+<span class="n">log_fit_session_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="s1">&#39;fit&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">-%H%M%S&quot;</span><span class="p">))</span>
+<span class="n">visualizations_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="s1">&#39;vizualizations&#39;</span><span class="p">)</span>
+<span class="n">visualizations_session_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="s1">&#39;vizualizations&#39;</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">-%H%M%S&quot;</span><span class="p">))</span>
+
+<span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">log_fit_dir</span><span class="p">,</span> <span class="n">visualizations_dir</span><span class="p">]</span>
+<span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Making fresh log dir.&quot;</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fresh log dir exists.&quot;</span><span class="p">)</span>
+
+<span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">log_fit_dir</span><span class="p">,</span> <span class="n">log_fit_session_dir</span><span class="p">,</span> <span class="n">visualizations_dir</span><span class="p">,</span> <span class="n">visualizations_session_dir</span><span class="p">]</span>
+<span class="k">for</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+  <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="nb">dir</span><span class="p">)</span>
+
+<span class="n">tensorboard_callback</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">TensorBoard</span><span class="p">(</span><span class="n">log_dir</span><span class="o">=</span><span class="n">log_fit_session_dir</span><span class="p">,</span> <span class="n">histogram_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">write_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also take a look at the layer activations in TensorBoard using tf-explain, so we’ll establish a callback to save activation visualizations to a dedicated directory which will serve the TensorBoard interface.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get a batch of validation samples to plot activations for</span>
+<span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">val_ds</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">):</span>
+  <span class="n">image_val</span><span class="p">,</span> <span class="n">label_val</span> <span class="o">=</span> <span class="n">example</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">example</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">ActivationsVisualizationCallback</span><span class="p">(</span>
+        <span class="n">validation_data</span><span class="o">=</span><span class="p">(</span><span class="n">image_val</span><span class="p">,</span> <span class="n">label_val</span><span class="p">),</span>
+        <span class="n">layers_name</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;last_layer&quot;</span><span class="p">],</span> 
+        <span class="n">output_dir</span><span class="o">=</span><span class="n">visualizations_session_dir</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">DisplayCallback</span><span class="p">(),</span>
+    <span class="n">tensorboard_callback</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="fit-and-view">
+<h4>Fit and View<a class="headerlink" href="#fit-and-view" title="Permalink to this headline">¶</a></h4>
+<p>Now we will actually train the model for 4 epochs (full cycles through the training dataset), visualizing predictions on a validation image after each epoch. In practice, you would want to train the model until validation loss starts to increase (a clear indication of overfitting). Empirically with this dataset, convergence occurred around 50 epochs. We’ve reduced to 4 epochs purely for rapid demonstration purposes. As a preview, at 50 epochs you should observe a test prediction similar to:</p>
+<p><img alt="testimage" src="../_images/epoch50_testimage.png" />
+<img alt="testimage1" src="../_images/epoch50_testimage1.png" /></p>
+<p>Don’t be alarmed if you see blank predictions after only 4 epochs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">EPOCHS</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="n">model_history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_ds</span><span class="p">,</span> 
+                   <span class="n">steps_per_epoch</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_train_examples</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">batch_size</span><span class="p">))),</span>
+                   <span class="n">epochs</span><span class="o">=</span><span class="n">EPOCHS</span><span class="p">,</span>
+                   <span class="n">validation_data</span><span class="o">=</span><span class="n">val_ds</span><span class="p">,</span>
+                   <span class="n">validation_steps</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">num_val_examples</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">batch_size</span><span class="p">))),</span>
+                   <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plot the model’s learning curve over time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loss</span> <span class="o">=</span> <span class="n">model_history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;loss&#39;</span><span class="p">]</span>
+<span class="n">val_loss</span> <span class="o">=</span> <span class="n">model_history</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;val_loss&#39;</span><span class="p">]</span>
+
+<span class="n">epochs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">EPOCHS</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Training loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">val_loss</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Validation loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training and Validation Loss&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Loss Value&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="start-tensorboard">
+<h4>Start TensorBoard<a class="headerlink" href="#start-tensorboard" title="Permalink to this headline">¶</a></h4>
+<p>You set the <code class="docutils literal notranslate"><span class="pre">logdir</span></code> in the below command to <code class="docutils literal notranslate"><span class="pre">..logs/visualizations</span></code> to see the activations or <code class="docutils literal notranslate"><span class="pre">..logs/fit</span></code> to see the model scalars, graphs, distributions and histograms (described below).</p>
+<p>The dashboards can be selected from the tabs in top navigation bar.</p>
+<ol class="simple">
+<li><p>The Scalars dashboard shows how the loss and metrics change with every  epoch. You can use it to also track training speed, learning rate, and other scalar values.</p></li>
+<li><p>The Graphs dashboard helps you visualize your model. In this case, the Keras graph of layers is shown which can help you ensure it is built correctly.</p></li>
+<li><p>The Distributions and Histograms dashboards show the distribution of a Tensor over time. This can be useful to visualize weights and biases and verify that they are changing in an expected way.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">tensorboard</span> --logdir &quot;$visualizations_dir&quot;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="save-model-to-file">
+<h4>Save model to file<a class="headerlink" href="#save-model-to-file" title="Permalink to this headline">¶</a></h4>
+<p>We will export the final model weights to your own google drive folder.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">)):</span>
+  <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">)</span>
+<span class="n">save_model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;model_out_batch_</span><span class="si">{}</span><span class="s1">_ep</span><span class="si">{}</span><span class="s1">_nopretrain_focalloss/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">EPOCHS</span><span class="p">))</span>
+<span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">save_model_path</span><span class="p">)):</span>
+  <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">save_model_path</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">save_model_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="make-predictions">
+<h3>Make predictions<a class="headerlink" href="#make-predictions" title="Permalink to this headline">¶</a></h3>
+<p>Let’s make some predictions. In the interest of saving time, the number of epochs was kept small, but you may set this higher to achieve more accurate results. We’ll load from the rea donly workshop directory in case you weren’t able to save your own model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Optional, you can load the model from the saved version</span>
+<span class="n">load_from_checkpoint</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">load_from_checkpoint</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+  <span class="n">save_model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;model_out_batch_</span><span class="si">{}</span><span class="s1">_ep</span><span class="si">{}</span><span class="s1">_nopretrain_focalloss/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">EPOCHS</span><span class="p">))</span>
+  <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">load_model</span><span class="p">(</span><span class="n">save_model_path</span><span class="p">,</span> <span class="n">custom_objects</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">SparseCategoricalFocalLoss</span><span class="p">,</span> <span class="s2">&quot;iou_score&quot;</span><span class="p">:</span> <span class="n">iou_score</span><span class="p">})</span>
+<span class="k">else</span><span class="p">:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;inferencing from in memory model&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_predictions</span><span class="p">(</span><span class="n">image</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;At least one of image or dataset must not be None.&quot;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">dataset</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">image</span><span class="p">,</span> <span class="n">mask</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+      <span class="n">pred_mask</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">pred_mask</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">pred_mask</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span>
+    <span class="n">pred_mask</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">pred_mask</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pred_mask</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="single-image-example">
+<h4>Single image example<a class="headerlink" href="#single-image-example" title="Permalink to this headline">¶</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_num</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">r_choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">num_foreground_examples</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">display_num</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+  <span class="n">img_num</span> <span class="o">=</span> <span class="n">r_choices</span><span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="n">temp_ds</span> <span class="o">=</span> <span class="n">get_baseline_dataset</span><span class="p">(</span><span class="n">foreground_list_x</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> 
+                               <span class="n">foreground_list_y</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span>
+                               <span class="n">preproc_fn</span><span class="o">=</span><span class="n">test_preprocessing_fn</span><span class="p">,</span>
+                               <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s examine some of these augmented images</span>
+
+<span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">temp_ds</span><span class="p">)</span>
+<span class="n">next_element</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="n">get_next</span><span class="p">()</span>
+
+<span class="n">batch_of_imgs</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">next_element</span>
+
+<span class="c1"># Running next element in our graph will produce a batch of images</span>
+
+<span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span> <span class="o">=</span> <span class="n">batch_of_imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:]</span>
+
+<span class="c1"># run and plot predicitions</span>
+<span class="n">pred_mask</span> <span class="o">=</span> <span class="n">get_predictions</span><span class="p">(</span><span class="n">sample_image</span><span class="p">)</span>
+
+<span class="n">show_predictions</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">sample_image</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">sample_mask</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="multi-image-example">
+<h4>Multi image example<a class="headerlink" href="#multi-image-example" title="Permalink to this headline">¶</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tiled_prediction_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span><span class="s1">&#39;predictions_test_focal_loss/&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tiled_prediction_dir</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">tiled_prediction_dir</span><span class="p">)</span>
+    
+<span class="n">pred_masks</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">pred_paths</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">true_masks</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_test_filenames</span><span class="p">)):</span>
+    <span class="n">img_num</span> <span class="o">=</span> <span class="n">i</span>
+
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">temp_ds</span> <span class="o">=</span> <span class="n">get_baseline_dataset</span><span class="p">(</span><span class="n">x_test_filenames</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> 
+                                   <span class="n">y_test_filenames</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="n">preproc_fn</span><span class="o">=</span><span class="n">test_preprocessing_fn</span><span class="p">,</span>
+                                   <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                   <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span> 
+      <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+
+    <span class="c1"># Let&#39;s examine some of these augmented images</span>
+
+    <span class="n">iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">temp_ds</span><span class="p">)</span>
+    <span class="n">next_element</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="n">get_next</span><span class="p">()</span>
+
+    <span class="n">batch_of_imgs</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">next_element</span>
+
+    <span class="c1"># Running next element in our graph will produce a batch of images</span>
+    <span class="n">image</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">batch_of_imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:]</span>
+    <span class="n">mask_int</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+    <span class="n">true_masks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mask_int</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">y_test_filenames</span><span class="p">[</span><span class="n">img_num</span><span class="p">:</span><span class="n">img_num</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">mask_int</span><span class="p">))</span>
+
+    <span class="c1"># run and plot predicitions, only showing every 27th prediction</span>
+    <span class="k">if</span> <span class="n">img_num</span> <span class="o">%</span> <span class="mi">27</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">show_predictions</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">pred_mask</span> <span class="o">=</span> <span class="n">get_predictions</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">pred_masks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_mask</span><span class="p">)</span>
+    
+    <span class="c1"># save prediction images to file</span>
+
+    <span class="n">filename_split</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">x_test_filenames</span><span class="p">[</span><span class="n">img_num</span><span class="p">])</span> 
+    <span class="n">filename_zero</span><span class="p">,</span> <span class="n">fileext</span> <span class="o">=</span> <span class="n">filename_split</span> 
+    <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename_zero</span><span class="p">)</span> 
+    <span class="n">pred_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tiled_prediction_dir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">basename</span><span class="p">))</span>
+    <span class="n">pred_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_path</span><span class="p">)</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">save_img</span><span class="p">(</span><span class="n">pred_path</span><span class="p">,</span><span class="n">pred_mask</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># scaling is good to do to cut down on file size, but adds an extra dtype conversion step.    </span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, we will save a csv with our test file paths so we can easily load predictions and labels in the next lesson to calculate our evaluation metrics.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x_test_filenames</span><span class="p">,</span> <span class="n">y_test_filenames</span><span class="p">,</span> <span class="n">pred_paths</span><span class="p">)),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;img_names&quot;</span><span class="p">,</span> <span class="s2">&quot;label_names&quot;</span><span class="p">,</span> <span class="s2">&quot;pred_names&quot;</span><span class="p">])</span>
+<span class="n">path_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span> <span class="s2">&quot;test_file_paths.csv&quot;</span><span class="p">))</span>
+
+<span class="n">path_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">)),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;img_names&quot;</span><span class="p">,</span> <span class="s2">&quot;label_names&quot;</span><span class="p">])</span>
+<span class="n">path_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span> <span class="s2">&quot;train_file_paths.csv&quot;</span><span class="p">))</span>
+
+<span class="n">path_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span><span class="p">)),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;img_names&quot;</span><span class="p">,</span> <span class="s2">&quot;label_names&quot;</span><span class="p">])</span>
+<span class="n">path_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span> <span class="s2">&quot;validate_file_paths.csv&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "conda-env-servir-py"
+        },
+        kernelOptions: {
+            kernelName: "conda-env-servir-py",
+            path: "./docs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'conda-env-servir-py'</script>
+
+              </div>
+              
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="Lesson2b_prep_data_ML_segmentation.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Process dataset for use with deep learning segmentation network</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="Lesson4_evaluation.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Evaluating Semantic Segmentation Models</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+          By Development Seed<br/>
+        
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
