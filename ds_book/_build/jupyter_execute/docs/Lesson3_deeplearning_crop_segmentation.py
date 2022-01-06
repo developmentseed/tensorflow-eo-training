@@ -6,9 +6,9 @@
 
 # In this tutorial we will learn how to segment images according to a set of classes. **Segmentation**  refers to the process of partitioning an image into groups of pixels that identify with a target class within the foreground or the background class (a catch-all class that contains non-target features).
 # 
-# Specifically, in this tutorial we will be using data from two reference datasets, Imaflora and Para, depicting land use classifications of relevant areas in the Amazon. 
+# Specifically, in this tutorial we will be using data from a [fusion dataset for crop type classification in Germany](https://mlhub.earth/data/dlr_fusion_competition_germany). It leverages Planet 5 day composites and polygon labels.
 # 
-# We will pair the reference data with a Planet 5 meter composite made from data available as part of the NICFI program. Our task will be to predict the land use / land cover in an image on a pixel-wise basis. 
+# Our task will be to predict the crop types (a form of land use / land cover) in an image on a pixel-wise basis. 
 # 
 # ## Specific concepts that will be covered
 # In the process, we will build practical experience and develop intuition around the following concepts:
@@ -21,7 +21,7 @@
 # * **Saving and loading Keras models** - We'll save our best model to file. When we want to perform inference/evaluate our model in the future, we can load the model file. 
 # 
 # ### General Workflow
-# 1. Load image and label datasets from Google Drive
+# 1. Load image and label datasets (acquired and processed in the prior lesson) from Google Drive
 # 2. Visualize data/perform some exploratory data analysis
 # 3. Set up data pipeline and preprocessing
 # 4. Build model
@@ -81,7 +81,7 @@ get_ipython().system('pip install -q tf-explain==0.3.1')
 get_ipython().system("pip install -q segmentation_models # we'll use this for pretraining later and for the IOU segmentation performance metric")
 
 
-# In[ ]:
+# In[2]:
 
 
 # import required libraries
@@ -131,24 +131,22 @@ import skimage.io as skio
 # #### Getting set up with the data
 # 
 # ```{important}
-# Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder `servir-tf-devseed`. Then, this folder will be available at the following path that is accessible with the google.colab `drive` module: `'/content/gdrive/My Drive/servir-tf-devseed/'`
+# Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder `tf-eo-devseed`. Then, this folder will be available at the following path that is accessible with the google.colab `drive` module: `'/content/gdrive/My Drive/tf-eo-devseed/'`
 # ```
 # 
-# We'll be working witht he following folders in the `servir-tf-devseed` folder:
+# We'll be working with the following folders and files in the `tf-eo-devseed` folder:
 # ```
-# servir-tf-devseed/
-# ├── images/
-# ├── images_bright/
+# tf-eo-devseed/
+# ├── stacks/
+# ├── stacks_brightened/
 # ├── indices/
-# ├── indices_800/
 # ├── labels/
-# ├── labels_800/
 # ├── background_list_train.txt
 # ├── train_list_clean.txt
-# └── terrabio_classes.csv
+# └── lulc_classes.csv
 # ```
 
-# In[ ]:
+# In[3]:
 
 
 # set your root directory and tiled data folders
@@ -159,19 +157,23 @@ if 'google.colab' in str(get_ipython()):
     # mount google drive
     from google.colab import drive
     drive.mount('/content/gdrive')
-    root_dir = '/content/gdrive/My Drive/servir-tf-devseed/' 
-    workshop_dir = '/content/gdrive/My Drive/servir-tf-devseed-workshop'
+    root_dir = '/content/gdrive/My Drive/tf-eo-devseed/' 
+    workshop_dir = '/content/gdrive/My Drive/tf-eo-devseed-workshop'
+    dirs = [root_dir, workshop_dir]
+    for d in dirs:
+        if not os.path.exists(d):
+            os.makedirs(d)
     print('Running on Colab')
 else:
-    root_dir = os.path.abspath("./data/servir-tf-devseed")
-    workshop_dir = os.path.abspath('./servir-tf-devseed-workshop')
+    root_dir = os.path.abspath("./data/tf-eo-devseed")
+    workshop_dir = os.path.abspath('./tf-eo-devseed-workshop')
     print(f'Not running on Colab, data needs to be downloaded locally at {os.path.abspath(root_dir)}')
 
-img_dir = os.path.join(root_dir,'indices/') # or os.path.join(root_dir,'images_bright/') if using the optical tiles
-label_dir = os.path.join(root_dir,'labels/')
+img_dir = os.path.join(root_dir,'rasters/tiled/stacks_brightened/') # or os.path.join(root_dir,'images_bright/') if using the optical tiles
+label_dir = os.path.join(root_dir,'rasters/tiled/labels/')
 
 
-# In[ ]:
+# In[4]:
 
 
 # go to root directory
@@ -195,123 +197,105 @@ print('Found GPU at: {}'.format(device_name))
 
 # ### Check out the labels
 
-# In[ ]:
+# Class names and identifiers extracted from the documentation provided here: https://radiantearth.blob.core.windows.net/mlhub/esa-food-security-challenge/Crops_GT_Brandenburg_Doc.pdf
+
+# In[5]:
 
 
 # Read the classes
-class_index = pd.read_csv(os.path.join(root_dir,'terrabio_classes.csv'))
-class_names = class_index.class_name.unique()
-print(class_index) 
+
+data = {'class_names':  ['Background', 'Wheat', 'Rye', 'Barley', 'Oats', 'Corn', 'Oil Seeds', 'Root Crops', 'Meadows', 'Forage Crops'],
+        'class_ids': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        }
+
+classes = pd.DataFrame(data)
+print(classes) 
 
 
 # ### Read into tensorflow datasets
 # 
 # Now we will compile the spectral index image and label tiles into training, validation, and test datasets for use with TensorFlow.
 
-# ```{warning} **Long running cells** \
-# Normally we would read the image files from the directories and then process forward from there with background removal with the next **three** illustrated functions, however, due to slow I/O in Google Colab we will read the images list with 90% background removal already performed from a pre-saved list in the shared drive.
-# ```
 # 
-# ```python
-# # get lists of image and label tile pairs for training and testing
-# 
-# def get_train_test_lists(imdir, lbldir):
-#   imgs = glob.glob(os.path.join(imdir,"/*.png"))
-#   #print(imgs[0:1])
-#   dset_list = []
-#   for img in imgs:
-#     filename_split = os.path.splitext(img) 
-#     filename_zero, fileext = filename_split 
-#     basename = os.path.basename(filename_zero) 
-#     dset_list.append(basename)
-#     
-#   x_filenames = []
-#   y_filenames = []
-#   for img_id in dset_list:
-#     x_filenames.append(os.path.join(imdir, "{}.png".format(img_id)))
-#     y_filenames.append(os.path.join(lbldir, "{}.png".format(img_id)))
-#     
-#   print("number of images: ", len(dset_list))
-#   return dset_list, x_filenames, y_filenames
-# 
-# train_list, x_train_filenames, y_train_filenames = get_train_test_lists(img_dir, label_dir)
-# 
-# ```
-# number of images:  37350
-# 
-# Check for the proportion of background tiles. This takes a while. So we can skip by loading from saved results.
-# 
-# ```python
-# skip = True
-# 
-# if not skip:
-#   background_list_train = []
-#   for i in train_list: 
-#       # read in each labeled images
-#       # print(os.path.join(label_dir,"{}.png".format(i))) 
-#       img = np.array(Image.open(os.path.join(label_dir,"{}.png".format(i))))  
-#       # check if no values in image are greater than zero (background value)
-#       if img.max()==0:
-#           background_list_train.append(i)
-#           
-#   print("Number of background images: ", len(background_list_train))
-# 
-#   with open(os.path.join(root_dir,'background_list_train.txt'), 'w') as f:
-#     for item in background_list_train:
-#         f.write("%s\n" % item)
-# 
-# else:
-#   background_list_train = [line.strip() for line in open("background_list_train.txt", 'r')]
-#   print("Number of background images: ", len(background_list_train))
-# ```
-# Number of background images:  36489
-# 
-# We will keep only 10% of the total. Too many background tiles can cause a form of class imbalance.
-# ```python
-# background_removal = len(background_list_train) * 0.9
-# train_list_clean = [y for y in train_list if y not in background_list_train[0:int(background_removal)]]
-# 
-# x_train_filenames = []
-# y_train_filenames = []
-# 
-# for i, img_id in zip(tqdm(range(len(train_list_clean))), train_list_clean):
-#   pass 
-#   x_train_filenames.append(os.path.join(img_dir, "{}.png".format(img_id)))
-#   y_train_filenames.append(os.path.join(label_dir, "{}.png".format(img_id)))
-# 
-# print("Number of background tiles: ", background_removal)
-# print("Remaining number of tiles after 90% background removal: ", len(train_list_clean))
-# ```
-# Number of background tiles:  32840
-# 
-# Remaining number of tiles after 90% background removal:  4510
+# Get lists of image and label tile pairs for training and testing.
+# <div>&#8681</div> 
 # 
 # 
-
-# ```{important}
-# The cell below contains the shortcut read of prepped training image list. 
-# ```
+# 
 
 # In[ ]:
 
 
 def get_train_test_lists(imdir, lbldir):
-  train_list = [line.strip() for line in open("train_list_clean.txt", 'r')]
+  imgs = glob.glob(os.path.join(imdir,"*.png"))
+  #print(imgs[0:1])
+  dset_list = []
+  for img in imgs:
+    filename_split = os.path.splitext(img) 
+    filename_zero, fileext = filename_split 
+    basename = os.path.basename(filename_zero) 
+    dset_list.append(basename)
 
   x_filenames = []
   y_filenames = []
-  for img_id in train_list:
+  for img_id in dset_list:
     x_filenames.append(os.path.join(imdir, "{}.png".format(img_id)))
     y_filenames.append(os.path.join(lbldir, "{}.png".format(img_id)))
 
-  print("Number of images: ", len(train_list))
-  return train_list, x_filenames, y_filenames
+  print("number of images: ", len(dset_list))
+  return dset_list, x_filenames, y_filenames
 
+train_list, x_train_filenames, y_train_filenames = get_train_test_lists(img_dir, label_dir)
+
+
+# Check for the proportion of background tiles. This takes a while. So after running this once, you can skip by loading from saved results.
+# <div>&#8681</div> 
 
 # In[ ]:
 
 
-train_list, x_train_filenames, y_train_filenames = get_train_test_lists(img_dir, label_dir)
+skip = False
+
+if not skip:
+  background_list_train = []
+  for i in train_list: 
+      # read in each labeled images
+      # print(os.path.join(label_dir,"{}.png".format(i))) 
+      img = np.array(Image.open(os.path.join(label_dir,"{}.png".format(i))))  
+      # check if no values in image are greater than zero (background value)
+      if img.max()==0:
+          background_list_train.append(i)
+
+  print("Number of background images: ", len(background_list_train))
+
+  with open(os.path.join(root_dir,'background_list_train.txt'), 'w') as f:
+    for item in background_list_train:
+        f.write("%s\n" % item)
+
+else:
+  background_list_train = [line.strip() for line in open("background_list_train.txt", 'r')]
+  print("Number of background images: ", len(background_list_train))
+
+
+# We will keep only 10% of the total. Too many background tiles can cause a form of class imbalance.
+# <div>&#8681</div> 
+
+# In[ ]:
+
+
+background_removal = len(background_list_train) * 0.9
+train_list_clean = [y for y in train_list if y not in background_list_train[0:int(background_removal)]]
+
+x_train_filenames = []
+y_train_filenames = []
+
+for i, img_id in zip(tqdm(range(len(train_list_clean))), train_list_clean):
+  pass 
+  x_train_filenames.append(os.path.join(img_dir, "{}.png".format(img_id)))
+  y_train_filenames.append(os.path.join(label_dir, "{}.png".format(img_id)))
+
+print("Number of background tiles: ", background_removal)
+print("Remaining number of tiles after 90% background removal: ", len(train_list_clean))
 
 
 # Now that we have our set of files we want to use for developing our model, we need to split them into three sets: 
@@ -337,114 +321,81 @@ print("Number of test examples: {}".format(num_test_examples))
 
 
 # ```{warning} **Long running cell** \
-# The code below checks for values in train, val, and test partitions. We won't run this since it takes over 10 minutes on colab due to slow I/O.
+# The code below checks for values in train, val, and test partitions. 
 # ```
-# ```python
-# vals_train = []
-# vals_val = []
-# vals_test = []
 # 
-# def get_vals_in_partition(partition_list, x_filenames, y_filenames):
-#   for x,y,i in zip(x_filenames, y_filenames, tqdm(range(len(y_filenames)))):
-#       pass 
-#       try:
-#         img = np.array(Image.open(y)) 
-#         vals = np.unique(img)
-#         partition_list.append(vals)
-#       except:
-#         continue
-# 
-# def flatten(partition_list):
-#     return [item for sublist in partition_list for item in sublist]
-# 
-# get_vals_in_partition(vals_train, x_train_filenames, y_train_filenames)
-# get_vals_in_partition(vals_val, x_val_filenames, y_val_filenames)
-# get_vals_in_partition(vals_test, x_test_filenames, y_test_filenames)
-# 
-# print("Values in training partition: ", set(flatten(vals_train)))
-# print("Values in validation partition: ", set(flatten(vals_val)))
-# print("Values in test partition: ", set(flatten(vals_test)))
-# ```
 
-# 
-# Values in training partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}
-# 
-# Values in validation partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}
-# 
-# Values in test partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}
+# In[ ]:
+
+
+vals_train = []
+vals_val = []
+vals_test = []
+
+def get_vals_in_partition(partition_list, x_filenames, y_filenames):
+  for x,y,i in zip(x_filenames, y_filenames, tqdm(range(len(y_filenames)))):
+      pass 
+      try:
+        img = np.array(Image.open(y)) 
+        vals = np.unique(img)
+        partition_list.append(vals)
+      except:
+        continue
+
+def flatten(partition_list):
+    return [item for sublist in partition_list for item in sublist]
+
+get_vals_in_partition(vals_train, x_train_filenames, y_train_filenames)
+get_vals_in_partition(vals_val, x_val_filenames, y_val_filenames)
+get_vals_in_partition(vals_test, x_test_filenames, y_test_filenames)
+
+
+# In[11]:
+
+
+print("Values in training partition: ", set(flatten(vals_train)))
+print("Values in validation partition: ", set(flatten(vals_val)))
+print("Values in test partition: ", set(flatten(vals_test)))
+
 
 # ### Visualize the data
 
 # ```{warning} **Long running cell** \
-# The code below loads foreground examples randomly. We won't run this since it takes over a while on colab due to slow I/O.
+# The code below loads foreground examples randomly. 
 # ```
 # <div>&#8681</div> 
-# 
-# ```python
-# display_num = 3
-# 
-# background_list_train = [line.strip() for line in open("background_list_train.txt", 'r')]
-# 
-# # select only for tiles with foreground labels present
-# foreground_list_x = []
-# foreground_list_y = []
-# for x,y in zip(x_train_filenames, y_train_filenames): 
-#     try:
-#       filename_split = os.path.splitext(y) 
-#       filename_zero, fileext = filename_split 
-#       basename = os.path.basename(filename_zero) 
-#       if basename not in background_list_train:
-#         foreground_list_x.append(x)
-#         foreground_list_y.append(y)
-#       else:
-#         continue
-#     except:
-#       continue
-# 
-# num_foreground_examples = len(foreground_list_y)
-# 
-# # randomlize the choice of image and label pairs
-# r_choices = np.random.choice(num_foreground_examples, display_num)
-# ```
 
-# ```{important}
-# Instead, we will read and plot a few sample foreground training images and labels from their pathnames. Note: this may still take a few execution tries to work. Google colab in practice takes some time to connect to data in Google Drive, so sometimes this returns an error on the first (few) attempt(s).
-# ```
-
-# In[ ]:
+# In[12]:
 
 
 display_num = 3
 
 background_list_train = [line.strip() for line in open("background_list_train.txt", 'r')]
 
-foreground_list_x = [
-                     f'{img_dir}/tile_terrabio_15684.png', 
-                     f'{img_dir}/tile_terrabio_23056.png', 
-                     f'{img_dir}/tile_terrabio_21877.png'
-                     ]
-
-foreground_list_y = [
-                     f'{label_dir}/tile_terrabio_15684.png', 
-                     f'{label_dir}/tile_terrabio_23056.png', 
-                     f'{label_dir}/tile_terrabio_21877.png'
-                     ]
-
-# confirm files exist
-for fx, fy in zip(foreground_list_x, foreground_list_y):
-  if os.path.isfile(fx) and os.path.isfile(fy):
-    print(fx, " and ", fy, " exist.")
-  else:
-    print(fx, " and ", fy, " don't exist.")
+# select only for tiles with foreground labels present
+foreground_list_x = []
+foreground_list_y = []
+for x,y in zip(x_train_filenames, y_train_filenames): 
+    try:
+      filename_split = os.path.splitext(y) 
+      filename_zero, fileext = filename_split 
+      basename = os.path.basename(filename_zero) 
+      if basename not in background_list_train:
+        foreground_list_x.append(x)
+        foreground_list_y.append(y)
+      else:
+        continue
+    except:
+      continue
 
 num_foreground_examples = len(foreground_list_y)
 
 # randomlize the choice of image and label pairs
-#r_choices = np.random.choice(num_foreground_examples, display_num)
+r_choices = np.random.choice(num_foreground_examples, display_num)
 
 plt.figure(figsize=(10, 15))
 for i in range(0, display_num * 2, 2):
-  #img_num = r_choices[i // 2]
+  img_num = r_choices[i // 2]
   img_num = i // 2
   x_pathname = foreground_list_x[img_num]
   y_pathname = foreground_list_y[img_num]
@@ -466,7 +417,7 @@ plt.show()
 
 # ### Read the tiles into tensors
 
-# In[ ]:
+# In[13]:
 
 
 # set input image shape
@@ -475,7 +426,7 @@ img_shape = (224, 224, 3)
 batch_size = 8
 
 
-# In[ ]:
+# In[14]:
 
 
 # Function for reading the tiles into TensorFlow tensors 
@@ -496,7 +447,7 @@ def _process_pathnames(fname, label_path):
   return img, label_img
 
 
-# In[ ]:
+# In[15]:
 
 
 # Function to augment the data with horizontal flip
@@ -509,7 +460,7 @@ def flip_img_h(horizontal_flip, tr_img, label_img):
   return tr_img, label_img
 
 
-# In[ ]:
+# In[16]:
 
 
 # Function to augment the data with vertical flip
@@ -522,7 +473,7 @@ def flip_img_v(vertical_flip, tr_img, label_img):
   return tr_img, label_img
 
 
-# In[ ]:
+# In[17]:
 
 
 # Function to augment the images and labels
@@ -548,7 +499,7 @@ def _augment(img,
   return img, label_img
 
 
-# In[ ]:
+# In[18]:
 
 
 # Main function to tie all of the above four dataset processing functions together 
@@ -578,7 +529,7 @@ def get_baseline_dataset(filenames,
   return dataset
 
 
-# In[ ]:
+# In[19]:
 
 
 # dataset configuration for training
@@ -591,7 +542,7 @@ tr_cfg = {
 tr_preprocessing_fn = functools.partial(_augment, **tr_cfg)
 
 
-# In[ ]:
+# In[20]:
 
 
 # dataset configuration for validation
@@ -602,7 +553,7 @@ val_cfg = {
 val_preprocessing_fn = functools.partial(_augment, **val_cfg)
 
 
-# In[ ]:
+# In[21]:
 
 
 # dataset configuration for testing
@@ -613,7 +564,7 @@ test_cfg = {
 test_preprocessing_fn = functools.partial(_augment, **test_cfg)
 
 
-# In[ ]:
+# In[22]:
 
 
 # create the TensorFlow datasets
@@ -631,7 +582,7 @@ test_ds = get_baseline_dataset(x_test_filenames,
                               batch_size=batch_size)
 
 
-# In[ ]:
+# In[23]:
 
 
 # Now we will display some samples from the datasets
@@ -658,7 +609,7 @@ batch_of_imgs, label = next_element
 sample_image, sample_mask = batch_of_imgs[0], label[0,:,:,:]
 
 
-# In[ ]:
+# In[24]:
 
 
 def display(display_list):
@@ -674,7 +625,7 @@ def display(display_list):
   plt.show()
 
 
-# In[ ]:
+# In[25]:
 
 
 # display sample train image
@@ -683,7 +634,7 @@ display([sample_image, sample_mask])
 
 # ...same check for the validation images:
 
-# In[ ]:
+# In[26]:
 
 
 # reset the forground list to capture the validation images
@@ -733,7 +684,7 @@ display([sample_image, sample_mask])
 # ...same check for the test images:
 # 
 
-# In[ ]:
+# In[30]:
 
 
 # reset the forground list to capture the test images
@@ -786,18 +737,18 @@ display([sample_image, sample_mask])
 # 
 # :::{figure-md} Unet_mobilenetv2_arch_arch-fig
 # 
-# <img src="images/Unet_mobilenetv2_arch_arch.png" width="650px">
+# <img src="https://github.com/developmentseed/servir-amazonia-ml/blob/main/ds_book/docs/images/Unet_mobilenetv2_arch_arch.png?raw=1" width="650px">
 # 
 # U-shaped MobileNetV2 (adapted U-Net) architecture diagram (from [Sarakon et al., 2019](https://www.researchgate.net/publication/339266308_Surface-Defect_Segmentation_using_U-shaped_Inverted_Residuals)). 
 # :::
 
 # The reason to output nine channels is because there are nine possible labels for each pixel. Think of this as multi-classification where each pixel is being classified into nine classes.
 
-# In[ ]:
+# In[31]:
 
 
 # set number of model output channels to the number of classes (including background)
-OUTPUT_CHANNELS = 9 
+OUTPUT_CHANNELS = 10 
 
 
 # As mentioned, the encoder will be an optionally pretrained MobileNetV2 model which is prepared and ready to use in tf.keras.applications. The encoder consists of specific outputs from intermediate layers in the model. Note that the encoder will be trained during the training process, as it would necessitate optical imagery if transfer learning were to be used, and in this example we are using spectral indices.
@@ -825,7 +776,7 @@ down_stack.trainable = True # Set this to False if using pre-trained weights
 
 # The decoder/upsampler is simply a series of upsample blocks implemented in TensorFlow examples. The arguments are (number of filters, kernel size). A kernel size of 3 is considered standard for current network implementations ([Sandler et al., 2018](https://arxiv.org/abs/1801.04381)). You can increase or decrease the number of filters, however, more filters equates to more parameters and longer training time. A range between 32 to 512, increasing 2x for each successive convolutional layer and decreasing for each successive deconvolutional/upsampling layer, is very common across different convolutional network architectures.
 
-# In[ ]:
+# In[33]:
 
 
 up_stack = [
@@ -836,7 +787,7 @@ up_stack = [
 ]
 
 
-# In[ ]:
+# In[34]:
 
 
 def unet_model(output_channels):
@@ -866,9 +817,9 @@ def unet_model(output_channels):
 
 # ### Train the model
 # 
-# Now, all that is left to do is to compile and train the model. The loss being used here is SparseCategoricalFocalLoss(from_logits=True). The reason to use this loss function is 1) because the network is trying to assign each pixel a label, just like multi-class prediction, and 2) because focal loss weights the relative contribution of each class by the distribution in the dataset to emphasize under-represented classes and dampen over-represented classes. In the true segmentation mask, each pixel has a value between 0-9. The network here is outputting ten channels. Essentially, each channel is trying to learn to predict a class, and SparseCategoricalFocalLoss(from_logits=True) is the recommended loss for such a scenario. Using the output of the network, the label assigned to the pixel is the channel with the highest value. This is what the create_mask function is doing.
+# Now, all that is left to do is to compile and train the model. The loss being used here is SparseCategoricalFocalLoss(from_logits=True). The reason to use this loss function is 1) because the network is trying to assign each pixel a label, just like multi-class prediction, and 2) because focal loss weights the relative contribution of each class by the distribution in the dataset to emphasize under-represented classes and dampen over-represented classes. In the true segmentation mask, each pixel has a value between 0-10. The network here is outputting ten channels. Essentially, each channel is trying to learn to predict a class, and SparseCategoricalFocalLoss(from_logits=True) is the recommended loss for such a scenario. Using the output of the network, the label assigned to the pixel is the channel with the highest value. This is what the create_mask function is doing.
 
-# In[ ]:
+# In[35]:
 
 
 model = unet_model(OUTPUT_CHANNELS)
@@ -888,14 +839,12 @@ for layer in model.layers:
 # In[ ]:
 
 
-train_df_para = gpd.read_file('TerraBio_Para.geojson')
-train_df_imaflora = gpd.read_file('TerraBio_Imaflora.geojson')
-train_df = pd.concat([train_df_para, train_df_imaflora])
-inv_freq = np.array(1/(train_df.landcover.value_counts()/len(train_df)))
+train_df = gpd.read_file('dlr_fusion_competition_germany_train_labels/dlr_fusion_competition_germany_train_labels_33N_18E_242N/labels.geojson')
+inv_freq = np.array(1/(train_df.crop_id.value_counts()/len(train_df)))
 inv_freq = [0.,*inv_freq]
 class_weights = {0 : inv_freq[0], 1: inv_freq[1], 2: inv_freq[2], 3: inv_freq[3], 
                 4: inv_freq[4], 5: inv_freq[5], 6: inv_freq[6],
-                7: inv_freq[7], 8: inv_freq[8]}
+                7: inv_freq[7], 8: inv_freq[8], 9: inv_freq[9]}
 
 def NormalizeData(data):
     return (data - np.min(data)) / (np.max(data) - np.min(data))
@@ -912,7 +861,7 @@ print("scaled class weights: ", scaled_class_weights_list)
 # We will measure our model's performance during training by per-pixel accuracy.
 # 
 
-# In[ ]:
+# In[38]:
 
 
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.00001),
@@ -922,7 +871,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.00001),
 
 # Let's try out the un/pre-trained model to see what it predicts before training.
 
-# In[ ]:
+# In[39]:
 
 
 def create_mask(pred_mask):
@@ -931,14 +880,14 @@ def create_mask(pred_mask):
   return pred_mask[0]
 
 
-# In[ ]:
+# In[40]:
 
 
 def show_predictions(image=None, mask=None, dataset=None, num=1):
   if image is None and dataset is None:
     # this is just for showing keras callback output. in practice this should be broken out into a different function
-    sample_image = skio.imread(f'{img_dir}/tile_terrabio_17507.png') * (1/255.)
-    sample_mask = skio.imread(f'{label_dir}/tile_terrabio_17507.png')
+    sample_image = skio.imread(f'{img_dir}/tile_dlr_fusion_competition_germany_train_source_planet_5day_33N_18E_242N_2018_05_28_811.png') * (1/255.)
+    sample_mask = skio.imread(f'{label_dir}/tile_dlr_fusion_competition_germany_train_source_planet_5day_33N_18E_242N_2018_05_28_811.png')
     mp = create_mask(model.predict(sample_image[tf.newaxis, ...]))
     mpe = tf.keras.backend.eval(mp)
     display([sample_image, sample_mask[..., tf.newaxis], mpe])
@@ -960,7 +909,7 @@ show_predictions(image=sample_image, mask=sample_mask)
 
 # Let's observe how the model improves while it is training. To accomplish this task, a callback function is defined below to plot a test image and its predicted mask after each epoch.
 
-# In[ ]:
+# In[42]:
 
 
 class DisplayCallback(tf.keras.callbacks.Callback):
@@ -972,7 +921,7 @@ class DisplayCallback(tf.keras.callbacks.Callback):
 
 # We may want to view the model graph and training progress in TensorBoard, so we'll establish a callback to save logs to a dedicated directory which will serve the TensorBoard interface.
 
-# In[ ]:
+# In[43]:
 
 
 # Load the TensorBoard notebook extension
@@ -1006,7 +955,7 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_fit_session_di
 
 # We can also take a look at the layer activations in TensorBoard using tf-explain, so we'll establish a callback to save activation visualizations to a dedicated directory which will serve the TensorBoard interface.
 
-# In[ ]:
+# In[45]:
 
 
 # get a batch of validation samples to plot activations for
@@ -1014,7 +963,7 @@ for example in val_ds.take(1):
   image_val, label_val = example[0], example[1]
 
 
-# In[ ]:
+# In[46]:
 
 
 callbacks = [
@@ -1032,7 +981,6 @@ callbacks = [
 # Now we will actually train the model for 4 epochs (full cycles through the training dataset), visualizing predictions on a validation image after each epoch. In practice, you would want to train the model until validation loss starts to increase (a clear indication of overfitting). Empirically with this dataset, convergence occurred around 50 epochs. We've reduced to 4 epochs purely for rapid demonstration purposes. As a preview, at 50 epochs you should observe a test prediction similar to:
 # 
 # ![testimage](images/epoch50_testimage.png)
-# ![testimage1](images/epoch50_testimage1.png)
 # 
 # Don't be alarmed if you see blank predictions after only 4 epochs.
 
@@ -1107,7 +1055,7 @@ model.save(save_model_path)
 # 
 # Let's make some predictions. In the interest of saving time, the number of epochs was kept small, but you may set this higher to achieve more accurate results. We'll load from the rea donly workshop directory in case you weren't able to save your own model.
 
-# In[ ]:
+# In[51]:
 
 
 # Optional, you can load the model from the saved version
@@ -1119,7 +1067,7 @@ else:
   print("inferencing from in memory model")
 
 
-# In[ ]:
+# In[52]:
 
 
 def get_predictions(image= None, dataset=None, num=1):
@@ -1208,8 +1156,9 @@ for i in range(0, len(x_test_filenames)):
     print(np.unique(mask_int))
 
     # run and plot predicitions, only showing every 27th prediction
-    if img_num % 27 == 0:
-        show_predictions(image=image, mask=mask)
+    #if img_num % 27 == 0:
+    #    show_predictions(image=image, mask=mask)
+    show_predictions(image=image, mask=mask)
     pred_mask = get_predictions(image)
     pred_masks.append(pred_mask)
     
@@ -1225,7 +1174,7 @@ for i in range(0, len(x_test_filenames)):
 
 # Finally, we will save a csv with our test file paths so we can easily load predictions and labels in the next lesson to calculate our evaluation metrics.
 
-# In[ ]:
+# In[56]:
 
 
 path_df = pd.DataFrame(list(zip(x_test_filenames, y_test_filenames, pred_paths)), columns=["img_names", "label_names", "pred_names"])

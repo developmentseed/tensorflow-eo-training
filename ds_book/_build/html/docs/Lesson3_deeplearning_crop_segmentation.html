@@ -354,8 +354,8 @@
 <div><p>A guide for using deep-learning based semantic segmentation to land use / land cover in satellite imagery.</p>
 </div></blockquote>
 <p>In this tutorial we will learn how to segment images according to a set of classes. <strong>Segmentation</strong>  refers to the process of partitioning an image into groups of pixels that identify with a target class within the foreground or the background class (a catch-all class that contains non-target features).</p>
-<p>Specifically, in this tutorial we will be using data from two reference datasets, Imaflora and Para, depicting land use classifications of relevant areas in the Amazon.</p>
-<p>We will pair the reference data with a Planet 5 meter composite made from data available as part of the NICFI program. Our task will be to predict the land use / land cover in an image on a pixel-wise basis.</p>
+<p>Specifically, in this tutorial we will be using data from a <a class="reference external" href="https://mlhub.earth/data/dlr_fusion_competition_germany">fusion dataset for crop type classification in Germany</a>. It leverages Planet 5 day composites and polygon labels.</p>
+<p>Our task will be to predict the crop types (a form of land use / land cover) in an image on a pixel-wise basis.</p>
 <div class="section" id="specific-concepts-that-will-be-covered">
 <h2>Specific concepts that will be covered<a class="headerlink" href="#specific-concepts-that-will-be-covered" title="Permalink to this headline">¶</a></h2>
 <p>In the process, we will build practical experience and develop intuition around the following concepts:</p>
@@ -374,7 +374,7 @@ and <strong>accuracy</strong>. We’ll also generate confusion matrices during e
 <div class="section" id="general-workflow">
 <h3>General Workflow<a class="headerlink" href="#general-workflow" title="Permalink to this headline">¶</a></h3>
 <ol class="simple">
-<li><p>Load image and label datasets from Google Drive</p></li>
+<li><p>Load image and label datasets (acquired and processed in the prior lesson) from Google Drive</p></li>
 <li><p>Visualize data/perform some exploratory data analysis</p></li>
 <li><p>Set up data pipeline and preprocessing</p></li>
 <li><p>Build model</p></li>
@@ -485,24 +485,27 @@ and <strong>accuracy</strong>. We’ll also generate confusion matrices during e
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Segmentation Models: using `keras` framework.
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="getting-set-up-with-the-data">
 <h3>Getting set up with the data<a class="headerlink" href="#getting-set-up-with-the-data" title="Permalink to this headline">¶</a></h3>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code>. Then, this folder will be available at the following path that is accessible with the google.colab <code class="docutils literal notranslate"><span class="pre">drive</span></code> module: <code class="docutils literal notranslate"><span class="pre">'/content/gdrive/My</span> <span class="pre">Drive/servir-tf-devseed/'</span></code></p>
+<p>Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder <code class="docutils literal notranslate"><span class="pre">tf-eo-devseed</span></code>. Then, this folder will be available at the following path that is accessible with the google.colab <code class="docutils literal notranslate"><span class="pre">drive</span></code> module: <code class="docutils literal notranslate"><span class="pre">'/content/gdrive/My</span> <span class="pre">Drive/tf-eo-devseed/'</span></code></p>
 </div>
-<p>We’ll be working witht he following folders in the <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code> folder:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>servir-tf-devseed/
-├── images/
-├── images_bright/
+<p>We’ll be working with the following folders and files in the <code class="docutils literal notranslate"><span class="pre">tf-eo-devseed</span></code> folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>tf-eo-devseed/
+├── stacks/
+├── stacks_brightened/
 ├── indices/
-├── indices_800/
 ├── labels/
-├── labels_800/
 ├── background_list_train.txt
 ├── train_list_clean.txt
-└── terrabio_classes.csv
+└── lulc_classes.csv
 </pre></div>
 </div>
 <div class="cell docutils container">
@@ -515,16 +518,26 @@ and <strong>accuracy</strong>. We’ll also generate confusion matrices during e
     <span class="c1"># mount google drive</span>
     <span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
     <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/gdrive&#39;</span><span class="p">)</span>
-    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed/&#39;</span> 
-    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed-workshop&#39;</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/tf-eo-devseed/&#39;</span> 
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/tf-eo-devseed-workshop&#39;</span>
+    <span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">workshop_dir</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running on Colab&#39;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/servir-tf-devseed&quot;</span><span class="p">)</span>
-    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./servir-tf-devseed-workshop&#39;</span><span class="p">)</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/tf-eo-devseed&quot;</span><span class="p">)</span>
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./tf-eo-devseed-workshop&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not running on Colab, data needs to be downloaded locally at </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;indices/&#39;</span><span class="p">)</span> <span class="c1"># or os.path.join(root_dir,&#39;images_bright/&#39;) if using the optical tiles</span>
-<span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;labels/&#39;</span><span class="p">)</span>
+<span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;rasters/tiled/stacks_brightened/&#39;</span><span class="p">)</span> <span class="c1"># or os.path.join(root_dir,&#39;images_bright/&#39;) if using the optical tiles</span>
+<span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;rasters/tiled/labels/&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mounted at /content/gdrive
+Running on Colab
 </pre></div>
 </div>
 </div>
@@ -533,6 +546,11 @@ and <strong>accuracy</strong>. We’ll also generate confusion matrices during e
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># go to root directory</span>
 <span class="o">%</span><span class="k">cd</span> $root_dir 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/content/gdrive/My Drive/tf-eo-devseed
 </pre></div>
 </div>
 </div>
@@ -555,12 +573,32 @@ and <strong>accuracy</strong>. We’ll also generate confusion matrices during e
 </div>
 <div class="section" id="check-out-the-labels">
 <h3>Check out the labels<a class="headerlink" href="#check-out-the-labels" title="Permalink to this headline">¶</a></h3>
+<p>Class names and identifiers extracted from the documentation provided here: <a class="reference external" href="https://radiantearth.blob.core.windows.net/mlhub/esa-food-security-challenge/Crops_GT_Brandenburg_Doc.pdf">https://radiantearth.blob.core.windows.net/mlhub/esa-food-security-challenge/Crops_GT_Brandenburg_Doc.pdf</a></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the classes</span>
-<span class="n">class_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;terrabio_classes.csv&#39;</span><span class="p">))</span>
-<span class="n">class_names</span> <span class="o">=</span> <span class="n">class_index</span><span class="o">.</span><span class="n">class_name</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">class_index</span><span class="p">)</span> 
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class_names&#39;</span><span class="p">:</span>  <span class="p">[</span><span class="s1">&#39;Background&#39;</span><span class="p">,</span> <span class="s1">&#39;Wheat&#39;</span><span class="p">,</span> <span class="s1">&#39;Rye&#39;</span><span class="p">,</span> <span class="s1">&#39;Barley&#39;</span><span class="p">,</span> <span class="s1">&#39;Oats&#39;</span><span class="p">,</span> <span class="s1">&#39;Corn&#39;</span><span class="p">,</span> <span class="s1">&#39;Oil Seeds&#39;</span><span class="p">,</span> <span class="s1">&#39;Root Crops&#39;</span><span class="p">,</span> <span class="s1">&#39;Meadows&#39;</span><span class="p">,</span> <span class="s1">&#39;Forage Crops&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;class_ids&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+        <span class="p">}</span>
+
+<span class="n">classes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    class_names  class_ids
+0    Background          0
+1         Wheat          1
+2           Rye          2
+3        Barley          3
+4          Oats          4
+5          Corn          5
+6     Oil Seeds          6
+7    Root Crops          7
+8       Meadows          8
+9  Forage Crops          9
 </pre></div>
 </div>
 </div>
@@ -569,15 +607,12 @@ and <strong>accuracy</strong>. We’ll also generate confusion matrices during e
 <div class="section" id="read-into-tensorflow-datasets">
 <h3>Read into tensorflow datasets<a class="headerlink" href="#read-into-tensorflow-datasets" title="Permalink to this headline">¶</a></h3>
 <p>Now we will compile the spectral index image and label tiles into training, validation, and test datasets for use with TensorFlow.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><strong>Long running cells</strong> <br />
-Normally we would read the image files from the directories and then process forward from there with background removal with the next <strong>three</strong> illustrated functions, however, due to slow I/O in Google Colab we will read the images list with 90% background removal already performed from a pre-saved list in the shared drive.</p>
-</div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get lists of image and label tile pairs for training and testing</span>
-
-<span class="k">def</span> <span class="nf">get_train_test_lists</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="n">lbldir</span><span class="p">):</span>
-  <span class="n">imgs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span><span class="s2">&quot;/*.png&quot;</span><span class="p">))</span>
+<p>Get lists of image and label tile pairs for training and testing.</p>
+<div>&#8681</div> 
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_train_test_lists</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="n">lbldir</span><span class="p">):</span>
+  <span class="n">imgs</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span><span class="s2">&quot;*.png&quot;</span><span class="p">))</span>
   <span class="c1">#print(imgs[0:1])</span>
   <span class="n">dset_list</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">imgs</span><span class="p">:</span>
@@ -585,23 +620,25 @@ Normally we would read the image files from the directories and then process for
     <span class="n">filename_zero</span><span class="p">,</span> <span class="n">fileext</span> <span class="o">=</span> <span class="n">filename_split</span> 
     <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">filename_zero</span><span class="p">)</span> 
     <span class="n">dset_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basename</span><span class="p">)</span>
-    
+
   <span class="n">x_filenames</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="n">y_filenames</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">for</span> <span class="n">img_id</span> <span class="ow">in</span> <span class="n">dset_list</span><span class="p">:</span>
     <span class="n">x_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
     <span class="n">y_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lbldir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
-    
+
   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dset_list</span><span class="p">))</span>
   <span class="k">return</span> <span class="n">dset_list</span><span class="p">,</span> <span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span>
 
 <span class="n">train_list</span><span class="p">,</span> <span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span> <span class="o">=</span> <span class="n">get_train_test_lists</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="n">label_dir</span><span class="p">)</span>
-
 </pre></div>
 </div>
-<p>number of images:  37350</p>
-<p>Check for the proportion of background tiles. This takes a while. So we can skip by loading from saved results.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span>
+</div>
+</div>
+<p>Check for the proportion of background tiles. This takes a while. So after running this once, you can skip by loading from saved results.</p>
+<div>&#8681</div> <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">skip</span><span class="p">:</span>
   <span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[]</span>
@@ -612,7 +649,7 @@ Normally we would read the image files from the directories and then process for
       <span class="c1"># check if no values in image are greater than zero (background value)</span>
       <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
           <span class="n">background_list_train</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-          
+
   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of background images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">))</span>
 
   <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;background_list_train.txt&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -624,9 +661,12 @@ Normally we would read the image files from the directories and then process for
   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of background images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Number of background images:  36489</p>
+</div>
+</div>
 <p>We will keep only 10% of the total. Too many background tiles can cause a form of class imbalance.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">background_removal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span>
+<div>&#8681</div> <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">background_removal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">background_list_train</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span>
 <span class="n">train_list_clean</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">train_list</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">background_list_train</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">background_removal</span><span class="p">)]]</span>
 
 <span class="n">x_train_filenames</span> <span class="o">=</span> <span class="p">[]</span>
@@ -639,34 +679,6 @@ Normally we would read the image files from the directories and then process for
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of background tiles: &quot;</span><span class="p">,</span> <span class="n">background_removal</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Remaining number of tiles after 90% background removal: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_list_clean</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Number of background tiles:  32840</p>
-<p>Remaining number of tiles after 90% background removal:  4510</p>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>The cell below contains the shortcut read of prepped training image list.</p>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>  <span class="k">def</span> <span class="nf">get_train_test_lists</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="n">lbldir</span><span class="p">):</span>
-    <span class="n">train_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;train_list_clean.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
-
-    <span class="n">x_filenames</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">y_filenames</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">img_id</span> <span class="ow">in</span> <span class="n">train_list</span><span class="p">:</span>
-      <span class="n">x_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">imdir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
-      <span class="n">y_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lbldir</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">img_id</span><span class="p">)))</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of images: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_list</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">train_list</span><span class="p">,</span> <span class="n">x_filenames</span><span class="p">,</span> <span class="n">y_filenames</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_list</span><span class="p">,</span> <span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span> <span class="o">=</span> <span class="n">get_train_test_lists</span><span class="p">(</span><span class="n">img_dir</span><span class="p">,</span> <span class="n">label_dir</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -697,9 +709,11 @@ Normally we would read the image files from the directories and then process for
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>Long running cell</strong> <br />
-The code below checks for values in train, val, and test partitions. We won’t run this since it takes over 10 minutes on colab due to slow I/O.</p>
+The code below checks for values in train, val, and test partitions.</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vals_train</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vals_train</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">vals_val</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">vals_test</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -719,25 +733,37 @@ The code below checks for values in train, val, and test partitions. We won’t 
 <span class="n">get_vals_in_partition</span><span class="p">(</span><span class="n">vals_train</span><span class="p">,</span> <span class="n">x_train_filenames</span><span class="p">,</span> <span class="n">y_train_filenames</span><span class="p">)</span>
 <span class="n">get_vals_in_partition</span><span class="p">(</span><span class="n">vals_val</span><span class="p">,</span> <span class="n">x_val_filenames</span><span class="p">,</span> <span class="n">y_val_filenames</span><span class="p">)</span>
 <span class="n">get_vals_in_partition</span><span class="p">(</span><span class="n">vals_test</span><span class="p">,</span> <span class="n">x_test_filenames</span><span class="p">,</span> <span class="n">y_test_filenames</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in training partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_train</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in training partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_train</span><span class="p">)))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in validation partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_val</span><span class="p">)))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Values in test partition: &quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="n">flatten</span><span class="p">(</span><span class="n">vals_test</span><span class="p">)))</span>
 </pre></div>
 </div>
-<p>Values in training partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}</p>
-<p>Values in validation partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}</p>
-<p>Values in test partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8}</p>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Values in training partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+Values in validation partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+Values in test partition:  {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <div class="section" id="visualize-the-data">
 <h3>Visualize the data<a class="headerlink" href="#visualize-the-data" title="Permalink to this headline">¶</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p><strong>Long running cell</strong> <br />
-The code below loads foreground examples randomly. We won’t run this since it takes over a while on colab due to slow I/O.</p>
+The code below loads foreground examples randomly.</p>
 </div>
-<div>&#8681</div> 
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">display_num</span> <span class="o">=</span> <span class="mi">3</span>
+<div>&#8681</div> <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_num</span> <span class="o">=</span> <span class="mi">3</span>
 
 <span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;background_list_train.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
 
@@ -761,45 +787,10 @@ The code below loads foreground examples randomly. We won’t run this since it 
 
 <span class="c1"># randomlize the choice of image and label pairs</span>
 <span class="n">r_choices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">num_foreground_examples</span><span class="p">,</span> <span class="n">display_num</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>Instead, we will read and plot a few sample foreground training images and labels from their pathnames. Note: this may still take a few execution tries to work. Google colab in practice takes some time to connect to data in Google Drive, so sometimes this returns an error on the first (few) attempt(s).</p>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_num</span> <span class="o">=</span> <span class="mi">3</span>
-
-<span class="n">background_list_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;background_list_train.txt&quot;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)]</span>
-
-<span class="n">foreground_list_x</span> <span class="o">=</span> <span class="p">[</span>
-                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_15684.png&#39;</span><span class="p">,</span> 
-                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_23056.png&#39;</span><span class="p">,</span> 
-                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_21877.png&#39;</span>
-                     <span class="p">]</span>
-
-<span class="n">foreground_list_y</span> <span class="o">=</span> <span class="p">[</span>
-                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_15684.png&#39;</span><span class="p">,</span> 
-                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_23056.png&#39;</span><span class="p">,</span> 
-                     <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_21877.png&#39;</span>
-                     <span class="p">]</span>
-
-<span class="c1"># confirm files exist</span>
-<span class="k">for</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">foreground_list_x</span><span class="p">,</span> <span class="n">foreground_list_y</span><span class="p">):</span>
-  <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fy</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="s2">&quot; and &quot;</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="s2">&quot; exist.&quot;</span><span class="p">)</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">fx</span><span class="p">,</span> <span class="s2">&quot; and &quot;</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="s2">&quot; don&#39;t exist.&quot;</span><span class="p">)</span>
-
-<span class="n">num_foreground_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">foreground_list_y</span><span class="p">)</span>
-
-<span class="c1"># randomlize the choice of image and label pairs</span>
-<span class="c1">#r_choices = np.random.choice(num_foreground_examples, display_num)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">display_num</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-  <span class="c1">#img_num = r_choices[i // 2]</span>
+  <span class="n">img_num</span> <span class="o">=</span> <span class="n">r_choices</span><span class="p">[</span><span class="n">i</span> <span class="o">//</span> <span class="mi">2</span><span class="p">]</span>
   <span class="n">img_num</span> <span class="o">=</span> <span class="n">i</span> <span class="o">//</span> <span class="mi">2</span>
   <span class="n">x_pathname</span> <span class="o">=</span> <span class="n">foreground_list_x</span><span class="p">[</span><span class="n">img_num</span><span class="p">]</span>
   <span class="n">y_pathname</span> <span class="o">=</span> <span class="n">foreground_list_y</span><span class="p">[</span><span class="n">img_num</span><span class="p">]</span>
@@ -819,6 +810,9 @@ The code below loads foreground examples randomly. We won’t run this since it 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/Lesson3_deeplearning_crop_segmentation_31_0.png" src="../_images/Lesson3_deeplearning_crop_segmentation_31_0.png" />
 </div>
 </div>
 </div>
@@ -1051,6 +1045,9 @@ The code below loads foreground examples randomly. We won’t run this since it 
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="../_images/Lesson3_deeplearning_crop_segmentation_45_0.png" src="../_images/Lesson3_deeplearning_crop_segmentation_45_0.png" />
+</div>
 </div>
 <p>…same check for the validation images:</p>
 <div class="cell docutils container">
@@ -1099,6 +1096,9 @@ The code below loads foreground examples randomly. We won’t run this since it 
 <span class="n">display</span><span class="p">([</span><span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span><span class="p">])</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/Lesson3_deeplearning_crop_segmentation_47_0.png" src="../_images/Lesson3_deeplearning_crop_segmentation_47_0.png" />
 </div>
 </div>
 <p>…same check for the test images:</p>
@@ -1149,20 +1149,23 @@ The code below loads foreground examples randomly. We won’t run this since it 
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="../_images/Lesson3_deeplearning_crop_segmentation_49_0.png" src="../_images/Lesson3_deeplearning_crop_segmentation_49_0.png" />
+</div>
 </div>
 </div>
 <div class="section" id="define-the-model">
 <h3>Define the model<a class="headerlink" href="#define-the-model" title="Permalink to this headline">¶</a></h3>
 <p>The model being used here is a modified U-Net. A U-Net consists of an encoder (downsampler) and decoder (upsampler). In-order to learn robust features, and reduce the number of trainable parameters, an optionally pretrained model can be used as the encoder. Thus, the encoder for this task will be a pretrained MobileNetV2 model, whose intermediate outputs will be used, and the decoder will be the upsample block already implemented in TensorFlow Examples in the Pix2pix tutorial.</p>
 <div class="figure align-default" id="unet-mobilenetv2-arch-arch-fig">
-<a class="reference internal image-reference" href="../_images/Unet_mobilenetv2_arch_arch.png"><img alt="../_images/Unet_mobilenetv2_arch_arch.png" src="../_images/Unet_mobilenetv2_arch_arch.png" style="width: 650px;" /></a>
+<a class="reference internal image-reference" href="https://github.com/developmentseed/servir-amazonia-ml/blob/main/ds_book/docs/images/Unet_mobilenetv2_arch_arch.png?raw=1"><img alt="https://github.com/developmentseed/servir-amazonia-ml/blob/main/ds_book/docs/images/Unet_mobilenetv2_arch_arch.png?raw=1" src="https://github.com/developmentseed/servir-amazonia-ml/blob/main/ds_book/docs/images/Unet_mobilenetv2_arch_arch.png?raw=1" style="width: 650px;" /></a>
 <p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">U-shaped MobileNetV2 (adapted U-Net) architecture diagram (from <a class="reference external" href="https://www.researchgate.net/publication/339266308_Surface-Defect_Segmentation_using_U-shaped_Inverted_Residuals">Sarakon et al., 2019</a>).</span><a class="headerlink" href="#unet-mobilenetv2-arch-arch-fig" title="Permalink to this image">¶</a></p>
 </div>
 <p>The reason to output nine channels is because there are nine possible labels for each pixel. Think of this as multi-classification where each pixel is being classified into nine classes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set number of model output channels to the number of classes (including background)</span>
-<span class="n">OUTPUT_CHANNELS</span> <span class="o">=</span> <span class="mi">9</span> 
+<span class="n">OUTPUT_CHANNELS</span> <span class="o">=</span> <span class="mi">10</span> 
 </pre></div>
 </div>
 </div>
@@ -1235,7 +1238,7 @@ The code below loads foreground examples randomly. We won’t run this since it 
 </div>
 <div class="section" id="train-the-model">
 <h3>Train the model<a class="headerlink" href="#train-the-model" title="Permalink to this headline">¶</a></h3>
-<p>Now, all that is left to do is to compile and train the model. The loss being used here is SparseCategoricalFocalLoss(from_logits=True). The reason to use this loss function is 1) because the network is trying to assign each pixel a label, just like multi-class prediction, and 2) because focal loss weights the relative contribution of each class by the distribution in the dataset to emphasize under-represented classes and dampen over-represented classes. In the true segmentation mask, each pixel has a value between 0-9. The network here is outputting ten channels. Essentially, each channel is trying to learn to predict a class, and SparseCategoricalFocalLoss(from_logits=True) is the recommended loss for such a scenario. Using the output of the network, the label assigned to the pixel is the channel with the highest value. This is what the create_mask function is doing.</p>
+<p>Now, all that is left to do is to compile and train the model. The loss being used here is SparseCategoricalFocalLoss(from_logits=True). The reason to use this loss function is 1) because the network is trying to assign each pixel a label, just like multi-class prediction, and 2) because focal loss weights the relative contribution of each class by the distribution in the dataset to emphasize under-represented classes and dampen over-represented classes. In the true segmentation mask, each pixel has a value between 0-10. The network here is outputting ten channels. Essentially, each channel is trying to learn to predict a class, and SparseCategoricalFocalLoss(from_logits=True) is the recommended loss for such a scenario. Using the output of the network, the label assigned to the pixel is the channel with the highest value. This is what the create_mask function is doing.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">unet_model</span><span class="p">(</span><span class="n">OUTPUT_CHANNELS</span><span class="p">)</span>
@@ -1255,14 +1258,12 @@ The code below loads foreground examples randomly. We won’t run this since it 
 <p>Find the class weights for the focal loss function to help address class imbalance.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_df_para</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;TerraBio_Para.geojson&#39;</span><span class="p">)</span>
-<span class="n">train_df_imaflora</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;TerraBio_Imaflora.geojson&#39;</span><span class="p">)</span>
-<span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">train_df_para</span><span class="p">,</span> <span class="n">train_df_imaflora</span><span class="p">])</span>
-<span class="n">inv_freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">landcover</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">train_df</span><span class="p">)))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;dlr_fusion_competition_germany_train_labels/dlr_fusion_competition_germany_train_labels_33N_18E_242N/labels.geojson&#39;</span><span class="p">)</span>
+<span class="n">inv_freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">crop_id</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">train_df</span><span class="p">)))</span>
 <span class="n">inv_freq</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="o">*</span><span class="n">inv_freq</span><span class="p">]</span>
 <span class="n">class_weights</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span> <span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">3</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> 
                 <span class="mi">4</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="mi">5</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="mi">6</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
-                <span class="mi">7</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="mi">8</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">8</span><span class="p">]}</span>
+                <span class="mi">7</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="mi">8</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="mi">9</span><span class="p">:</span> <span class="n">inv_freq</span><span class="p">[</span><span class="mi">9</span><span class="p">]}</span>
 
 <span class="k">def</span> <span class="nf">NormalizeData</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
@@ -1303,8 +1304,8 @@ The code below loads foreground examples randomly. We won’t run this since it 
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">show_predictions</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
   <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># this is just for showing keras callback output. in practice this should be broken out into a different function</span>
-    <span class="n">sample_image</span> <span class="o">=</span> <span class="n">skio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_17507.png&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mf">255.</span><span class="p">)</span>
-    <span class="n">sample_mask</span> <span class="o">=</span> <span class="n">skio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_terrabio_17507.png&#39;</span><span class="p">)</span>
+    <span class="n">sample_image</span> <span class="o">=</span> <span class="n">skio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">img_dir</span><span class="si">}</span><span class="s1">/tile_dlr_fusion_competition_germany_train_source_planet_5day_33N_18E_242N_2018_05_28_811.png&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mf">255.</span><span class="p">)</span>
+    <span class="n">sample_mask</span> <span class="o">=</span> <span class="n">skio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label_dir</span><span class="si">}</span><span class="s1">/tile_dlr_fusion_competition_germany_train_source_planet_5day_33N_18E_242N_2018_05_28_811.png&#39;</span><span class="p">)</span>
     <span class="n">mp</span> <span class="o">=</span> <span class="n">create_mask</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sample_image</span><span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">]))</span>
     <span class="n">mpe</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">backend</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">mp</span><span class="p">)</span>
     <span class="n">display</span><span class="p">([</span><span class="n">sample_image</span><span class="p">,</span> <span class="n">sample_mask</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">mpe</span><span class="p">])</span>
@@ -1402,8 +1403,7 @@ The code below loads foreground examples randomly. We won’t run this since it 
 <div class="section" id="fit-and-view">
 <h4>Fit and View<a class="headerlink" href="#fit-and-view" title="Permalink to this headline">¶</a></h4>
 <p>Now we will actually train the model for 4 epochs (full cycles through the training dataset), visualizing predictions on a validation image after each epoch. In practice, you would want to train the model until validation loss starts to increase (a clear indication of overfitting). Empirically with this dataset, convergence occurred around 50 epochs. We’ve reduced to 4 epochs purely for rapid demonstration purposes. As a preview, at 50 epochs you should observe a test prediction similar to:</p>
-<p><img alt="testimage" src="../_images/epoch50_testimage.png" />
-<img alt="testimage1" src="../_images/epoch50_testimage1.png" /></p>
+<p><img alt="testimage" src="../_images/epoch50_testimage.png" /></p>
 <p>Don’t be alarmed if you see blank predictions after only 4 epochs.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1583,8 +1583,9 @@ The code below loads foreground examples randomly. We won’t run this since it 
     <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">mask_int</span><span class="p">))</span>
 
     <span class="c1"># run and plot predicitions, only showing every 27th prediction</span>
-    <span class="k">if</span> <span class="n">img_num</span> <span class="o">%</span> <span class="mi">27</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">show_predictions</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="c1">#if img_num % 27 == 0:</span>
+    <span class="c1">#    show_predictions(image=image, mask=mask)</span>
+    <span class="n">show_predictions</span><span class="p">(</span><span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
     <span class="n">pred_mask</span> <span class="o">=</span> <span class="n">get_predictions</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
     <span class="n">pred_masks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_mask</span><span class="p">)</span>
     
