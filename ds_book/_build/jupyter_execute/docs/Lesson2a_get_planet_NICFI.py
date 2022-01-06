@@ -33,13 +33,15 @@
 get_ipython().system('pip install -q rasterio==1.2.10')
 get_ipython().system('pip install -q geopandas==0.10.2')
 get_ipython().system('pip install -q shapely==1.8.0')
+get_ipython().system('pip install -q radiant_mlhub # for dataset access, see: https://mlhub.earth/')
 
 
-# In[ ]:
+# In[210]:
 
 
 # import required libraries
-import os, glob, functools, fnmatch, requests, json
+import os, glob, functools, fnmatch, requests,  io, shutil, tarfile, json
+from pathlib import Path
 from zipfile import ZipFile
 from itertools import product
 from configparser import ConfigParser
@@ -60,11 +62,14 @@ from shapely.geometry import box
 
 from IPython.display import clear_output
 
+from radiant_mlhub import Dataset, client, get_session, Collection
+
 
 # In[ ]:
 
 
-print("rasterio version: ", rasterio.__version__, "| geopandas version: ", gpd.__version__)
+# configure Radiant Earth MLHub access
+get_ipython().system('mlhub configure')
 
 
 # In[ ]:
@@ -75,34 +80,28 @@ if 'google.colab' in str(get_ipython()):
     # mount google drive
     from google.colab import drive
     drive.mount('/content/gdrive')
-    root_dir = '/content/gdrive/My Drive/servir-tf-devseed/' 
-    workshop_dir = '/content/gdrive/My Drive/servir-tf-devseed-workshop'
+    root_dir = '/content/gdrive/My Drive/tf-eo-devseed/' 
+    workshop_dir = '/content/gdrive/My Drive/tf-eo-devseed-workshop'
+    dirs = [root_dir, workshop_dir]
+    for d in dirs:
+        if not os.path.exists(d):
+            os.makedirs(d)
     print('Running on Colab')
 else:
-    root_dir = os.path.abspath("./data/servir-tf-devseed")
-    workshop_dir = os.path.abspath('./servir-tf-devseed-workshop')
+    root_dir = os.path.abspath("./data/tf-eo-devseed")
+    workshop_dir = os.path.abspath('./tf-eo-devseed-workshop')
     print(f'Not running on Colab, data needs to be downloaded locally at {os.path.abspath(root_dir)}')
-
-if (not os.path.isdir(workshop_dir)):
-  os.mkdir(workshop_dir)
-terrabio_dir = os.path.join(workshop_dir,'terrabio')
-rami_dir = os.path.join(workshop_dir,'rami')
-# Make subdirectories for each project
-dirs = [terrabio_dir, rami_dir]
-for dir in dirs:
-  if not os.path.exists(dir):
-    os.makedirs(dir)
 
 
 # In[ ]:
 
 
 # Go to root folder
-get_ipython().run_line_magic('cd', '$workshop_dir')
+get_ipython().run_line_magic('cd', '$root_dir')
 
 
 # ```{admonition} **GCS note!**
-# We won't be using Google Cloud Storage to download data, but here is a code snippet to show how to practically do so with the RAMI "Blocks" gridded AOI shapefile. This code works if you have access to the "servirtensorflow" project on GCP.
+# We won't be using Google Cloud Storage to download data, but here is a code snippet to show how to practically do so with the a placeholder "aoi" vector file. This code works if you have access to the a project on GCP.
 # ```
 
 # ```python
@@ -116,17 +115,17 @@ get_ipython().run_line_magic('cd', '$workshop_dir')
 # from google.cloud import storage
 # 
 # # Instantiates a client
-# project = 'servirtensorflow'
+# project = 'tf-eo-training-project'
 # storage_client = storage.Client(project=project)
 # 
 # # The name for the new bucket
 # bucket_name = "dev-seed-workshop"
 # 
-# rami_data_dir = os.path.join(rami_dir,'/data/')
-# rami_gcs_to_local_dir = os.path.join(rami_data_dir,'gcs/')
-# prefix = 'rami/data/Blocks/'
-# local_dir = os.path.join(rami_gcs_to_local_dir,'Blocks/')
-# dirs = [rami_data_dir, rami_gcs_to_local_dir, local_dir]
+# data_dir = os.path.join(workshop_dir,'data/')
+# gcs_to_local_dir = os.path.join(data_dir,'gcs/')
+# prefix = 'data/'
+# local_dir = os.path.join(gcs_to_local_dir, prefix)
+# dirs = [data_dir, gcs_to_local_dir, local_dir]
 # for dir in dirs:
 #   if not os.path.exists(dir):
 #     os.makedirs(dir)
@@ -141,29 +140,14 @@ get_ipython().run_line_magic('cd', '$workshop_dir')
 #     filename_split = os.path.splitext(filename)
 #     filename_zero, fileext = filename_split
 #     basename = os.path.basename(filename_zero)
-#     filename = 'Blocks'
+#     filename = 'aoi'
 #     blob.download_to_filename(os.path.join(local_dir, "%s%s" % (basename, fileext)))   # Download 
 #     print(blob, "%s%s" % (basename, fileext))
 # 
 # ```
-# Output:
-# ```
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.cpg, 1637264951785014>
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.cpg, 1637264951785014> Blocks.cpg
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.dbf, 1637264951817858>
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.dbf, 1637264951817858> Blocks.dbf
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.fix, 1637264951832266>
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.fix, 1637264951832266> Blocks.fix
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.prj, 1637264951801837>
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.prj, 1637264951801837> Blocks.prj
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.shp, 1637264951794288>
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.shp, 1637264951794288> Blocks.shp
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.shx, 1637264951768348>
-# <Blob: dev-seed-workshop, rami/data/Blocks/Blocks/Blocks.shx, 1637264951768348> Blocks.shx
-# ````
 
 # ### Get search parameters
-# - Read the AOI from the shared google drive folder into a Geopandas dataframe.
+# - Read the AOI from a [Radiant Earth MLHub dataset](https://mlhub.earth/data/ref_african_crops_kenya_01) that overlaps with NICFI coverage into a Geopandas dataframe.
 # - Get AOI bounds and centroid.
 # - Authenticate with Planet NICFI API key.
 # - Choose mosaic based on month/year of interest.
@@ -172,12 +156,79 @@ get_ipython().run_line_magic('cd', '$workshop_dir')
 # In[ ]:
 
 
+collections = [
+    'ref_african_crops_kenya_01_labels'
+]
+
+def download(collection_id):
+    print(f'Downloading {collection_id}...')
+    collection = Collection.fetch(collection_id)
+    path = collection.download('.')
+    tar = tarfile.open(path, "r:gz")
+    tar.extractall()
+    tar.close()
+    os.remove(path)
+    
+def resolve_path(base, path):
+    return Path(os.path.join(base, path)).resolve()
+    
+def load_df(collection_id):
+    collection = json.load(open(f'{collection_id}/collection.json', 'r'))
+    rows = []
+    item_links = []
+    for link in collection['links']:
+        if link['rel'] != 'item':
+            continue
+        item_links.append(link['href'])
+    for item_link in item_links:
+        item_path = f'{collection_id}/{item_link}'
+        current_path = os.path.dirname(item_path)
+        item = json.load(open(item_path, 'r'))
+        tile_id = item['id'].split('_')[-1]
+        for asset_key, asset in item['assets'].items():
+            rows.append([
+                tile_id,
+                None,
+                None,
+                asset_key,
+                str(resolve_path(current_path, asset['href']))
+            ])
+            
+        for link in item['links']:
+            if link['rel'] != 'source':
+                continue
+            link_path = resolve_path(current_path, link['href'])
+            source_path = os.path.dirname(link_path)
+            try:
+                source_item = json.load(open(link_path, 'r'))
+            except FileNotFoundError:
+                continue
+            datetime = source_item['properties']['datetime']
+            satellite_platform = source_item['collection'].split('_')[-1]
+            for asset_key, asset in source_item['assets'].items():
+                rows.append([
+                    tile_id,
+                    datetime,
+                    satellite_platform,
+                    asset_key,
+                    str(resolve_path(source_path, asset['href']))
+                ])
+    return pd.DataFrame(rows, columns=['tile_id', 'datetime', 'satellite_platform', 'asset', 'file_path'])
+
+for c in collections:
+    download(c)
+
+
+# In[ ]:
+
+
 # Load the shapefile into a geopandas dataframe (for more info see: https://geopandas.org/en/stable/)
-gdf = gpd.read_file(os.path.join(root_dir,'Blocks', 'Blocks.shp'))
+gdf = gpd.read_file(os.path.join(root_dir, 'ref_african_crops_kenya_01_labels/ref_african_crops_kenya_01_labels_00/labels.geojson'))
+gdf  = gdf.to_crs("EPSG:4326")
 # Get AOI bounds
-bbox_peru = gdf.geometry.total_bounds
+bbox_aoi = gdf.geometry.total_bounds
 # Get AOI centroid for plotting with folium
-centroid_peru = [box(*bbox_peru).centroid.x, box(*bbox_peru).centroid.y]
+centroid_aoi = [box(*bbox_aoi).centroid.x, box(*bbox_aoi).centroid.y]
 
 
 # In[ ]:
@@ -201,7 +252,7 @@ session.auth = (PLANET_API_KEY, "") #<= change to match variable for API Key if 
 # ```{important}
 # In the following cell, the **name__is** parameter is the basemap name. It is only differentiable by the time range in the name.
 # 
-# E.g. `planet_medres_normalized_analytic_2021-08_mosaic` is for August, 2021.
+# E.g. `planet_medres_normalized_analytic_2021-06_mosaic` is for June, 2021.
 # 
 #  
 # ```
@@ -211,7 +262,7 @@ session.auth = (PLANET_API_KEY, "") #<= change to match variable for API Key if 
 
 #set params for search using name of mosaic
 parameters = {
-    "name__is" :"planet_medres_normalized_analytic_2021-08_mosaic" # <= customized to month/year of interest
+    "name__is" :"planet_medres_normalized_analytic_2021-06_mosaic" # <= customized to month/year of interest
 }
 #make get request to access mosaic from basemaps API
 res = session.get(API_URL, params = parameters)
@@ -235,9 +286,9 @@ mosaic_id = mosaic['mosaics'][0]['id']
 #get bbox for entire mosaic
 mosaic_bbox = mosaic['mosaics'][0]['bbox']
 print("mosaic_bbox: ", mosaic_bbox)
-print("bbox_peru: ", bbox_peru)
+print("bbox_aoi: ", bbox_aoi)
 #converting bbox to string for search params
-string_bbox = ','.join(map(str, bbox_peru))
+string_bbox = ','.join(map(str, bbox_aoi))
 
 print('Mosaic id: ', mosaic_id)
 
@@ -249,14 +300,9 @@ print('Mosaic id: ', mosaic_id)
 
 m = Map(tiles="Stamen Terrain",
         control_scale=True,
-        location = centroid_peru,
-        min_lon=-70.28418783,
-        max_lon=-69.78113127,
-        min_lat=-13.07947054,
-        max_lat=-12.75607703,
-        max_bounds=True,
+        location = [centroid_aoi[1], centroid_aoi[0]],
         zoom_start = 10,
-        max_zoom = 8,
+        max_zoom = 20,
         min_zoom =6,
         width = '100%',
         height = '100%',
@@ -311,7 +357,7 @@ Figure(width=500, height=300).add_child(m)
 
 
 # Set directory for downloading the quad tiles to
-nicfi_dir = os.path.join(rami_dir,'082021_basemap_nicfi_lapampa/') 
+nicfi_dir = os.path.join(root_dir,'062021_basemap_nicfi_aoi/') 
 quads_dir = os.path.join(nicfi_dir,'quads/')
 dirs = [nicfi_dir, quads_dir]
 for dir in dirs:
@@ -342,7 +388,7 @@ for i in items:
 
 
 # File and folder paths
-out_mosaic = os.path.join(nicfi_dir,'082021_basemap_nicfi_lapampa_Mosaic.tif')
+out_mosaic = os.path.join(nicfi_dir,'062021_basemap_nicfi_aoi_Mosaic.tif')
 
 # Make a search criteria to select the quad tile files
 search_criteria = "*.tiff"
@@ -351,7 +397,7 @@ q = os.path.join(nicfi_dir,'quads', search_criteria)
 print(q)
 
 
-# In[ ]:
+# In[258]:
 
 
 # Get all of the quad tiles
@@ -364,13 +410,13 @@ quad_files = glob.glob(q)
 quad_files
 
 
-# In[ ]:
+# In[260]:
 
 
 src_files_to_mosaic = []
 
 
-# In[ ]:
+# In[261]:
 
 
 for f in quad_files:
@@ -378,14 +424,14 @@ for f in quad_files:
   src_files_to_mosaic.append(src)
 
 
-# In[ ]:
+# In[262]:
 
 
 # Create the mosaic
 mosaic, out_trans = merge(src_files_to_mosaic)
 
 
-# In[ ]:
+# In[263]:
 
 
 out_meta = src.meta.copy()
@@ -403,12 +449,15 @@ out_meta.update({"driver": "GTiff",
 # Write the mosaic to raster file
 with rasterio.open(out_mosaic, "w", **out_meta) as dest:
     dest.write(mosaic)
-
-
-# In[ ]:
-
-
-out_mosaic
+    
+# Write true color (RGB).
+rgb_out_mosaic = os.path.join(nicfi_dir,'062021_basemap_nicfi_aoi_rgb_Mosaic.tif')
+out_meta.update({"count": 3})
+print(out_meta)
+rgb = np.dstack([mosaic[2], mosaic[1], mosaic[0]])
+rgb = rgb.transpose(2,1,0)
+with rasterio.open(rgb_out_mosaic, "w", **out_meta) as dest:
+    dest.write(rgb)
 
 
 # #### Plot the mosaic
@@ -416,7 +465,7 @@ out_mosaic
 # In[ ]:
 
 
-src = rasterio.open(out_mosaic)
+src = rasterio.open(rgb_out_mosaic)
 
 show(src)
 
