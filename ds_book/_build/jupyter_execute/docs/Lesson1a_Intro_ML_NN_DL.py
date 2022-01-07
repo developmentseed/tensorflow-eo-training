@@ -9,6 +9,20 @@
 # - Gain familiarity with the mechanics of a neural network, convolutional neural networks, and the U-Net architecture in particular
 # - Discuss considerations for choosing a deep learning architecture for a particular problem
 
+# Below is a video recording of the oral lecture associated with this lesson and the following. It was given by Lilly Thomas, ML Engineer at Development Seed.
+
+# In[1]:
+
+
+from IPython.display import YouTubeVideo
+
+def display_yotube_video(url, **kwargs):
+    id_ = url.split("=")[-1]
+    return YouTubeVideo(id_, **kwargs)
+
+display_yotube_video("https://www.youtube.com/watch?v=-C3niPVd-zU", width=800, height=600)
+
+
 # ### What is Machine Learning?
 # 
 # Machine learning (ML) is a subset of artificial intelligence (AI), which in broad terms, is defined as the ability of a machine to simulate intelligent human behavior. 
@@ -46,7 +60,7 @@
 # Artificial neural networks (ANNs) are a specific, biologically-inspired class of machine learning algorithms. They are modeled after the structure and function of the human brain.
 # 
 # :::{figure-md} neuron-fig
-# <img src="images/neuron-structure.jpg" width="450px">
+# <img src="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/neuron-structure.jpg?raw=1" width="450px">
 # 
 # Biological neuron (from [https://training.seer.cancer.gov/anatomy/nervous/tissue.html](https://training.seer.cancer.gov/anatomy/nervous/tissue.html)).
 # :::

@@ -340,6 +340,30 @@
 <li><p>Gain familiarity with the mechanics of a neural network, convolutional neural networks, and the U-Net architecture in particular</p></li>
 <li><p>Discuss considerations for choosing a deep learning architecture for a particular problem</p></li>
 </ul>
+<p>Below is a video recording of the oral lecture associated with this lesson and the following. It was given by Lilly Thomas, ML Engineer at Development Seed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">YouTubeVideo</span>
+
+<span class="k">def</span> <span class="nf">display_yotube_video</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">id_</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">YouTubeVideo</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">display_yotube_video</span><span class="p">(</span><span class="s2">&quot;https://www.youtube.com/watch?v=-C3niPVd-zU&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<iframe
+    width="800"
+    height="600"
+    src="https://www.youtube.com/embed/-C3niPVd-zU"
+    frameborder="0"
+    allowfullscreen
+></iframe>
+</div></div>
+</div>
 <div class="section" id="what-is-machine-learning">
 <h3>What is Machine Learning?<a class="headerlink" href="#what-is-machine-learning" title="Permalink to this headline">¶</a></h3>
 <p>Machine learning (ML) is a subset of artificial intelligence (AI), which in broad terms, is defined as the ability of a machine to simulate intelligent human behavior.</p>
@@ -370,7 +394,7 @@
 <h3>What are Neural Networks?<a class="headerlink" href="#what-are-neural-networks" title="Permalink to this headline">¶</a></h3>
 <p>Artificial neural networks (ANNs) are a specific, biologically-inspired class of machine learning algorithms. They are modeled after the structure and function of the human brain.</p>
 <div class="figure align-default" id="neuron-fig">
-<a class="reference internal image-reference" href="../_images/neuron-structure.jpg"><img alt="../_images/neuron-structure.jpg" src="../_images/neuron-structure.jpg" style="width: 450px;" /></a>
+<a class="reference internal image-reference" href="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/neuron-structure.jpg?raw=1"><img alt="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/neuron-structure.jpg?raw=1" src="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/neuron-structure.jpg?raw=1" style="width: 450px;" /></a>
 <p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Biological neuron (from <a class="reference external" href="https://training.seer.cancer.gov/anatomy/nervous/tissue.html">https://training.seer.cancer.gov/anatomy/nervous/tissue.html</a>).</span><a class="headerlink" href="#neuron-fig" title="Permalink to this image">¶</a></p>
 </div>
 <p>ANNs are essentially programs that make decisions by weighing the evidence and responding to feedback. By varying the input data, types of parameters and their values, we can get different models of decision-making.</p>
