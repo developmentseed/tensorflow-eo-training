@@ -297,8 +297,8 @@
 <li><p>false negative: the pixel was incorrectly assigned the background class or a different class</p></li>
 </ul>
 <p>The most in depth and succinct summary we can produce is a confusion matrix. It summarrizes the counts of pixels that fall into each of these categories for each of our classes of interest and the background class.</p>
-<p><img alt="Confusion Matrix Example" src="../_images/cm.png" /></p>
-<p>In this tutorial we will using data from two reference datasets, Imaflora and Para, and our U-Net predictions from Planet NICFI monthly imagery to compute a confusion matrix to assess our model performance. As we go through this exercise, you’ll notice that our reference datasets do not always correspond to the imagery, so take this lesson as a demonstration of how to carry out an experiment, not as an evaluation of a model that will be used in production. The next episode will cover how to deal with innacurate or limited reference data.</p>
+<p><img alt="Confusion Matrix Example" src="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/cm.png?raw=1" /></p>
+<p>In this tutorial we will using data from a reference dataset hosted on Radiant Earth MLHub called <a class="reference external" href="https://mlhub.earth/data/dlr_fusion_competition_germany">“A Fusion Dataset for Crop Type Classification in Germany”</a>, and our U-Net predictions to compute a confusion matrix to assess our model performance.</p>
 <div class="section" id="specific-concepts-that-will-be-covered">
 <h2>Specific concepts that will be covered<a class="headerlink" href="#specific-concepts-that-will-be-covered" title="Permalink to this headline">¶</a></h2>
 <p>In the process, we will build practical experience and develop intuition around the following concepts:</p>
@@ -356,19 +356,17 @@
 <h3>Getting set up with the data<a class="headerlink" href="#getting-set-up-with-the-data" title="Permalink to this headline">¶</a></h3>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code>. Then, this folder will be available at the following path that is accessible with the google.colab <code class="docutils literal notranslate"><span class="pre">drive</span></code> module: <code class="docutils literal notranslate"><span class="pre">'/content/gdrive/My</span> <span class="pre">Drive/servir-tf-devseed/'</span></code></p>
+<p>Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder <code class="docutils literal notranslate"><span class="pre">tf-eo-devseed</span></code>. Then, this folder will be available at the following path that is accessible with the google.colab <code class="docutils literal notranslate"><span class="pre">drive</span></code> module: <code class="docutils literal notranslate"><span class="pre">'/content/gdrive/My</span> <span class="pre">Drive/tf-eo-devseed/'</span></code></p>
 </div>
-<p>We’ll be working witht he following folders in the <code class="docutils literal notranslate"><span class="pre">servir-tf-devseed</span></code> folder:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>servir-tf-devseed/
-├── images/
-├── images_bright/
+<p>We’ll be working with the following folders and files in the <code class="docutils literal notranslate"><span class="pre">tf-eo-devseed</span></code> folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>tf-eo-devseed/
+├── stacks/
+├── stacks_brightened/
 ├── indices/
-├── indices_800/
 ├── labels/
-├── labels_800/
 ├── background_list_train.txt
 ├── train_list_clean.txt
-└── terrabio_classes.csv
+└── lulc_classes.csv
 </pre></div>
 </div>
 <div class="cell docutils container">
@@ -378,21 +376,17 @@
     <span class="c1"># mount google drive</span>
     <span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
     <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/gdrive&#39;</span><span class="p">)</span>
-    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed/&#39;</span> 
-    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed-workshop&#39;</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/tf-eo-devseed/&#39;</span> 
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/tf-eo-devseed-workshop&#39;</span>
+    <span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">workshop_dir</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running on Colab&#39;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/servir-tf-devseed&quot;</span><span class="p">)</span>
-    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./servir-tf-devseed-workshop&#39;</span><span class="p">)</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/tf-eo-devseed&quot;</span><span class="p">)</span>
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./tf-eo-devseed-workshop&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not running on Colab, data needs to be downloaded locally at </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
-<span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;indices/&#39;</span><span class="p">)</span> <span class="c1"># or os.path.join(root_dir,&#39;images_bright/&#39;) if using the optical tiles</span>
-<span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;labels/&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Not running on Colab, data needs to be downloaded locally at /home/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed
 </pre></div>
 </div>
 </div>
@@ -404,36 +398,37 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed
-</pre></div>
-</div>
-</div>
 </div>
 </div>
 <div class="section" id="check-out-the-labels">
 <h3>Check out the labels<a class="headerlink" href="#check-out-the-labels" title="Permalink to this headline">¶</a></h3>
+<p>Class names and identifiers extracted from the documentation provided here: <a class="reference external" href="https://radiantearth.blob.core.windows.net/mlhub/esa-food-security-challenge/Crops_GT_Brandenburg_Doc.pdf">https://radiantearth.blob.core.windows.net/mlhub/esa-food-security-challenge/Crops_GT_Brandenburg_Doc.pdf</a></p>
 <p>We’ll use these labels to label our confusion matrix and table with class specific metrics.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the classes</span>
-<span class="n">class_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;terrabio_classes.csv&#39;</span><span class="p">))</span>
-<span class="n">class_names</span> <span class="o">=</span> <span class="n">class_index</span><span class="o">.</span><span class="n">class_name</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">class_index</span><span class="p">)</span> 
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class_names&#39;</span><span class="p">:</span>  <span class="p">[</span><span class="s1">&#39;Background&#39;</span><span class="p">,</span> <span class="s1">&#39;Wheat&#39;</span><span class="p">,</span> <span class="s1">&#39;Rye&#39;</span><span class="p">,</span> <span class="s1">&#39;Barley&#39;</span><span class="p">,</span> <span class="s1">&#39;Oats&#39;</span><span class="p">,</span> <span class="s1">&#39;Corn&#39;</span><span class="p">,</span> <span class="s1">&#39;Oil Seeds&#39;</span><span class="p">,</span> <span class="s1">&#39;Root Crops&#39;</span><span class="p">,</span> <span class="s1">&#39;Meadows&#39;</span><span class="p">,</span> <span class="s1">&#39;Forage Crops&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;class_ids&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+        <span class="p">}</span>
+
+<span class="n">classes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span> 
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   class_id   class_name
-0         0   Background
-1         1     Bushland
-2         2      Pasture
-3         3        Roads
-4         4        Cocoa
-5         5   Tree cover
-6         6    Developed
-7         7        Water
-8         8  Agriculture
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    class_names  class_ids
+0    Background          0
+1         Wheat          1
+2           Rye          2
+3        Barley          3
+4          Oats          4
+5          Corn          5
+6     Oil Seeds          6
+7    Root Crops          7
+8       Meadows          8
+9  Forage Crops          9
 </pre></div>
 </div>
 </div>
@@ -449,7 +444,7 @@
 <p>First we need to read in our prediction masks that we saved out in the last notebook. To do this, we can use scikit image, and then we can use scikit learn to compute our confusion matrix. No tensorflow needed for this part!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span> <span class="s2">&quot;test_file_paths.csv&quot;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">workshop_dir</span><span class="p">,</span> <span class="s2">&quot;test_file_paths.csv&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -461,113 +456,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Unnamed: 0</th>
-      <th>img_names</th>
-      <th>label_names</th>
-      <th>pred_names</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_392.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_392.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_392.png</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>1</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_1440.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_1440.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_1440.png</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_21138.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_21138.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_21138.png</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>3</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_21426.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_21426.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_21426.png</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>4</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_3724.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_3724.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_3724.png</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>442</th>
-      <td>442</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_52.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_52.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_52.png</td>
-    </tr>
-    <tr>
-      <th>443</th>
-      <td>443</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_95.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_95.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_95.png</td>
-    </tr>
-    <tr>
-      <th>444</th>
-      <td>444</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_2678.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_2678.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_2678.png</td>
-    </tr>
-    <tr>
-      <th>445</th>
-      <td>445</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_44.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_44.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_44.png</td>
-    </tr>
-    <tr>
-      <th>446</th>
-      <td>446</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/indices/tile_terrabio_577.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/data/servir-tf-devseed/labels/tile_terrabio_577.png</td>
-      <td>/Users/rave/servir-amazonia-ml/ds_book/docs/servir-tf-devseed-workshop/predictions_test_focal_loss/tile_terrabio_577.png</td>
-    </tr>
-  </tbody>
-</table>
-<p>447 rows × 4 columns</p>
-</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -578,7 +466,7 @@
 </div>
 </div>
 </div>
-<p>One of our labels has an image dimension that doesn’t match the prediction dimension! It’s possible this image was corrupted. We can skip it and the corresponding prediction when computing our metrics.</p>
+<p>A few of our labels have an image dimension that doesn’t match the prediction dimension! It’s possible this image was corrupted. We can skip it and the corresponding prediction when computing our metrics.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_arr_lst_valid</span> <span class="o">=</span> <span class="p">[]</span>
@@ -598,27 +486,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The 176th label has an incorrect dimension, skipping.
-[[5 0 5 ... 6 5 0]
- [3 2 4 ... 7 4 7]
- [5 1 4 ... 5 5 3]
- ...
- [4 7 4 ... 7 4 7]
- [5 1 2 ... 5 5 1]
- [4 2 4 ... 2 4 2]]
-[[0 0 0 ... 0 0 0]
- [0 0 0 ... 0 0 0]
- [0 0 0 ... 0 0 0]
- ...
- [0 0 0 ... 0 0 0]
- [0 0 0 ... 0 0 0]
- [0 0 0 ... 0 0 0]]
-(224, 224)
-(218, 224)
-</pre></div>
-</div>
-</div>
 </div>
 <p>With our predictions and labels in lists of tiled arrays, we can then flatten these so that we instead have lists of pixels for predictions and labels. This is the format expected by scikit-learn’s <code class="docutils literal notranslate"><span class="pre">confusion_matrix</span></code> function.</p>
 <div class="cell docutils container">
@@ -626,7 +493,7 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># flatten our tensors and use scikit-learn to create a confusion matrix</span>
 <span class="n">flat_preds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">pred_arr_lst_valid</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 <span class="n">flat_truth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">label_arr_lst_valid</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-<span class="n">OUTPUT_CHANNELS</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">OUTPUT_CHANNELS</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">flat_truth</span><span class="p">,</span> <span class="n">flat_preds</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">OUTPUT_CHANNELS</span><span class="p">)))</span>
 </pre></div>
 </div>
@@ -641,17 +508,11 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x16b0b0d60&gt;
-</pre></div>
-</div>
-<img alt="../_images/Lesson4_evaluation_21_1.png" src="../_images/Lesson4_evaluation_21_1.png" />
-</div>
 </div>
 <p>… or matplotlib, which allows us to more easily customize all aspects of our plot.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]</span>
 
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="n">cm</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="n">cm</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
@@ -683,12 +544,6 @@
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(8.5, -0.5)
-</pre></div>
-</div>
-<img alt="../_images/Lesson4_evaluation_23_1.png" src="../_images/Lesson4_evaluation_23_1.png" />
 </div>
 </div>
 <p>Now let’s compute the f1 score</p>
