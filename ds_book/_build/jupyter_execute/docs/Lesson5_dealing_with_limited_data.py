@@ -17,7 +17,7 @@
 # 1. closely inspect our original labeled dataset for quality issues, such as mismatch with the imagery due to date, incorrect class labels, and incorrect label boundaries
 # 2. weigh the cost and benefits of annotating new labels or try other approaches to maximize our model's performance with the data we already have.
 # 
-# Part 1 of this Lesson will describe considerations for setting up an annotation campaign, keeping in mind data quality issues that have come up during the RAMI and Terrabio projects.
+# Part 1 of this Lesson will describe considerations for setting up an annotation campaign, keeping in mind data quality issues.
 # 
 # Part 2 will cover techniques for maximizing the performance of models trained with limited data, assuming label quality is sufficient.
 # 
@@ -71,7 +71,7 @@
 # An additional consideration for an annotation campaign is, can our annotators accurately and efficiently annotate the classes we prioritize. Let's consider the following example, where want to map urban tree cover, buildings, and parking lots.
 # 
 # :::{figure-md} LULC Labeling
-# <img src="./images/lulc_labeling.gif" width="450px">
+# <img src="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/lulc_labeling.gif?raw=1" width="450px">
 # 
 # Our Data Team labeling segments in a complex scene using JOSM, the Java Open Street Map Editor.
 # :::
@@ -97,7 +97,7 @@
 # An example of this challenge is marine debris detection with Planet Labs imagery. 
 
 # :::{figure-md} Marine Debris Detection with Planet Labs
-# <img src="./images/marine_debris.png" width="450px">
+# <img src="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/marine_debris.png?raw=1" width="450px">
 # 
 # An annotated Planet Labs image containing marine plastic pollution.
 # :::
@@ -180,22 +180,23 @@ from albumentations import (
 
 # set your root directory and tiled data folders
 if 'google.colab' in str(get_ipython()):
-    # this is a google colab specific command to ensure TF version 2 is used. 
-    # it won't work in a regular jupyter notebook, for a regular notebook make sure you install TF version 2
-    get_ipython().run_line_magic('tensorflow_version', '2.x')
     # mount google drive
     from google.colab import drive
     drive.mount('/content/gdrive')
-    root_dir = '/content/gdrive/My Drive/servir-tf-devseed/' 
-    workshop_dir = '/content/gdrive/My Drive/servir-tf-devseed-workshop'
+    root_dir = '/content/gdrive/My Drive/tf-eo-devseed/' 
+    workshop_dir = '/content/gdrive/My Drive/tf-eo-devseed-workshop'
+    dirs = [root_dir, workshop_dir]
+    for d in dirs:
+        if not os.path.exists(d):
+            os.makedirs(d)
     print('Running on Colab')
 else:
-    root_dir = os.path.abspath("./data/servir-tf-devseed")
-    workshop_dir = os.path.abspath('./servir-tf-devseed-workshop')
+    root_dir = os.path.abspath("./data/tf-eo-devseed")
+    workshop_dir = os.path.abspath('./tf-eo-devseed-workshop')
     print(f'Not running on Colab, data needs to be downloaded locally at {os.path.abspath(root_dir)}')
 
-img_dir = os.path.join(root_dir,'indices/') # or os.path.join(root_dir,'images_bright/') if using the optical tiles
-label_dir = os.path.join(root_dir,'labels/')
+img_dir = os.path.join(root_dir,'rasters/tiled/stacks_brightened/') # or os.path.join(root_dir,'rasters/tiled/indices/') if using the indices
+label_dir = os.path.join(root_dir,'rasters/tiled/labels/')
 
 
 # In[ ]:
@@ -222,13 +223,17 @@ print('Found GPU at: {}'.format(device_name))
 
 # ### Check out the labels
 
-# In[ ]:
+# In[7]:
 
 
 # Read the classes
-class_index = pd.read_csv(os.path.join(root_dir,'terrabio_classes.csv'))
-class_names = class_index.class_name.unique()
-print(class_index) 
+
+data = {'class_names':  ['Background', 'Wheat', 'Rye', 'Barley', 'Oats', 'Corn', 'Oil Seeds', 'Root Crops', 'Meadows', 'Forage Crops'],
+        'class_ids': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        }
+
+classes = pd.DataFrame(data)
+print(classes) 
 
 
 # In[ ]:
@@ -426,7 +431,7 @@ callbacks = [
 ]
 
 
-# We'll use the `segmentation_models` implementation of a U-net, since it handles downlaoding pretrained weights from a variety of sources. To set up the U-Net in a manner that is equivalent with the U-Net we made from scratch in episode 3, we need to specify the correct activation function for multi-category pixel segmentation,`softmax`, and the correct number of classes: 9.
+# We'll use the `segmentation_models` implementation of a U-net, since it handles downlaoding pretrained weights from a variety of sources. To set up the U-Net in a manner that is equivalent with the U-Net we made from scratch in episode 3, we need to specify the correct activation function for multi-category pixel segmentation,`softmax`, and the correct number of classes: 10.
 
 # In[ ]:
 
@@ -437,7 +442,7 @@ sm.set_framework('tf.keras')
 
 sm.framework()
 
-model = sm.Unet('mobilenetv2', activation='softmax', classes = 9, encoder_weights="imagenet", input_shape=(224,224,3))
+model = sm.Unet('mobilenetv2', activation='softmax', classes = 10, encoder_weights="imagenet", input_shape=(224,224,3))
 
 
 # We'll compile our model with the same optimizer, loss function, and accuracy metrics from Lesson 3.

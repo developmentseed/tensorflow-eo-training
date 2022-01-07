@@ -334,7 +334,7 @@
 <li><p>closely inspect our original labeled dataset for quality issues, such as mismatch with the imagery due to date, incorrect class labels, and incorrect label boundaries</p></li>
 <li><p>weigh the cost and benefits of annotating new labels or try other approaches to maximize our model’s performance with the data we already have.</p></li>
 </ol>
-<p>Part 1 of this Lesson will describe considerations for setting up an annotation campaign, keeping in mind data quality issues that have come up during the RAMI and Terrabio projects.</p>
+<p>Part 1 of this Lesson will describe considerations for setting up an annotation campaign, keeping in mind data quality issues.</p>
 <p>Part 2 will cover techniques for maximizing the performance of models trained with limited data, assuming label quality is sufficient.</p>
 <div class="section" id="specific-concepts-that-will-be-covered">
 <h2>Specific concepts that will be covered<a class="headerlink" href="#specific-concepts-that-will-be-covered" title="Permalink to this headline">¶</a></h2>
@@ -396,7 +396,7 @@
 <h2>Tips for efficiently annotating geospatial imagery for semantic segmentation (pixel-wise classification)<a class="headerlink" href="#tips-for-efficiently-annotating-geospatial-imagery-for-semantic-segmentation-pixel-wise-classification" title="Permalink to this headline">¶</a></h2>
 <p>An additional consideration for an annotation campaign is, can our annotators accurately and efficiently annotate the classes we prioritize. Let’s consider the following example, where want to map urban tree cover, buildings, and parking lots.</p>
 <div class="figure align-default" id="lulc-labeling">
-<a class="reference internal image-reference" href="../_images/lulc_labeling.gif"><img alt="../_images/lulc_labeling.gif" src="../_images/lulc_labeling.gif" style="width: 450px;" /></a>
+<a class="reference internal image-reference" href="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/lulc_labeling.gif?raw=1"><img alt="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/lulc_labeling.gif?raw=1" src="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/lulc_labeling.gif?raw=1" style="width: 450px;" /></a>
 <p class="caption"><span class="caption-number">Fig. 21 </span><span class="caption-text">Our Data Team labeling segments in a complex scene using JOSM, the Java Open Street Map Editor.</span><a class="headerlink" href="#lulc-labeling" title="Permalink to this image">¶</a></p>
 </div>
 <p>LULC classes are often directly adjacent to each other. Therefore, it can be very helpful to annotate in a platform that supports snapping edges to existing annotations and editing both in tandem, as the gif demonstrates. The background class does not need to be annotated manually.</p>
@@ -413,7 +413,7 @@
 <p>Detection problems in remote sensing are unique because oftentimes we are dealing with very large, megapizxel images, but small objects of interest. Because of this, it is important to sample our annotation areas so that we capture many examples of the classes we care about detecting. A simple random sample of tiles within an AOI is most likely not the correct approach here, as it would undersample our classes of interest and lead to class imbalance.</p>
 <p>An example of this challenge is marine debris detection with Planet Labs imagery.</p>
 <div class="figure align-default" id="marine-debris-detection-with-planet-labs">
-<a class="reference internal image-reference" href="../_images/marine_debris.png"><img alt="../_images/marine_debris.png" src="../_images/marine_debris.png" style="width: 450px;" /></a>
+<a class="reference internal image-reference" href="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/marine_debris.png?raw=1"><img alt="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/marine_debris.png?raw=1" src="https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/marine_debris.png?raw=1" style="width: 450px;" /></a>
 <p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">An annotated Planet Labs image containing marine plastic pollution.</span><a class="headerlink" href="#marine-debris-detection-with-planet-labs" title="Permalink to this image">¶</a></p>
 </div>
 <p>In this case, Lilly’s AOI was the entire ocean. a simple random sample of the whole ocean, or even all coastlines or major currents, would result in an overhelming amount of the background class. Instead annotation areas were targeted based on geolocated reports of marine debris. An approach DevSeed uses in a lot of projects is to try to develop as many represnetative sampels of the main class of interest as possible, and additionally develop representative samples of hard negatives (which look like the class of interest). We then control the amount of “easy negatives” that are introduced in the training set so that we minimize class imbalance.</p>
@@ -494,22 +494,23 @@
 
 <span class="c1"># set your root directory and tiled data folders</span>
 <span class="k">if</span> <span class="s1">&#39;google.colab&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()):</span>
-    <span class="c1"># this is a google colab specific command to ensure TF version 2 is used. </span>
-    <span class="c1"># it won&#39;t work in a regular jupyter notebook, for a regular notebook make sure you install TF version 2</span>
-    <span class="o">%</span><span class="k">tensorflow_version</span> 2.x
     <span class="c1"># mount google drive</span>
     <span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
     <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/gdrive&#39;</span><span class="p">)</span>
-    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed/&#39;</span> 
-    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/servir-tf-devseed-workshop&#39;</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/tf-eo-devseed/&#39;</span> 
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/gdrive/My Drive/tf-eo-devseed-workshop&#39;</span>
+    <span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">root_dir</span><span class="p">,</span> <span class="n">workshop_dir</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running on Colab&#39;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/servir-tf-devseed&quot;</span><span class="p">)</span>
-    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./servir-tf-devseed-workshop&#39;</span><span class="p">)</span>
+    <span class="n">root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;./data/tf-eo-devseed&quot;</span><span class="p">)</span>
+    <span class="n">workshop_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;./tf-eo-devseed-workshop&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not running on Colab, data needs to be downloaded locally at </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">root_dir</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-<span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;indices/&#39;</span><span class="p">)</span> <span class="c1"># or os.path.join(root_dir,&#39;images_bright/&#39;) if using the optical tiles</span>
-<span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;labels/&#39;</span><span class="p">)</span>
+<span class="n">img_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;rasters/tiled/stacks_brightened/&#39;</span><span class="p">)</span> <span class="c1"># or os.path.join(root_dir,&#39;rasters/tiled/indices/&#39;) if using the indices</span>
+<span class="n">label_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;rasters/tiled/labels/&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -542,9 +543,28 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the classes</span>
-<span class="n">class_index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root_dir</span><span class="p">,</span><span class="s1">&#39;terrabio_classes.csv&#39;</span><span class="p">))</span>
-<span class="n">class_names</span> <span class="o">=</span> <span class="n">class_index</span><span class="o">.</span><span class="n">class_name</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">class_index</span><span class="p">)</span> 
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;class_names&#39;</span><span class="p">:</span>  <span class="p">[</span><span class="s1">&#39;Background&#39;</span><span class="p">,</span> <span class="s1">&#39;Wheat&#39;</span><span class="p">,</span> <span class="s1">&#39;Rye&#39;</span><span class="p">,</span> <span class="s1">&#39;Barley&#39;</span><span class="p">,</span> <span class="s1">&#39;Oats&#39;</span><span class="p">,</span> <span class="s1">&#39;Corn&#39;</span><span class="p">,</span> <span class="s1">&#39;Oil Seeds&#39;</span><span class="p">,</span> <span class="s1">&#39;Root Crops&#39;</span><span class="p">,</span> <span class="s1">&#39;Meadows&#39;</span><span class="p">,</span> <span class="s1">&#39;Forage Crops&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;class_ids&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+        <span class="p">}</span>
+
+<span class="n">classes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    class_names  class_ids
+0    Background          0
+1         Wheat          1
+2           Rye          2
+3        Barley          3
+4          Oats          4
+5          Corn          5
+6     Oil Seeds          6
+7    Root Crops          7
+8       Meadows          8
+9  Forage Crops          9
 </pre></div>
 </div>
 </div>
@@ -748,7 +768,7 @@
 </div>
 </div>
 </div>
-<p>We’ll use the <code class="docutils literal notranslate"><span class="pre">segmentation_models</span></code> implementation of a U-net, since it handles downlaoding pretrained weights from a variety of sources. To set up the U-Net in a manner that is equivalent with the U-Net we made from scratch in episode 3, we need to specify the correct activation function for multi-category pixel segmentation,<code class="docutils literal notranslate"><span class="pre">softmax</span></code>, and the correct number of classes: 9.</p>
+<p>We’ll use the <code class="docutils literal notranslate"><span class="pre">segmentation_models</span></code> implementation of a U-net, since it handles downlaoding pretrained weights from a variety of sources. To set up the U-Net in a manner that is equivalent with the U-Net we made from scratch in episode 3, we need to specify the correct activation function for multi-category pixel segmentation,<code class="docutils literal notranslate"><span class="pre">softmax</span></code>, and the correct number of classes: 10.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># define model</span>
@@ -757,7 +777,7 @@
 
 <span class="n">sm</span><span class="o">.</span><span class="n">framework</span><span class="p">()</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">Unet</span><span class="p">(</span><span class="s1">&#39;mobilenetv2&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="mi">9</span><span class="p">,</span> <span class="n">encoder_weights</span><span class="o">=</span><span class="s2">&quot;imagenet&quot;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span><span class="mi">224</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">Unet</span><span class="p">(</span><span class="s1">&#39;mobilenetv2&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">encoder_weights</span><span class="o">=</span><span class="s2">&quot;imagenet&quot;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">224</span><span class="p">,</span><span class="mi">224</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
