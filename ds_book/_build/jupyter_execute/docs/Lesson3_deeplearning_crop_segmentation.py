@@ -169,7 +169,7 @@ else:
     workshop_dir = os.path.abspath('./tf-eo-devseed-workshop')
     print(f'Not running on Colab, data needs to be downloaded locally at {os.path.abspath(root_dir)}')
 
-img_dir = os.path.join(root_dir,'rasters/tiled/stacks_brightened/') # or os.path.join(root_dir,'images_bright/') if using the optical tiles
+img_dir = os.path.join(root_dir,'rasters/tiled/stacks_brightened/') # or os.path.join(root_dir,'rasters/tiled/indices/') if using the indices
 label_dir = os.path.join(root_dir,'rasters/tiled/labels/')
 
 

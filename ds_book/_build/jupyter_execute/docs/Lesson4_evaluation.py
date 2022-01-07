@@ -17,9 +17,9 @@
 # The most in depth and succinct summary we can produce is a confusion matrix. It summarrizes the counts of pixels that fall into each of these categories for each of our classes of interest and the background class.
 # 
 # 
-# ![Confusion Matrix Example](images/cm.png)
+# ![Confusion Matrix Example](https://github.com/developmentseed/tensorflow-eo-training/blob/main/ds_book/docs/images/cm.png?raw=1)
 # 
-# In this tutorial we will using data from two reference datasets, Imaflora and Para, and our U-Net predictions from Planet NICFI monthly imagery to compute a confusion matrix to assess our model performance. As we go through this exercise, you'll notice that our reference datasets do not always correspond to the imagery, so take this lesson as a demonstration of how to carry out an experiment, not as an evaluation of a model that will be used in production. The next episode will cover how to deal with innacurate or limited reference data.
+# In this tutorial we will using data from a reference dataset hosted on Radiant Earth MLHub called ["A Fusion Dataset for Crop Type Classification in Germany"](https://mlhub.earth/data/dlr_fusion_competition_germany), and our U-Net predictions to compute a confusion matrix to assess our model performance. 
 # 
 # ## Specific concepts that will be covered
 # In the process, we will build practical experience and develop intuition around the following concepts:
@@ -50,7 +50,7 @@ get_ipython().system('pip install -q scikit-learn==1.0.1')
 get_ipython().system('pip install -q scikit-image==0.18.3')
 
 
-# In[1]:
+# In[2]:
 
 
 # import required libraries
@@ -74,27 +74,25 @@ import skimage.io as skio # lighter dependency than tensorflow for working with 
 from sklearn.metrics import confusion_matrix, f1_score
 
 
-# ### Getting set up with the data
+# #### Getting set up with the data
 # 
 # ```{important}
-# Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder `servir-tf-devseed`. Then, this folder will be available at the following path that is accessible with the google.colab `drive` module: `'/content/gdrive/My Drive/servir-tf-devseed/'`
+# Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder `tf-eo-devseed`. Then, this folder will be available at the following path that is accessible with the google.colab `drive` module: `'/content/gdrive/My Drive/tf-eo-devseed/'`
 # ```
 # 
-# We'll be working witht he following folders in the `servir-tf-devseed` folder:
+# We'll be working with the following folders and files in the `tf-eo-devseed` folder:
 # ```
-# servir-tf-devseed/
-# ├── images/
-# ├── images_bright/
+# tf-eo-devseed/
+# ├── stacks/
+# ├── stacks_brightened/
 # ├── indices/
-# ├── indices_800/
 # ├── labels/
-# ├── labels_800/
 # ├── background_list_train.txt
 # ├── train_list_clean.txt
-# └── terrabio_classes.csv
+# └── lulc_classes.csv
 # ```
 
-# In[2]:
+# In[ ]:
 
 
 # set your root directory and tiled data folders
@@ -102,19 +100,20 @@ if 'google.colab' in str(get_ipython()):
     # mount google drive
     from google.colab import drive
     drive.mount('/content/gdrive')
-    root_dir = '/content/gdrive/My Drive/servir-tf-devseed/' 
-    workshop_dir = '/content/gdrive/My Drive/servir-tf-devseed-workshop'
+    root_dir = '/content/gdrive/My Drive/tf-eo-devseed/' 
+    workshop_dir = '/content/gdrive/My Drive/tf-eo-devseed-workshop'
+    dirs = [root_dir, workshop_dir]
+    for d in dirs:
+        if not os.path.exists(d):
+            os.makedirs(d)
     print('Running on Colab')
 else:
-    root_dir = os.path.abspath("./data/servir-tf-devseed")
-    workshop_dir = os.path.abspath('./servir-tf-devseed-workshop')
+    root_dir = os.path.abspath("./data/tf-eo-devseed")
+    workshop_dir = os.path.abspath('./tf-eo-devseed-workshop')
     print(f'Not running on Colab, data needs to be downloaded locally at {os.path.abspath(root_dir)}')
 
-img_dir = os.path.join(root_dir,'indices/') # or os.path.join(root_dir,'images_bright/') if using the optical tiles
-label_dir = os.path.join(root_dir,'labels/')
 
-
-# In[3]:
+# In[ ]:
 
 
 # go to root directory
@@ -122,15 +121,21 @@ get_ipython().run_line_magic('cd', '$root_dir')
 
 
 # ### Check out the labels
+# Class names and identifiers extracted from the documentation provided here: https://radiantearth.blob.core.windows.net/mlhub/esa-food-security-challenge/Crops_GT_Brandenburg_Doc.pdf
+# 
 # We'll use these labels to label our confusion matrix and table with class specific metrics.
 
-# In[4]:
+# In[7]:
 
 
 # Read the classes
-class_index = pd.read_csv(os.path.join(root_dir,'terrabio_classes.csv'))
-class_names = class_index.class_name.unique()
-print(class_index) 
+
+data = {'class_names':  ['Background', 'Wheat', 'Rye', 'Barley', 'Oats', 'Corn', 'Oil Seeds', 'Root Crops', 'Meadows', 'Forage Crops'],
+        'class_ids': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        }
+
+classes = pd.DataFrame(data)
+print(classes) 
 
 
 # ### Getting image, prediction, and label filenames
@@ -143,20 +148,20 @@ print(class_index)
 
 # First we need to read in our prediction masks that we saved out in the last notebook. To do this, we can use scikit image, and then we can use scikit learn to compute our confusion matrix. No tensorflow needed for this part!
 
-# In[5]:
+# In[10]:
 
 
-path_df = pd.read_csv(os.path.join(root_dir, "test_file_paths.csv"))
+path_df = pd.read_csv(os.path.join(workshop_dir, "test_file_paths.csv"))
 
 
-# In[6]:
+# In[ ]:
 
 
 pd.set_option('display.max_colwidth', None)
 path_df
 
 
-# In[7]:
+# In[12]:
 
 
 # reading in preds
@@ -164,9 +169,9 @@ label_arr_lst = path_df["label_names"].apply(skio.imread)
 pred_arr_lst = path_df["pred_names"].apply(skio.imread)
 
 
-# One of our labels has an image dimension that doesn't match the prediction dimension! It's possible this image was corrupted. We can skip it and the corresponding prediction when computing our metrics.
+# A few of our labels have an image dimension that doesn't match the prediction dimension! It's possible this image was corrupted. We can skip it and the corresponding prediction when computing our metrics.
 
-# In[8]:
+# In[ ]:
 
 
 pred_arr_lst_valid = []
@@ -187,19 +192,19 @@ for i in range(0, len(pred_arr_lst)):
 
 # With our predictions and labels in lists of tiled arrays, we can then flatten these so that we instead have lists of pixels for predictions and labels. This is the format expected by scikit-learn's `confusion_matrix` function.
 
-# In[9]:
+# In[14]:
 
 
 # flatten our tensors and use scikit-learn to create a confusion matrix
 flat_preds = np.concatenate(pred_arr_lst_valid).flatten()
 flat_truth = np.concatenate(label_arr_lst_valid).flatten()
-OUTPUT_CHANNELS = 9
+OUTPUT_CHANNELS = 10
 cm = confusion_matrix(flat_truth, flat_preds, labels=list(range(OUTPUT_CHANNELS)))
 
 
 # Finally, we can plot the confusion matrix. We can either use the built-in method from scikit-learn... 
 
-# In[18]:
+# In[ ]:
 
 
 from sklearn.metrics import ConfusionMatrixDisplay
@@ -209,10 +214,10 @@ ConfusionMatrixDisplay.from_predictions(flat_truth, flat_preds, normalize='true'
 
 # ... or matplotlib, which allows us to more easily customize all aspects of our plot.
 
-# In[15]:
+# In[ ]:
 
 
-classes = [0,1,2,3,4,5,6,7,8]
+classes = [0,1,2,3,4,5,6,7,8,9]
 
 get_ipython().run_line_magic('matplotlib', 'inline')
 cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
