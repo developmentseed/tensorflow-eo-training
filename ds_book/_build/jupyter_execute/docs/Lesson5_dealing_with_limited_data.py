@@ -223,7 +223,7 @@ print('Found GPU at: {}'.format(device_name))
 
 # ### Check out the labels
 
-# In[7]:
+# In[4]:
 
 
 # Read the classes
@@ -236,15 +236,15 @@ classes = pd.DataFrame(data)
 print(classes) 
 
 
-# In[ ]:
+# In[6]:
 
 
-train_df = pd.read_csv(os.path.join(root_dir, "train_file_paths.csv"))
-validate_df =  pd.read_csv(os.path.join(root_dir, "validate_file_paths.csv"))
-test_df =  pd.read_csv(os.path.join(root_dir, "test_file_paths.csv"))
+train_df = pd.read_csv(os.path.join(workshop_dir, "train_file_paths.csv"))
+validate_df =  pd.read_csv(os.path.join(workshop_dir, "validate_file_paths.csv"))
+test_df =  pd.read_csv(os.path.join(workshop_dir, "test_file_paths.csv"))
 
 
-# In[ ]:
+# In[7]:
 
 
 x_train_filenames = train_df["img_names"]
@@ -265,7 +265,7 @@ num_test_examples = len(x_test_filenames)
 # 
 # Common augmentations include brightening images, applying blur, saturation, flipping, rotating, and randomly cropping and resizing. We'll apply a few augmentations from the `albumentations` library to highlight how to set up an augmentation pipeline. This differs from coding your own augmentations, like we did in episode 3 with our horizontal flip and veritcal flip functions, saving time and lines of code.
 
-# In[ ]:
+# In[8]:
 
 
 # set input image shape
@@ -299,7 +299,7 @@ def _augment(img, label_img, img_size):
 
 # Now we will call our augmentation pipeline whenever we load a batch in our training or validation datasets. The augmentation pipeline that we form with `Compose()` is called in `get_baseline_dataset` during the dataset creation process.
 
-# In[ ]:
+# In[9]:
 
 
 # load your data
@@ -356,7 +356,7 @@ val_ds = get_baseline_dataset(x_val_filenames,
 
 # Let's view some of our augmentations
 
-# In[ ]:
+# In[11]:
 
 
 def view_image(ds):
@@ -383,7 +383,7 @@ view_image(train_ds)
 
 # ### Display functions for monitoring model progress and visualizing arrays
 
-# In[ ]:
+# In[16]:
 
 
 def create_mask(pred_mask):
@@ -406,8 +406,8 @@ def display(display_list):
 def show_predictions(image=None, mask=None, dataset=None, num=1):
   if image is None and dataset is None:
     # this is just for showing keras callback output. in practice this should be broken out into a different function
-    sample_image = skio.imread(f'{img_dir}/tile_terrabio_17507.png') * (1/255.)
-    sample_mask = skio.imread(f'{label_dir}/tile_terrabio_17507.png')
+    sample_image = skio.imread(f'{img_dir}/tile_dlr_fusion_competition_germany_train_source_planet_5day_33N_18E_242N_2018_05_28_811.png') * (1/255.)
+    sample_mask = skio.imread(f'{label_dir}/tile_dlr_fusion_competition_germany_train_source_planet_5day_33N_18E_242N_2018_05_28_811.png')
     mp = create_mask(model.predict(sample_image[tf.newaxis, ...]))
     mpe = tf.keras.backend.eval(mp)
     display([sample_image, sample_mask[..., tf.newaxis], mpe])
@@ -433,7 +433,7 @@ callbacks = [
 
 # We'll use the `segmentation_models` implementation of a U-net, since it handles downlaoding pretrained weights from a variety of sources. To set up the U-Net in a manner that is equivalent with the U-Net we made from scratch in episode 3, we need to specify the correct activation function for multi-category pixel segmentation,`softmax`, and the correct number of classes: 10.
 
-# In[ ]:
+# In[18]:
 
 
 # define model
