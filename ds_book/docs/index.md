@@ -39,7 +39,7 @@ For local running, the code for each topic in the form of
 ```{admonition} How to access the data
 :class: important
 
-Ideally, all data would be ingested from a storage bucket on Google Cloud Platform, however, input/output to Google Colab from cloud storage is prohibitively slow and fragile. For the purpose of this workshop, we have shared a Google Drive folder with participants. To use its contents during the workshop, please right click on the folder from Google Drive and select `Add shortcut to Drive` and select your `My Drive` folder as the destination. This will allow you to programmatically read the data via a path that mimics your personal drive rather than your shared drive. 
+These tutorials will make use of open source data hosted on [Radiant Earth MLHub](https://mlhub.earth/). Please register an account with MLHub and obtain your unique API key in advance of starting these tutorials.
 
 ```
 
