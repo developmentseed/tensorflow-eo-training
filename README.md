@@ -25,6 +25,6 @@ and in the left menu select any chapter below the Introduction, click the "rocke
 **Links**:
 
 - Jupyter Book: 
-[https://developmentseed.github.io/tensorflow-eo-training/docs/index.html](https://developmentseed.github.io/tensorflow-eo-training/docs/index.html)
+[https://developmentseed.org/tensorflow-eo-training/docs/index.html](https://developmentseed.org/tensorflow-eo-training/docs/index.html)
 
 
