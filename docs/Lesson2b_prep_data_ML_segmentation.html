@@ -589,7 +589,7 @@ classes in labels geojson:  [1 2 3 4 5 6 7 8 9]
 
     <span class="c1"># arrays</span>
     <span class="c1"># Read and re-scale the original 16 bit image to 8 bit.</span>
-    <span class="n">scale</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
       <span class="n">rgbn_norm</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>
       <span class="n">rgbn_norm_out</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">raster_dir</span><span class="p">,</span><span class="s1">&#39;sr_byte_scaled.tif&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;Gtiff&#39;</span><span class="p">,</span>
@@ -966,7 +966,7 @@ classes in labels geojson:  [1 2 3 4 5 6 7 8 9]
 <h3>Getting set up with the data<a class="headerlink" href="#getting-set-up-with-the-data" title="Permalink to this headline">¶</a></h3>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
-<p>Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder <code class="docutils literal notranslate"><span class="pre">tf-eo-devseed</span></code>. Then, this folder will be available at the following path that is accessible with the google.colab <code class="docutils literal notranslate"><span class="pre">drive</span></code> module: <code class="docutils literal notranslate"><span class="pre">'/content/gdrive/My</span> <span class="pre">Drive/tf-eo-devseed/'</span></code></p>
+<p>The tiled imagery will be available at the following path that is accessible with the google.colab <code class="docutils literal notranslate"><span class="pre">drive</span></code> module: <code class="docutils literal notranslate"><span class="pre">'/content/gdrive/My</span> <span class="pre">Drive/tf-eo-devseed/'</span></code></p>
 </div>
 <p>We’ll be working with the following folders and files in the <code class="docutils literal notranslate"><span class="pre">tf-eo-devseed</span></code> folder:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>tf-eo-devseed/
