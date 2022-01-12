@@ -671,7 +671,7 @@ classes in labels geojson:  [1 2 3 4 5 6 7 8 9]
 <p>Stack bands of interest.</p>
 <div>&#8681</div> <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="n">red</span><span class="p">,</span> <span class="n">green</span><span class="p">,</span> <span class="n">blue</span><span class="p">,</span> <span class="n">nir</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">bandstack</span><span class="p">(</span><span class="n">red</span><span class="p">,</span> <span class="n">green</span><span class="p">,</span> <span class="n">blue</span><span class="p">,</span> <span class="n">nir</span><span class="p">):</span>
 
     <span class="n">stack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">red</span><span class="p">,</span> <span class="n">green</span><span class="p">,</span> <span class="n">blue</span><span class="p">))</span>
 
@@ -934,7 +934,7 @@ classes in labels geojson:  [1 2 3 4 5 6 7 8 9]
 
       <span class="c1"># Stack channels of interest (RGB) into one single 3 channel image</span>
       <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stacking channels of interest...&quot;</span><span class="p">)</span>
-      <span class="n">stack</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+      <span class="n">stack</span> <span class="o">=</span> <span class="n">bandstack</span><span class="p">(</span><span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">rgbn</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
 
       <span class="c1"># Color correct the RGB image</span>
       <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Color correcting a RGB image...&quot;</span><span class="p">)</span>
