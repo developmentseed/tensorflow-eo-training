@@ -131,7 +131,7 @@ import skimage.io as skio
 # #### Getting set up with the data
 # 
 # ```{important}
-# Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder `tf-eo-devseed`. Then, this folder will be available at the following path that is accessible with the google.colab `drive` module: `'/content/gdrive/My Drive/tf-eo-devseed/'`
+# The tiled imagery is available at the following path that is accessible with the google.colab `drive` module: `'/content/gdrive/My Drive/tf-eo-devseed/'`
 # ```
 # 
 # We'll be working with the following folders and files in the `tf-eo-devseed` folder:

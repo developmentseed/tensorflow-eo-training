@@ -249,10 +249,10 @@ test_df =  pd.read_csv(os.path.join(workshop_dir, "test_file_paths.csv"))
 
 x_train_filenames = train_df["img_names"]
 y_train_filenames = train_df["label_names"]
-x_val_filenames = train_df["img_names"]
-y_val_filenames = train_df["label_names"]
-x_test_filenames = train_df["img_names"]
-y_test_filenames = train_df["label_names"]
+x_val_filenames = validate_df["img_names"]
+y_val_filenames = validate_df["label_names"]
+x_test_filenames = test_df["img_names"]
+y_test_filenames = test_df["label_names"]
 
 num_train_examples = len(x_train_filenames)
 num_val_examples = len(x_val_filenames)

@@ -253,7 +253,7 @@ def raster_read(raster_dir):
 
     # arrays
     # Read and re-scale the original 16 bit image to 8 bit.
-    scale = False
+    scale = True
     if scale:
       rgbn_norm = cv2.normalize(rgbn.read(), None, 0, 255, cv2.NORM_MINMAX)
       rgbn_norm_out=rasterio.open(os.path.join(raster_dir,'sr_byte_scaled.tif'), 'w', driver='Gtiff',
@@ -338,7 +338,7 @@ def indexnormstack(red, green, blue, nir):
 # In[12]:
 
 
-def stack(red, green, blue, nir):
+def bandstack(red, green, blue, nir):
 
     stack = np.dstack((red, green, blue))
 
@@ -596,7 +596,7 @@ if process:
 
       # Stack channels of interest (RGB) into one single 3 channel image
       print("Stacking channels of interest...")
-      stack = stack(rgbn.read(3), rgbn.read(2), rgbn.read(1), rgbn.read(4))
+      stack = bandstack(rgbn.read(3), rgbn.read(2), rgbn.read(1), rgbn.read(4))
 
       # Color correct the RGB image
       print("Color correcting a RGB image...")
@@ -624,7 +624,7 @@ else:
 # #### Getting set up with the data
 # 
 # ```{important}
-# Create drive shortcuts of the tiled imagery to your own My Drive Folder by Right-Clicking on the Shared folder `tf-eo-devseed`. Then, this folder will be available at the following path that is accessible with the google.colab `drive` module: `'/content/gdrive/My Drive/tf-eo-devseed/'`
+# The tiled imagery will be available at the following path that is accessible with the google.colab `drive` module: `'/content/gdrive/My Drive/tf-eo-devseed/'`
 # ```
 # 
 # We'll be working with the following folders and files in the `tf-eo-devseed` folder:

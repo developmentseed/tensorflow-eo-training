@@ -455,7 +455,7 @@ rgb_out_mosaic = os.path.join(nicfi_dir,'062021_basemap_nicfi_aoi_rgb_Mosaic.tif
 out_meta.update({"count": 3})
 print(out_meta)
 rgb = np.dstack([mosaic[2], mosaic[1], mosaic[0]])
-rgb = rgb.transpose(2,1,0)
+rgb = rgb.transpose(2,0,1)
 with rasterio.open(rgb_out_mosaic, "w", **out_meta) as dest:
     dest.write(rgb)
 

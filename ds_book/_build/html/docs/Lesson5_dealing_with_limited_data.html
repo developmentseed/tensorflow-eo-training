@@ -582,10 +582,10 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train_filenames</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;img_names&quot;</span><span class="p">]</span>
 <span class="n">y_train_filenames</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;label_names&quot;</span><span class="p">]</span>
-<span class="n">x_val_filenames</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;img_names&quot;</span><span class="p">]</span>
-<span class="n">y_val_filenames</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;label_names&quot;</span><span class="p">]</span>
-<span class="n">x_test_filenames</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;img_names&quot;</span><span class="p">]</span>
-<span class="n">y_test_filenames</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;label_names&quot;</span><span class="p">]</span>
+<span class="n">x_val_filenames</span> <span class="o">=</span> <span class="n">validate_df</span><span class="p">[</span><span class="s2">&quot;img_names&quot;</span><span class="p">]</span>
+<span class="n">y_val_filenames</span> <span class="o">=</span> <span class="n">validate_df</span><span class="p">[</span><span class="s2">&quot;label_names&quot;</span><span class="p">]</span>
+<span class="n">x_test_filenames</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;img_names&quot;</span><span class="p">]</span>
+<span class="n">y_test_filenames</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;label_names&quot;</span><span class="p">]</span>
 
 <span class="n">num_train_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_train_filenames</span><span class="p">)</span>
 <span class="n">num_val_examples</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_val_filenames</span><span class="p">)</span>
