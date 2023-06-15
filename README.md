@@ -17,7 +17,7 @@ ISBN: (to come)
 
 A major advantage of executable books is that the reader may enjoy running the source codes himself, modifying them and playing around. No downloading, installation or configuration are required. Simply go to 
 
-[https://developmentseed.github.io/tensorflow-eo-training/docs/index.html](https://developmentseed.github.io/tensorflow-eo-training/docs/index.html),
+[https://developmentseed.org/tensorflow-eo-training/docs/index.html](https://developmentseed.org/tensorflow-eo-training/docs/index.html),
 
 and in the left menu select any chapter below the Introduction, click the "rocket" icon at the top right of the screen, and choose "Colab". 
 
